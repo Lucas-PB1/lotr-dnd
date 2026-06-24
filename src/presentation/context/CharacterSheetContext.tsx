@@ -1,6 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { CharacterDto } from '../../application/mappers/CharacterMapper';
 import { CombatStatsService } from '../../domain/services/CombatStatsService';
+import { PointBuyService } from '../../domain/services/PointBuyService';
 import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 import {
   characterService,
@@ -22,9 +23,16 @@ const CharacterSheetContext = createContext<CharacterSheetContextValue | null>(n
 
 function loadOrCreate(id: string): CharacterDto {
   const loaded = characterService.load.execute(id) ?? characterService.create.execute(id);
+  const creationChoices = normalizeCreationChoices(loaded.creationChoices);
+  const abilities =
+    loaded.abilityScoreMode === 'pointBuy'
+      ? PointBuyService.clampToPointBuyRange(loaded.abilities)
+      : loaded.abilities;
+
   return CombatStatsService.applyDerivedStats({
     ...loaded,
-    creationChoices: normalizeCreationChoices(loaded.creationChoices),
+    creationChoices,
+    abilities,
   });
 }
 
@@ -33,15 +41,24 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
     loadOrCreate(DEFAULT_CHARACTER_ID),
   );
   const [isSaving, setIsSaving] = useState(false);
+  const saveTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     setIsSaving(true);
-    const timer = window.setTimeout(() => {
+    if (saveTimerRef.current !== null) {
+      window.clearTimeout(saveTimerRef.current);
+    }
+    saveTimerRef.current = window.setTimeout(() => {
       characterService.save.execute(character);
       setIsSaving(false);
+      saveTimerRef.current = null;
     }, 400);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      if (saveTimerRef.current !== null) {
+        window.clearTimeout(saveTimerRef.current);
+      }
+    };
   }, [character]);
 
   const updateCharacter = useCallback((partial: Partial<CharacterDto>) => {
@@ -49,6 +66,9 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
       const merged = { ...prev, ...partial };
       if (merged.creationChoices) {
         merged.creationChoices = normalizeCreationChoices(merged.creationChoices);
+      }
+      if (merged.abilityScoreMode === 'pointBuy' && merged.abilities) {
+        merged.abilities = PointBuyService.clampToPointBuyRange(merged.abilities);
       }
       return CombatStatsService.applyDerivedStats(merged);
     });
@@ -62,10 +82,17 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
   );
 
   const resetCharacter = useCallback(() => {
+    if (saveTimerRef.current !== null) {
+      window.clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
+
     characterService.delete.execute(DEFAULT_CHARACTER_ID);
     const fresh = CombatStatsService.applyDerivedStats(
       characterService.create.execute(DEFAULT_CHARACTER_ID),
     );
+    characterService.save.execute(fresh);
+    setIsSaving(false);
     setCharacter(fresh);
   }, []);
 

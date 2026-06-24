@@ -4,6 +4,7 @@ import { getCreationProgress } from '../../application/creation/creationProgress
 import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
+import { SheetToolbar } from '../components/layout/SheetToolbar';
 import { SheetFinalTab } from '../components/layout/SheetFinalTab';
 import { SheetInventoryTab } from '../components/layout/SheetInventoryTab';
 import { SheetMainTab } from '../components/layout/SheetMainTab';
@@ -15,6 +16,7 @@ import { useCharacterSheet } from '../context/CharacterSheetContext';
 export function CharacterSheetPage() {
   const { character, resetCharacter, isSaving } = useCharacterSheet();
   const [resetOpen, setResetOpen] = useState(false);
+  const [sheetKey, setSheetKey] = useState(0);
 
   const progress = useMemo(
     () => getCreationProgress(character.creationChoices),
@@ -30,19 +32,26 @@ export function CharacterSheetPage() {
 
   const handleReset = () => {
     resetCharacter();
+    setSheetKey((key) => key + 1);
     setResetOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="sheet-page">
-      <SheetPageHeader
-        character={character}
-        isSaving={isSaving}
-        onResetClick={() => setResetOpen(true)}
-      />
+      <SheetPageHeader character={character} />
 
       <Card className="sheet-content border-2 border-amber-400/50 bg-[var(--color-parchment)] p-4 shadow-xl sm:p-6">
-        <Tabs aria-label="Navegação da ficha" variant="pills" className="sheet-tabs">
+        <SheetToolbar
+          isSaving={isSaving}
+          onResetClick={() => setResetOpen(true)}
+        />
+        <Tabs
+          key={sheetKey}
+          aria-label="Navegação da ficha"
+          variant="pills"
+          className="sheet-tabs"
+        >
           <TabItem
             active
             title={

@@ -1,13 +1,10 @@
-import { Badge, Button } from 'flowbite-react';
 import type { CharacterProps } from '../../../domain/entities/Character';
 
 interface SheetPageHeaderProps {
   character: CharacterProps;
-  isSaving: boolean;
-  onResetClick: () => void;
 }
 
-export function SheetPageHeader({ character, isSaving, onResetClick }: SheetPageHeaderProps) {
+export function SheetPageHeader({ character }: SheetPageHeaderProps) {
   return (
     <header className="sheet-page__header">
       <div>
@@ -17,14 +14,6 @@ export function SheetPageHeader({ character, isSaving, onResetClick }: SheetPage
           {character.culture ? ` · ${character.culture}` : ''}
           {character.callingAndLevel ? ` · ${character.callingAndLevel}` : ''}
         </p>
-      </div>
-      <div className="sheet-page__actions">
-        <Badge color={isSaving ? 'warning' : 'success'} size="sm">
-          {isSaving ? 'Salvando…' : 'Salvo'}
-        </Badge>
-        <Button color="failure" size="sm" onClick={onResetClick}>
-          Limpar ficha
-        </Button>
       </div>
     </header>
   );
