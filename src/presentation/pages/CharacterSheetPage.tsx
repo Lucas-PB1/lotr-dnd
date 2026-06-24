@@ -1,5 +1,4 @@
 import { useMemo, useState, type ReactNode } from 'react';
-import { AnimatePresence } from 'motion/react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
 import { APP_SUBTITLE, APP_TITLE } from '../../shared/constants/appLabels';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
@@ -8,7 +7,7 @@ import { SheetAppShell } from '../components/layout/shell/SheetAppShell';
 import type { SheetTabId } from '../components/layout/shell/sheetTabTypes';
 import { SheetFinalTab } from '../components/layout/SheetFinalTab';
 import { SheetInventoryTab } from '../components/layout/SheetInventoryTab';
-import { SheetMainTab } from '../components/layout/SheetMainTab';
+import { SheetDiceTab } from '../components/layout/SheetDiceTab';
 import { SheetShopTab } from '../components/layout/SheetShopTab';
 import { SheetStoryTab } from '../components/layout/SheetStoryTab';
 import { useCharacterSheet } from '../context/CharacterSheetContext';
@@ -64,12 +63,8 @@ export function CharacterSheetPage() {
     switch (activeTab) {
       case 'creation':
         return <CharacterCreationSection />;
-      case 'adventure':
-        return (
-          <LegacyTabWrap>
-            <SheetMainTab />
-          </LegacyTabWrap>
-        );
+      case 'dice':
+        return <SheetDiceTab />;
       case 'inventory':
         return <SheetInventoryTab />;
       case 'shop':
@@ -110,7 +105,7 @@ export function CharacterSheetPage() {
           </footer>
         }
       >
-        <AnimatePresence mode="wait">{tabContent}</AnimatePresence>
+        {tabContent}
       </SheetAppShell>
 
       <ResetCharacterModal

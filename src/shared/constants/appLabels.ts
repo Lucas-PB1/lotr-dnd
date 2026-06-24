@@ -5,7 +5,7 @@ export const APP_SUBTITLE = 'Ficha digital de personagem';
 
 export const SHEET_TABS = {
   creation: 'Criação',
-  adventure: 'Aventura',
+  dice: 'Atributos',
   inventory: 'Inventário',
   shop: 'Mercado',
   summary: 'Resumo',

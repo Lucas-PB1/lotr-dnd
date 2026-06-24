@@ -15,7 +15,7 @@ import {
   DocumentTextIcon,
   GiftIcon,
   MagnifyingGlassIcon,
-  MapIcon,
+  Square2StackIcon,
   PencilSquareIcon,
   QueueListIcon,
   ShieldCheckIcon,
@@ -34,7 +34,7 @@ import {
   BuildingStorefrontIcon as BuildingStorefrontIconSolid,
   DocumentTextIcon as DocumentTextIconSolid,
   GiftIcon as GiftIconSolid,
-  MapIcon as MapIconSolid,
+  Square2StackIcon as Square2StackIconSolid,
   ShieldCheckIcon as ShieldCheckIconSolid,
   ShoppingBagIcon as ShoppingBagIconSolid,
   SparklesIcon as SparklesIconSolid,
@@ -52,7 +52,7 @@ export type IconPair = {
 
 export const SHEET_TAB_ICONS: Record<SheetTabId, IconPair> = {
   creation: { outline: SparklesIcon, solid: SparklesIconSolid },
-  adventure: { outline: MapIcon, solid: MapIconSolid },
+  dice: { outline: Square2StackIcon, solid: Square2StackIconSolid },
   inventory: { outline: ShoppingBagIcon, solid: ShoppingBagIconSolid },
   shop: { outline: BuildingStorefrontIcon, solid: BuildingStorefrontIconSolid },
   summary: { outline: DocumentTextIcon, solid: DocumentTextIconSolid },
