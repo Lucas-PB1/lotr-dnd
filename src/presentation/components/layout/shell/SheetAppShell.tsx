@@ -13,6 +13,7 @@ type SheetAppShellProps = {
   tabBadges?: Partial<Record<SheetTabId, string>>;
   isSaving: boolean;
   onResetClick: () => void;
+  onCharactersClick: () => void;
   children: ReactNode;
 };
 
@@ -23,6 +24,7 @@ export function SheetAppShell({
   tabBadges,
   isSaving,
   onResetClick,
+  onCharactersClick,
   children,
 }: SheetAppShellProps) {
   return (
@@ -32,6 +34,7 @@ export function SheetAppShell({
         activeTab={activeTab}
         isSaving={isSaving}
         onResetClick={onResetClick}
+        onCharactersClick={onCharactersClick}
       />
       <SheetSideNav
         character={character}

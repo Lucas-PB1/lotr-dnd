@@ -67,21 +67,25 @@ export function SheetSideNav({ character, activeTab, onTabChange, badges }: Shee
       </nav>
 
       <div className="st-sidenav__footer">
-        <p className="st-sidenav__progress">
-          {character.sheetFinalized ? SHELL_UI.sheetReady : SHELL_UI.finishHint}
-        </p>
-        <p className="st-sidenav__progress-count" aria-live="polite">
-          {done}/{total} passos
-        </p>
-        {!onSheetTab ? (
-          <button
-            type="button"
-            className="st-sidenav__cta"
-            onClick={() => onTabChange('summary')}
-          >
-            {character.sheetFinalized ? SHELL_UI.goToSheet : SHELL_UI.openSheet}
-          </button>
-        ) : null}
+        {!character.sheetFinalized ? (
+          <>
+            <p className="st-sidenav__progress">{SHELL_UI.finishHint}</p>
+            <p className="st-sidenav__progress-count" aria-live="polite">
+              {done}/{total} passos
+            </p>
+            {!onSheetTab ? (
+              <button
+                type="button"
+                className="st-sidenav__cta"
+                onClick={() => onTabChange('summary')}
+              >
+                {SHELL_UI.openSheet}
+              </button>
+            ) : null}
+          </>
+        ) : (
+          <p className="st-sidenav__progress">{SHELL_UI.sheetReady}</p>
+        )}
       </div>
     </aside>
   );

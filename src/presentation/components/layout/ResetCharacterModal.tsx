@@ -1,4 +1,5 @@
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'flowbite-react';
+import { useEffect, useRef } from 'react';
+import { JOURNEY_STEP_LABELS, SHELL_UI } from '../../../shared/constants/shellLabels';
 
 interface ResetCharacterModalProps {
   open: boolean;
@@ -7,27 +8,72 @@ interface ResetCharacterModalProps {
 }
 
 export function ResetCharacterModal({ open, onClose, onConfirm }: ResetCharacterModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    panelRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const handleConfirm = () => {
+    onConfirm();
+  };
+
   return (
-    <Modal show={open} size="md" onClose={onClose} popup>
-      <ModalHeader>Começar do zero?</ModalHeader>
-      <ModalBody>
-        <p className="text-sm text-gray-600 dark:text-gray-300">
-          A ficha volta ao estado inicial: criação de personagem, atributos, inventário, moedas,
-          história e notas serão apagados neste navegador.
-        </p>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-300">
-          <li>Você volta para a aba <strong>Criação</strong></li>
-          <li>Não há como desfazer depois de confirmar</li>
-        </ul>
-      </ModalBody>
-      <ModalFooter>
-        <Button color="gray" onClick={onClose}>
-          Cancelar
-        </Button>
-        <Button color="failure" onClick={onConfirm}>
-          Sim, começar do zero
-        </Button>
-      </ModalFooter>
-    </Modal>
+    <div
+      className="st-reset-modal no-print"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="st-reset-modal-title"
+      aria-describedby="st-reset-modal-desc"
+    >
+      <button type="button" className="st-reset-modal__backdrop" aria-label="Fechar" onClick={onClose} />
+      <div ref={panelRef} className="st-reset-modal__panel" tabIndex={-1}>
+        <span className="st-reset-modal__icon" aria-hidden>
+          !
+        </span>
+
+        <header className="st-reset-modal__header">
+          <p className="st-reset-modal__eyebrow">{SHELL_UI.reset}</p>
+          <h2 id="st-reset-modal-title" className="st-reset-modal__title">
+            {SHELL_UI.resetTitle}
+          </h2>
+        </header>
+
+        <div id="st-reset-modal-desc" className="st-reset-modal__body">
+          <p>{SHELL_UI.resetBody}</p>
+          <ul>
+            <li>
+              {SHELL_UI.resetBulletCreationPrefix} <strong>{JOURNEY_STEP_LABELS.creation}</strong>
+            </li>
+            <li>{SHELL_UI.resetBulletUndo}</li>
+          </ul>
+        </div>
+
+        <footer className="st-reset-modal__footer">
+          <button type="button" className="st-reset-modal__action" onClick={onClose}>
+            {SHELL_UI.cancel}
+          </button>
+          <button
+            type="button"
+            className="st-reset-modal__action st-reset-modal__action--danger"
+            onClick={handleConfirm}
+          >
+            {SHELL_UI.resetConfirm}
+          </button>
+        </footer>
+      </div>
+    </div>
   );
 }

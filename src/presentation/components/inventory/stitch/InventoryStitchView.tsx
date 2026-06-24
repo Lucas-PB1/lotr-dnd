@@ -5,6 +5,7 @@ import { useInventoryDerived } from '../hooks/useInventoryDerived';
 import { formatWallet, walletTotalCopper } from '../inventoryItemDisplay';
 import { InventoryEquipmentGrid } from './InventoryEquipmentGrid';
 import { InventoryItemDetail } from './InventoryItemDetail';
+import { InventoryItemDrawer } from './InventoryItemDrawer';
 import { InventoryLedgerList } from './InventoryLedgerList';
 import { InventoryPageHeader } from './InventoryPageHeader';
 import { InventoryQuickActions, InventoryTreasuryCard } from './InventoryQuickActions';
@@ -79,7 +80,7 @@ export function InventoryStitchView() {
         </div>
       </div>
 
-      <div className="st-inventory-bento">
+      <div className="st-inventory-bento st-inventory-bento--detail-desktop">
         <div className="st-inventory-bento__detail">
           <InventoryItemDetail
             item={selectedItem}
@@ -95,6 +96,18 @@ export function InventoryStitchView() {
           <InventoryTreasuryCard />
         </div>
       </div>
+
+      <InventoryItemDrawer
+        open={Boolean(selectedItem)}
+        item={selectedItem}
+        combatLine={selectedCombatLine}
+        onClose={() => setSelectedItemId(undefined)}
+        onEquip={equip}
+        onUnequip={unequip}
+        onUse={useItem}
+        onSell={sell}
+        onRemove={remove}
+      />
     </div>
   );
 }

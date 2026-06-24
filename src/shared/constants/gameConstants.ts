@@ -58,3 +58,4 @@ export const LOTR_SKILLS: SkillDefinition[] = [
 export const DEFAULT_ATTACK_COUNT = 6;
 
 export const STORAGE_KEY = 'lotr-character-sheet';
+export const ACTIVE_CHARACTER_KEY = 'lotr-active-character-id';

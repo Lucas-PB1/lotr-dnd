@@ -10,6 +10,7 @@
 @import './presentation/styles/sheet-stitch.css';
 @import './presentation/styles/sheet-pdf.css';
 @import './presentation/styles/mobile-stitch.css';
+@import './presentation/styles/features-stitch.css';
 @source '../.flowbite-react/class-list.json';
 
 @theme {

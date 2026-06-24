@@ -80,3 +80,27 @@ export function countJourneyDone(character: CharacterProps): { done: number; tot
   const done = JOURNEY_ORDER.filter((id) => isStepComplete(id, character)).length;
   return { done, total: JOURNEY_ORDER.length };
 }
+
+export interface JourneyMissingHint {
+  stepId: JourneyStepId;
+  label: string;
+  tabId: SheetTabId;
+  message: string;
+}
+
+const MISSING_MESSAGES: Record<JourneyStepId, string> = {
+  creation: 'Complete cultura, chamado, virtudes e equipamento inicial.',
+  dice: 'Defina os atributos e pontos de vida.',
+  inventory: 'Adicione itens ao inventário ou equipamento.',
+  story: 'Preencha história, comunidade ou aparência.',
+  summary: 'Abra a ficha do herói para finalizar.',
+};
+
+export function getMissingJourneyHints(character: CharacterProps): JourneyMissingHint[] {
+  return JOURNEY_ORDER.filter((id) => !isStepComplete(id, character)).map((id) => ({
+    stepId: id,
+    label: JOURNEY_STEP_LABELS[id],
+    tabId: id,
+    message: MISSING_MESSAGES[id],
+  }));
+}

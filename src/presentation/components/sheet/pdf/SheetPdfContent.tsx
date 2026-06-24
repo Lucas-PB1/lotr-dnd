@@ -219,6 +219,18 @@ export function SheetPdfContent({ character }: SheetPdfContentProps) {
         </section>
       ) : null}
 
+      <section className="st-pdf-doc__section">
+        <h2>Sombra</h2>
+        <p className="st-pdf-doc__line">
+          <strong>Pontuação:</strong> {character.shadow.score} ·{' '}
+          <strong>Miserável:</strong> {character.shadow.miserable ? 'Sim' : 'Não'} ·{' '}
+          <strong>Angustiado:</strong> {character.shadow.anguished ? 'Sim' : 'Não'}
+        </p>
+        {character.shadow.scars.trim() ? (
+          <p className="st-pdf-doc__paragraph">{character.shadow.scars}</p>
+        ) : null}
+      </section>
+
       {(character.fellowship.fellowshipName.trim() || character.fellowship.patrons.trim()) && (
         <section className="st-pdf-doc__section">
           <h2>Comunidade</h2>

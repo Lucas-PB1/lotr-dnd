@@ -1,4 +1,4 @@
-import { countJourneyDone } from '../../../../application/sheet/getSheetJourney';
+import { countJourneyDone, getMissingJourneyHints } from '../../../../application/sheet/getSheetJourney';
 import type { CharacterProps } from '../../../../domain/entities/Character';
 import { SHELL_UI } from '../../../../shared/constants/shellLabels';
 import type { SheetTabId } from './sheetTabTypes';
@@ -10,8 +10,13 @@ type SheetMobileProgressProps = {
 };
 
 export function SheetMobileProgress({ character, activeTab, onTabChange }: SheetMobileProgressProps) {
+  if (character.sheetFinalized) {
+    return null;
+  }
+
   const { done, total } = countJourneyDone(character);
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const missing = getMissingJourneyHints(character);
   const onSheet = activeTab === 'summary';
 
   return (
@@ -21,13 +26,23 @@ export function SheetMobileProgress({ character, activeTab, onTabChange }: Sheet
           <span className="st-mobile-progress__count">
             {done}/{total} passos
           </span>
-          <span className="st-mobile-progress__hint">
-            {character.sheetFinalized ? SHELL_UI.sheetReady : SHELL_UI.finishHint}
-          </span>
+          {missing.length > 0 ? (
+            <ul className="st-mobile-progress__missing">
+              {missing.slice(0, 2).map((hint) => (
+                <li key={hint.stepId}>
+                  <button type="button" onClick={() => onTabChange(hint.tabId)}>
+                    <strong>{hint.label}:</strong> {hint.message}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <span className="st-mobile-progress__hint">{SHELL_UI.sheetReady}</span>
+          )}
         </div>
         {!onSheet ? (
           <button type="button" className="st-mobile-progress__cta" onClick={() => onTabChange('summary')}>
-            {character.sheetFinalized ? SHELL_UI.goToSheet : 'Ficha'}
+            {SHELL_UI.openSheet}
           </button>
         ) : null}
       </div>

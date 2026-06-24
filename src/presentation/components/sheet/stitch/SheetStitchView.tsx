@@ -8,6 +8,8 @@ import { SheetPlayDeathSaves } from './SheetPlayDeathSaves';
 import { SheetPlayHero } from './SheetPlayHero';
 import { SheetPlayHpBlock } from './SheetPlayHpBlock';
 import { SheetPlayReferencePanel } from './SheetPlayReferencePanel';
+import { SheetPlayShadowPanel } from './SheetPlayShadowPanel';
+import { SheetPlayVirtuesPanel } from './SheetPlayVirtuesPanel';
 import { SheetPlaySavesPanel } from './SheetPlaySavesPanel';
 import { SheetPlaySkillsPanel } from './SheetPlaySkillsPanel';
 import { SheetPlayToolbar } from './SheetPlayToolbar';
@@ -26,6 +28,7 @@ export function SheetStitchView() {
           <SheetPlayHpBlock />
           <SheetPlayCombatStrip />
           <SheetPlayDeathSaves />
+          <SheetPlayShadowPanel />
           <SheetPlayAttacksPanel />
         </div>
 
@@ -33,6 +36,7 @@ export function SheetStitchView() {
           <SheetPlayAbilitiesPanel />
           <SheetPlaySavesPanel />
           <SheetPlaySkillsPanel />
+          <SheetPlayVirtuesPanel />
         </div>
       </div>
 

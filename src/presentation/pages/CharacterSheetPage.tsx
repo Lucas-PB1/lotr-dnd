@@ -1,23 +1,49 @@
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
 import { getInitialSheetTab } from '../../application/sheet/getInitialSheetTab';
-import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
+import { CharacterManagerModal } from '../components/layout/CharacterManagerModal';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
 import { SheetAppShell } from '../components/layout/shell/SheetAppShell';
 import type { SheetTabId } from '../components/layout/shell/sheetTabTypes';
-import { SheetFinalTab } from '../components/layout/SheetFinalTab';
-import { SheetInventoryTab } from '../components/layout/SheetInventoryTab';
-import { SheetDiceTab } from '../components/layout/SheetDiceTab';
-import { SheetShopTab } from '../components/layout/SheetShopTab';
-import { SheetStoryTab } from '../components/layout/SheetStoryTab';
 import { useCharacterSheet } from '../context/CharacterSheetContext';
 import { SheetNavigationProvider } from '../context/SheetNavigationContext';
+
+const CharacterCreationSection = lazy(() =>
+  import('../components/sections/CharacterCreationSection').then((m) => ({
+    default: m.CharacterCreationSection,
+  })),
+);
+const SheetDiceTab = lazy(() =>
+  import('../components/layout/SheetDiceTab').then((m) => ({ default: m.SheetDiceTab })),
+);
+const SheetInventoryTab = lazy(() =>
+  import('../components/layout/SheetInventoryTab').then((m) => ({ default: m.SheetInventoryTab })),
+);
+const SheetShopTab = lazy(() =>
+  import('../components/layout/SheetShopTab').then((m) => ({ default: m.SheetShopTab })),
+);
+const SheetStoryTab = lazy(() =>
+  import('../components/layout/SheetStoryTab').then((m) => ({ default: m.SheetStoryTab })),
+);
+const SheetFinalTab = lazy(() =>
+  import('../components/layout/SheetFinalTab').then((m) => ({ default: m.SheetFinalTab })),
+);
+
+function TabFallback() {
+  return <p className="st-tab-loading">Carregando…</p>;
+}
 
 export function CharacterSheetPage() {
   const { character, resetCharacter, isSaving } = useCharacterSheet();
   const [resetOpen, setResetOpen] = useState(false);
+  const [charactersOpen, setCharactersOpen] = useState(false);
   const [sheetKey, setSheetKey] = useState(0);
   const [activeTab, setActiveTab] = useState<SheetTabId>(() => getInitialSheetTab(character));
+
+  useEffect(() => {
+    setActiveTab(getInitialSheetTab(character));
+    setSheetKey((key) => key + 1);
+  }, [character.id]);
 
   const progress = useMemo(
     () => getCreationProgress(character.creationChoices),
@@ -51,6 +77,11 @@ export function CharacterSheetPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleCharacterChanged = () => {
+    setSheetKey((key) => key + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const tabContent = (() => {
     switch (activeTab) {
       case 'creation':
@@ -80,14 +111,21 @@ export function CharacterSheetPage() {
         tabBadges={tabBadges}
         isSaving={isSaving}
         onResetClick={() => setResetOpen(true)}
+        onCharactersClick={() => setCharactersOpen(true)}
       >
-        {tabContent}
+        <Suspense fallback={<TabFallback />}>{tabContent}</Suspense>
       </SheetAppShell>
 
       <ResetCharacterModal
         open={resetOpen}
         onClose={() => setResetOpen(false)}
         onConfirm={handleReset}
+      />
+
+      <CharacterManagerModal
+        open={charactersOpen}
+        onClose={() => setCharactersOpen(false)}
+        onCharacterChanged={handleCharacterChanged}
       />
     </SheetNavigationProvider>
   );

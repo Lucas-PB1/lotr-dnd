@@ -9,6 +9,7 @@ type SheetTopBarProps = {
   activeTab: SheetTabId;
   isSaving: boolean;
   onResetClick: () => void;
+  onCharactersClick: () => void;
 };
 
 export function SheetTopBar({
@@ -16,6 +17,7 @@ export function SheetTopBar({
   activeTab,
   isSaving,
   onResetClick,
+  onCharactersClick,
 }: SheetTopBarProps) {
   const heroName = character.name.trim();
   const inPlayMode = Boolean(character.sheetFinalized);
@@ -47,31 +49,50 @@ export function SheetTopBar({
           </div>
         </div>
 
-        <div className="st-topbar__context">
+        <div className="st-topbar__toolbar">
           {heroName ? (
             <p className="st-topbar__hero" title="Personagem ativo">
               {heroName}
             </p>
           ) : null}
-          <span className={`st-topbar__mode${inPlayMode ? ' st-topbar__mode--play' : ''}`}>
-            {inPlayMode ? SHELL_UI.modePlay : SHELL_UI.modeBuilding}
-          </span>
-        </div>
 
-        <div className="st-topbar__actions">
-          <div className="st-topbar__save" title={SHELL_UI.saveHint}>
+          <div className="st-topbar__status" aria-label="Estado da ficha">
             <span
-              className={`st-topbar__save-dot${isSaving ? ' st-topbar__save-dot--busy' : ''}`}
-              aria-hidden
-            />
-            <span className="st-topbar__save-label">
-              {isSaving ? SHELL_UI.saveBusy : SHELL_UI.saveIdle}
+              className={`st-topbar__chip st-topbar__chip--mode${inPlayMode ? ' st-topbar__chip--play' : ''}`}
+            >
+              {inPlayMode ? SHELL_UI.modePlay : SHELL_UI.modeBuilding}
             </span>
+            <div className="st-topbar__chip st-topbar__chip--save" title={SHELL_UI.saveHint}>
+              <span
+                className={`st-topbar__save-dot${isSaving ? ' st-topbar__save-dot--busy' : ''}`}
+                aria-hidden
+              />
+              <span className="st-topbar__save-label">
+                {isSaving ? SHELL_UI.saveBusy : SHELL_UI.saveIdle}
+              </span>
+            </div>
           </div>
-          <button type="button" className="st-topbar__reset" onClick={onResetClick}>
-            <span className="st-topbar__reset--full">{SHELL_UI.reset}</span>
-            <span className="st-topbar__reset--short">{SHELL_UI.resetShort}</span>
-          </button>
+
+          <span className="st-topbar__divider" aria-hidden />
+
+          <div className="st-topbar__tools">
+            <button
+              type="button"
+              className="st-topbar__chip st-topbar__chip--action"
+              onClick={onCharactersClick}
+            >
+              <span className="st-topbar__chip-label--full">{SHELL_UI.characters}</span>
+              <span className="st-topbar__chip-label--short">{SHELL_UI.charactersShort}</span>
+            </button>
+            <button
+              type="button"
+              className="st-topbar__chip st-topbar__chip--danger"
+              onClick={onResetClick}
+            >
+              <span className="st-topbar__chip-label--full">{SHELL_UI.reset}</span>
+              <span className="st-topbar__chip-label--short">{SHELL_UI.resetShort}</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>

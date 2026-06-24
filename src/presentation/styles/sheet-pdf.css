@@ -12,12 +12,13 @@
 
 .st-pdf-doc {
   width: 794px;
-  padding: 28px 32px 36px;
+  padding: 24px 28px 32px;
   background: #fff;
   color: #1a1814;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 11pt;
-  line-height: 1.45;
+  font-size: 10.5pt;
+  line-height: 1.4;
+  border: 1px solid #c4a574;
 }
 
 .st-pdf-doc__eyebrow {

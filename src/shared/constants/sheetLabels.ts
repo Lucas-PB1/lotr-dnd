@@ -17,6 +17,7 @@ export const SHEET_PLAY_UI = {
   attacksHint: 'Armas do Inventário. Equipe no Inventário para aparecer aqui.',
   rollAttack: 'Ataque',
   rollDamage: 'Dano',
+  rollHint: 'Toque em d20 para rolar na mesa.',
   reference: 'Consulta rápida',
   referenceHint: 'Equipamento, virtudes e crônica — só leitura na mesa.',
   equipment: 'Equipamento',
@@ -27,4 +28,5 @@ export const SHEET_PLAY_UI = {
   noSkills: 'Nenhuma perícia marcada na ficha.',
   inspiration: 'Inspiração',
   inspired: 'Inspirado',
+  shadowHint: 'Ajuste pontuação e estados de Sombra na mesa.',
 } as const;

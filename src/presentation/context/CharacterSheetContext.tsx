@@ -1,21 +1,33 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  listCharacterSummaries,
+  persistActiveCharacterId,
+  resolveActiveCharacterId,
+  type CharacterSummary,
+} from '../../application/character/activeCharacterStorage';
+import {
+  downloadCharacterJson,
+  newCharacterId,
+  parseCharacterImportJson,
+} from '../../application/character/characterImportExport';
 import type { CharacterDto } from '../../application/mappers/CharacterMapper';
 import { CombatStatsService } from '../../domain/services/CombatStatsService';
 import { PointBuyService } from '../../domain/services/PointBuyService';
 import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
-import {
-  characterService,
-  DEFAULT_CHARACTER_ID,
-} from '../../infrastructure/di/container';
+import { characterService } from '../../infrastructure/di/container';
 
 interface CharacterSheetContextValue {
   character: CharacterDto;
+  characterSummaries: CharacterSummary[];
   updateCharacter: (partial: Partial<CharacterDto>) => void;
-  updateNested: <K extends keyof CharacterDto>(
-    key: K,
-    value: CharacterDto[K],
-  ) => void;
+  updateNested: <K extends keyof CharacterDto>(key: K, value: CharacterDto[K]) => void;
   resetCharacter: () => void;
+  switchCharacter: (id: string) => void;
+  createNewCharacter: () => void;
+  deleteCharacter: (id: string) => void;
+  exportCharacterJson: () => void;
+  importCharacterJson: (json: string) => void;
+  refreshCharacterList: () => void;
   isSaving: boolean;
 }
 
@@ -38,11 +50,23 @@ function loadOrCreate(id: string): CharacterDto {
 }
 
 export function CharacterSheetProvider({ children }: { children: React.ReactNode }) {
-  const [character, setCharacter] = useState<CharacterDto>(() =>
-    loadOrCreate(DEFAULT_CHARACTER_ID),
+  const initialId = resolveActiveCharacterId();
+  const [activeId, setActiveId] = useState(initialId);
+  const [character, setCharacter] = useState<CharacterDto>(() => loadOrCreate(initialId));
+  const [characterSummaries, setCharacterSummaries] = useState<CharacterSummary[]>(() =>
+    listCharacterSummaries(),
   );
   const [isSaving, setIsSaving] = useState(false);
   const saveTimerRef = useRef<number | null>(null);
+  const characterRef = useRef(character);
+
+  useEffect(() => {
+    characterRef.current = character;
+  }, [character]);
+
+  const refreshCharacterList = useCallback(() => {
+    setCharacterSummaries(listCharacterSummaries());
+  }, []);
 
   useEffect(() => {
     setIsSaving(true);
@@ -53,6 +77,7 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
       characterService.save.execute(character);
       setIsSaving(false);
       saveTimerRef.current = null;
+      refreshCharacterList();
     }, 400);
 
     return () => {
@@ -60,7 +85,26 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
         window.clearTimeout(saveTimerRef.current);
       }
     };
-  }, [character]);
+  }, [character, refreshCharacterList]);
+
+  const flushSave = useCallback(() => {
+    if (saveTimerRef.current !== null) {
+      window.clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
+    characterService.save.execute(characterRef.current);
+    setIsSaving(false);
+  }, []);
+
+  const activateCharacter = useCallback(
+    (id: string) => {
+      persistActiveCharacterId(id);
+      setActiveId(id);
+      setCharacter(loadOrCreate(id));
+      refreshCharacterList();
+    },
+    [refreshCharacterList],
+  );
 
   const updateCharacter = useCallback((partial: Partial<CharacterDto>) => {
     setCharacter((prev) => {
@@ -83,23 +127,93 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
   );
 
   const resetCharacter = useCallback(() => {
-    if (saveTimerRef.current !== null) {
-      window.clearTimeout(saveTimerRef.current);
-      saveTimerRef.current = null;
-    }
-
-    characterService.delete.execute(DEFAULT_CHARACTER_ID);
-    const fresh = CombatStatsService.applyDerivedStats(
-      characterService.create.execute(DEFAULT_CHARACTER_ID),
-    );
+    flushSave();
+    characterService.delete.execute(activeId);
+    const fresh = CombatStatsService.applyDerivedStats(characterService.create.execute(activeId));
     characterService.save.execute(fresh);
-    setIsSaving(false);
     setCharacter(fresh);
-  }, []);
+    refreshCharacterList();
+  }, [activeId, flushSave, refreshCharacterList]);
+
+  const switchCharacter = useCallback(
+    (id: string) => {
+      if (id === activeId) return;
+      flushSave();
+      activateCharacter(id);
+    },
+    [activeId, activateCharacter, flushSave],
+  );
+
+  const createNewCharacter = useCallback(() => {
+    flushSave();
+    const id = newCharacterId();
+    const fresh = CombatStatsService.applyDerivedStats(characterService.create.execute(id));
+    activateCharacter(id);
+    setCharacter(fresh);
+  }, [activateCharacter, flushSave]);
+
+  const deleteCharacter = useCallback(
+    (id: string) => {
+      const ids = characterService.listIds.execute();
+      if (ids.length <= 1) return;
+
+      characterService.delete.execute(id);
+
+      if (id === activeId) {
+        const nextId = characterService.listIds.execute()[0];
+        activateCharacter(nextId);
+      } else {
+        refreshCharacterList();
+      }
+    },
+    [activeId, activateCharacter, refreshCharacterList],
+  );
+
+  const exportCharacterJson = useCallback(() => {
+    flushSave();
+    downloadCharacterJson(characterRef.current);
+  }, [flushSave]);
+
+  const importCharacterJson = useCallback(
+    (json: string) => {
+      flushSave();
+      const id = newCharacterId();
+      const imported = parseCharacterImportJson(json, id);
+      characterService.save.execute(imported);
+      activateCharacter(imported.id);
+    },
+    [activateCharacter, flushSave],
+  );
 
   const value = useMemo(
-    () => ({ character, updateCharacter, updateNested, resetCharacter, isSaving }),
-    [character, updateCharacter, updateNested, resetCharacter, isSaving],
+    () => ({
+      character,
+      characterSummaries,
+      updateCharacter,
+      updateNested,
+      resetCharacter,
+      switchCharacter,
+      createNewCharacter,
+      deleteCharacter,
+      exportCharacterJson,
+      importCharacterJson,
+      refreshCharacterList,
+      isSaving,
+    }),
+    [
+      character,
+      characterSummaries,
+      updateCharacter,
+      updateNested,
+      resetCharacter,
+      switchCharacter,
+      createNewCharacter,
+      deleteCharacter,
+      exportCharacterJson,
+      importCharacterJson,
+      refreshCharacterList,
+      isSaving,
+    ],
   );
 
   return (
