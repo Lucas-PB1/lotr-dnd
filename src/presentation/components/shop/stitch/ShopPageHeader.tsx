@@ -35,7 +35,7 @@ export function ShopPageHeader() {
             onChange={(copper) => updateCurrency({ copper })}
           />
         </div>
-        <div className="st-shop-wallet__total hidden sm:block">
+        <div className="st-shop-wallet__total st-shop-wallet__total--always">
           <span className="font-st-label text-[var(--color-st-on-surface-variant)] block text-xs uppercase">
             {SHOP_UI.walletTotal}
           </span>

@@ -102,11 +102,14 @@
   gap: 0.25rem;
   opacity: 0;
   transition: opacity 0.2s;
+  flex-shrink: 0;
 }
 
-.st-ledger-row:hover .st-ledger-row__actions,
-.st-ledger-row--selected .st-ledger-row__actions {
-  opacity: 1;
+@media (hover: hover) and (min-width: 1024px) {
+  .st-ledger-row:hover .st-ledger-row__actions,
+  .st-ledger-row--selected .st-ledger-row__actions {
+    opacity: 1;
+  }
 }
 
 .st-burden-bar {
@@ -650,6 +653,7 @@
 .st-main {
   grid-area: main;
   min-height: 0;
+  min-width: 0;
   padding-top: 1rem;
   padding-bottom: var(--spacing-st-section-margin);
   padding-left: var(--spacing-st-container-padding);
@@ -666,40 +670,10 @@
 .st-main__inner {
   max-width: 72rem;
   margin: 0 auto;
+  min-width: 0;
 }
 
-.st-mobile-nav {
-  display: flex;
-  gap: 0.35rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media (min-width: 1024px) {
-  .st-mobile-nav {
-    display: none;
-  }
-}
-
-.st-mobile-nav__btn {
-  flex-shrink: 0;
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--color-st-outline-variant);
-  background: var(--color-st-surface-container);
-  color: var(--color-st-on-surface-variant);
-  font-family: var(--font-st-label);
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-
-.st-mobile-nav__btn--active {
-  background: var(--color-st-primary-container);
-  color: var(--color-st-on-primary-container);
-  border-color: transparent;
-}
+/* Mobile nav: ver mobile-stitch.css (.st-mobile-shell) */
 
 /* App footer */
 .st-app-footer {

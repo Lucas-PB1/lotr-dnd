@@ -26,7 +26,7 @@ type InventoryLedgerListProps = {
 };
 
 const actionBtnClass =
-  'p-1 rounded hover:bg-[var(--color-st-surface-container-high)] transition-colors';
+  'p-2 sm:p-1 rounded min-w-[2.5rem] min-h-[2.5rem] sm:min-w-0 sm:min-h-0 flex items-center justify-center hover:bg-[var(--color-st-surface-container-high)] transition-colors';
 
 export function InventoryLedgerList({
   items,
@@ -51,9 +51,9 @@ export function InventoryLedgerList({
   };
 
   return (
-    <ParchmentCard className="p-6 flex flex-col min-h-[28rem]">
-      <div className="flex justify-between items-center mb-4 gap-2 flex-wrap">
-        <h3 className="font-st-title uppercase tracking-widest flex items-center gap-2 m-0">
+    <ParchmentCard className="p-4 sm:p-6 flex flex-col min-h-0">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+        <h3 className="font-st-title uppercase tracking-widest flex items-center gap-2 m-0 text-base sm:text-lg">
           <StitchIcon icon={UI_ICONS.backpack} size="md" className="text-[var(--color-st-secondary)]" />
           {INVENTORY_UI.packContents}
           {carriedCount > 0 && (
@@ -62,24 +62,24 @@ export function InventoryLedgerList({
             </span>
           )}
         </h3>
-        <div className="flex gap-2 flex-1 min-w-[12rem] justify-end">
+        <div className="flex gap-2 w-full sm:w-auto sm:flex-1 sm:min-w-[12rem] sm:justify-end">
           <input
             type="search"
             placeholder="Filtrar…"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="px-3 py-1.5 rounded-lg bg-[var(--color-st-surface-container)] border border-[var(--color-st-outline-variant)] text-sm text-[var(--color-st-on-surface)] max-w-[10rem]"
+            className="flex-1 min-w-0 px-3 py-2.5 rounded-lg bg-[var(--color-st-surface-container)] border border-[var(--color-st-outline-variant)] text-sm text-[var(--color-st-on-surface)]"
           />
         </div>
       </div>
 
       {carriedCount > 0 && (
-        <div className="flex flex-wrap gap-1 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-4">
           {CARRY_FILTERS.map((f) => (
             <button
               key={f.id}
               type="button"
-              className={`px-2 py-0.5 rounded-full text-xs font-st-label border ${
+              className={`px-3 py-2 rounded-full text-xs font-st-label border min-h-[2.5rem] ${
                 filter === f.id
                   ? 'bg-[var(--color-st-primary-container)] border-transparent text-[var(--color-st-on-primary-container)]'
                   : 'border-[var(--color-st-outline-variant)] text-[var(--color-st-on-surface-variant)]'

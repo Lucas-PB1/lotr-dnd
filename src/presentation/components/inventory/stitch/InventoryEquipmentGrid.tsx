@@ -100,11 +100,11 @@ export function InventoryEquipmentGrid({
   ];
 
   return (
-    <ParchmentCard accentTop className="p-6 h-full">
-      <h3 className="font-st-title text-center mb-8 uppercase tracking-widest text-[var(--color-st-on-surface)]">
+    <ParchmentCard accentTop className="p-4 sm:p-6 h-full">
+      <h3 className="font-st-title text-center mb-4 sm:mb-8 uppercase tracking-widest text-[var(--color-st-on-surface)] text-base sm:text-lg">
         {INVENTORY_UI.wornEquipment}
       </h3>
-      <div className="grid grid-cols-2 gap-8 justify-items-center">
+      <div className="grid grid-cols-3 gap-4 sm:gap-8 justify-items-center">
         {slots.map((slot) => (
           <EquipmentSlot key={slot.id} {...slot} />
         ))}

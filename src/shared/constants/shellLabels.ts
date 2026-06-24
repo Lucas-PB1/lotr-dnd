@@ -2,6 +2,8 @@
 
 export const SHELL_UI = {
   appEyebrow: 'Ficha digital',
+  appTitleShort: 'LOTR RPG',
+  resetShort: 'Zerar',
   saveIdle: 'Salvo',
   saveBusy: 'Salvando…',
   saveHint: 'Dados guardados automaticamente no navegador',

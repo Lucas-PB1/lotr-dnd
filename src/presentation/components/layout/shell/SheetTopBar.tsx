@@ -1,17 +1,14 @@
 import { useMemo } from 'react';
-import { getSheetJourney } from '../../../../application/sheet/getSheetJourney';
 import type { CharacterProps } from '../../../../domain/entities/Character';
 import { APP_SUBTITLE, APP_TITLE } from '../../../../shared/constants/appLabels';
 import { SHELL_UI } from '../../../../shared/constants/shellLabels';
 import type { SheetTabId } from './sheetTabTypes';
-import { SheetJourneyStrip } from './SheetJourneyStrip';
 
 type SheetTopBarProps = {
   character: CharacterProps;
   activeTab: SheetTabId;
   isSaving: boolean;
   onResetClick: () => void;
-  onTabChange: (tab: SheetTabId) => void;
 };
 
 export function SheetTopBar({
@@ -19,15 +16,20 @@ export function SheetTopBar({
   activeTab,
   isSaving,
   onResetClick,
-  onTabChange,
 }: SheetTopBarProps) {
-  const journeySteps = useMemo(
-    () => getSheetJourney(character, activeTab),
-    [character, activeTab],
-  );
-
   const heroName = character.name.trim();
   const inPlayMode = Boolean(character.sheetFinalized);
+  const activeLabel = useMemo(() => {
+    const labels: Record<SheetTabId, string> = {
+      creation: 'Criação',
+      dice: 'Atributos',
+      inventory: 'Inventário',
+      shop: 'Mercado',
+      story: 'História',
+      summary: 'Ficha',
+    };
+    return labels[activeTab];
+  }, [activeTab]);
 
   return (
     <header className="st-topbar no-print">
@@ -36,10 +38,12 @@ export function SheetTopBar({
           <span className="st-topbar__emblem" aria-hidden>
             ◆
           </span>
-          <div>
+          <div className="st-topbar__brand-text">
             <p className="st-topbar__eyebrow">{SHELL_UI.appEyebrow}</p>
-            <h1 className="st-topbar__title">{APP_TITLE}</h1>
+            <h1 className="st-topbar__title st-topbar__title--full">{APP_TITLE}</h1>
+            <h1 className="st-topbar__title st-topbar__title--short">{SHELL_UI.appTitleShort}</h1>
             <p className="st-topbar__subtitle">{APP_SUBTITLE}</p>
+            <p className="st-topbar__active-tab">{activeLabel}</p>
           </div>
         </div>
 
@@ -49,9 +53,7 @@ export function SheetTopBar({
               {heroName}
             </p>
           ) : null}
-          <span
-            className={`st-topbar__mode${inPlayMode ? ' st-topbar__mode--play' : ''}`}
-          >
+          <span className={`st-topbar__mode${inPlayMode ? ' st-topbar__mode--play' : ''}`}>
             {inPlayMode ? SHELL_UI.modePlay : SHELL_UI.modeBuilding}
           </span>
         </div>
@@ -67,13 +69,10 @@ export function SheetTopBar({
             </span>
           </div>
           <button type="button" className="st-topbar__reset" onClick={onResetClick}>
-            {SHELL_UI.reset}
+            <span className="st-topbar__reset--full">{SHELL_UI.reset}</span>
+            <span className="st-topbar__reset--short">{SHELL_UI.resetShort}</span>
           </button>
         </div>
-      </div>
-
-      <div className="st-topbar__row st-topbar__row--journey">
-        <SheetJourneyStrip steps={journeySteps} onStepClick={onTabChange} />
       </div>
     </header>
   );

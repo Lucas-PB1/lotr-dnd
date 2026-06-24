@@ -32,7 +32,6 @@ export function SheetAppShell({
         activeTab={activeTab}
         isSaving={isSaving}
         onResetClick={onResetClick}
-        onTabChange={onTabChange}
       />
       <SheetSideNav
         character={character}
@@ -40,7 +39,12 @@ export function SheetAppShell({
         onTabChange={onTabChange}
         badges={tabBadges}
       />
-      <SheetMainCanvas activeTab={activeTab} onTabChange={onTabChange} tabBadges={tabBadges}>
+      <SheetMainCanvas
+        character={character}
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+        tabBadges={tabBadges}
+      >
         {children}
         <SheetAppFooter />
       </SheetMainCanvas>
