@@ -17,7 +17,7 @@ export const SHEET_PLAY_UI = {
   attacksHint: 'Armas do Inventário. Equipe no Inventário para aparecer aqui.',
   rollAttack: 'Ataque',
   rollDamage: 'Dano',
-  rollHint: 'Toque em d20 para rolar na mesa.',
+  rollHint: 'Toque em d20 — o dado gira e revela o resultado na mesa.',
   reference: 'Consulta rápida',
   referenceHint: 'Equipamento, virtudes e crônica — só leitura na mesa.',
   equipment: 'Equipamento',
