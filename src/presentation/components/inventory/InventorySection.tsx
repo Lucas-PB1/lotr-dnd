@@ -7,6 +7,7 @@ import {
   formatItemCost,
   getItemDefinition,
   itemCostInCopper,
+  PDF_CATALOG_SOURCE,
   searchCatalogItems,
   SHOP_CATEGORY_FILTERS,
 } from '../../../shared/data/itemCatalog';
@@ -84,8 +85,11 @@ function ShopModal({
 
   return (
     <Modal show={open} onClose={onClose} size="4xl">
-      <ModalHeader>Loja — equipamento da Terra-média</ModalHeader>
+      <ModalHeader>Loja — Cap. 4 do livro (Equipment)</ModalHeader>
       <ModalBody>
+        <p className="inventory-shop__source">
+          Itens do PDF oficial ({PDF_CATALOG_SOURCE.pages}). {PDF_CATALOG_SOURCE.note}
+        </p>
         <p className="inventory-shop__wallet">
           Carteira: <strong>{character.currency.gold}</strong> ouro ·{' '}
           <strong>{character.currency.silver}</strong> prata ·{' '}

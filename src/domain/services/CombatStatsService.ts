@@ -68,7 +68,7 @@ export class CombatStatsService {
       } else if (armorDef?.armorCategory === 'medium') {
         ac = (armorDef.baseAc ?? 12) + Math.min(dexMod, armorDef.maxDexBonus ?? 2);
       } else if (armorDef?.armorCategory === 'heavy') {
-        ac = armorDef.baseAc ?? 16;
+        ac = armorDef.baseAc ?? 15;
       } else {
         ac = (armorDef?.baseAc ?? 10) + dexMod;
       }

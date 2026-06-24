@@ -1,6 +1,5 @@
 /**
- * Extrai texto do PDF escaneado via OCR (Tesseract.js).
- * Foco: Capítulo 3 — Criação de Personagem (páginas do livro ~25–68).
+ * OCR do Cap. 4 — Equipment (PDF págs. 71–79).
  */
 import fs from 'fs';
 import path from 'path';
@@ -12,38 +11,38 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PDF_PATH = path.join(__dirname, '../Lord Of The Rings Roleplay.pdf');
 const OUT_DIR = path.join(__dirname, '../data/extracted');
 
-// Intervalo inicial: páginas do PDF (ajustável após mapeamento)
-const START_PAGE = 20;
-const END_PAGE = 75;
+const START_PAGE = 71;
+const END_PAGE = 79;
 
 async function ocrPageImage(buffer) {
-  const { data } = await Tesseract.recognize(buffer, 'eng', {
-    logger: () => {},
-  });
+  const { data } = await Tesseract.recognize(buffer, 'eng', { logger: () => {} });
   return data.text.trim();
 }
 
 async function main() {
+  if (!fs.existsSync(PDF_PATH)) {
+    console.error('PDF não encontrado:', PDF_PATH);
+    process.exit(1);
+  }
+
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   const buf = fs.readFileSync(PDF_PATH);
   const parser = new PDFParse({ data: buf });
   const info = await parser.getInfo();
   const totalPages = info.total;
+  const endPage = Math.min(END_PAGE, totalPages);
 
-  console.log(`PDF: ${totalPages} páginas. OCR de ${START_PAGE} a ${END_PAGE}...`);
+  console.log(`PDF: ${totalPages} páginas. Equipment OCR ${START_PAGE}–${endPage}...`);
 
-  const pageStats = [];
-  const textResult = await parser.getText({ first: 0, last: 0, partial: [] });
-  // get per-page native text first
   const nativeParser = new PDFParse({ data: buf });
   const native = await nativeParser.getText({
-    partial: Array.from({ length: END_PAGE - START_PAGE + 1 }, (_, i) => START_PAGE + i),
+    partial: Array.from({ length: endPage - START_PAGE + 1 }, (_, i) => START_PAGE + i),
   });
   await nativeParser.destroy();
 
   const pages = [];
-  for (let pageNum = START_PAGE; pageNum <= END_PAGE; pageNum++) {
+  for (let pageNum = START_PAGE; pageNum <= endPage; pageNum++) {
     const nativePage = native.pages.find((p) => p.num === pageNum);
     const nativeText = nativePage?.text?.trim() ?? '';
 
@@ -57,7 +56,7 @@ async function main() {
     const screenshotParser = new PDFParse({ data: buf });
     const shot = await screenshotParser.getScreenshot({
       partial: [pageNum],
-      desiredWidth: 1800,
+      desiredWidth: 2000,
       imageBuffer: true,
     });
     await screenshotParser.destroy();
@@ -75,21 +74,24 @@ async function main() {
 
   await parser.destroy();
 
-  const combined = pages.map((p) => `\n\n===== PÁGINA ${p.page} (${p.source}) =====\n\n${p.text}`).join('\n');
+  const combined = pages
+    .map((p) => `\n\n===== PÁGINA ${p.page} (${p.source}) =====\n\n${p.text}`)
+    .join('\n');
 
-  fs.writeFileSync(path.join(OUT_DIR, 'character-creation-ocr.txt'), combined, 'utf8');
+  fs.writeFileSync(path.join(OUT_DIR, 'equipment-ocr.txt'), combined, 'utf8');
   fs.writeFileSync(
-    path.join(OUT_DIR, 'character-creation-ocr.json'),
-    JSON.stringify({ pdfPath: PDF_PATH, startPage: START_PAGE, endPage: END_PAGE, totalPages, pages }, null, 2),
+    path.join(OUT_DIR, 'equipment-ocr.json'),
+    JSON.stringify(
+      { pdfPath: PDF_PATH, startPage: START_PAGE, endPage: endPage, totalPages, pages },
+      null,
+      2,
+    ),
     'utf8',
   );
 
-  const stats = pages.map((p) => ({ page: p.page, source: p.source, chars: p.chars }));
-  fs.writeFileSync(path.join(OUT_DIR, 'page-stats.json'), JSON.stringify(stats, null, 2), 'utf8');
-
   console.log('\nConcluído!');
   console.log(`Total chars: ${pages.reduce((s, p) => s + p.chars, 0)}`);
-  console.log(`Arquivos em: ${OUT_DIR}`);
+  console.log(`→ ${path.join(OUT_DIR, 'equipment-ocr.txt')}`);
 }
 
 main().catch((err) => {

@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "extract:pdf": "node scripts/extract-pdf-ocr.mjs",
+    "extract:equipment": "node scripts/extract-equipment-ocr.mjs",
     "parse:creation": "node --experimental-strip-types scripts/parse-character-creation.mjs"
   },
   "devDependencies": {

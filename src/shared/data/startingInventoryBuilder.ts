@@ -6,83 +6,108 @@ import {
   type CallingEquipmentDefinition,
 } from './startingEquipmentData';
 
-const CULTURE_GEAR: Record<string, string[]> = {
+type GearEntry = { id: string; quantity?: number };
+
+/** Starting Gear — tabela p. 71 do PDF */
+const CULTURE_GEAR: Record<string, GearEntry[]> = {
   Frugal: [
-    'backpack',
-    'sleeping-bag',
-    'mess-kit',
-    'tinderbox',
-    'torches-10',
-    'rations-5',
-    'waterskin',
+    { id: 'backpack' },
+    { id: 'bedroll' },
+    { id: 'mess-kit' },
+    { id: 'tinderbox' },
+    { id: 'torches-10' },
+    { id: 'rations-1-day', quantity: 5 },
+    { id: 'waterskin' },
   ],
   Comum: [
-    'backpack',
-    'sleeping-bag',
-    'mess-kit',
-    'tinderbox',
-    'torches-10',
-    'rations-10',
-    'waterskin',
-    'hemp-rope',
+    { id: 'backpack' },
+    { id: 'bedroll' },
+    { id: 'mess-kit' },
+    { id: 'tinderbox' },
+    { id: 'torches-10' },
+    { id: 'rations-1-day', quantity: 10 },
+    { id: 'waterskin' },
+    { id: 'rope-hempen-50' },
   ],
   Próspero: [
-    'backpack',
-    'sleeping-bag',
-    'mess-kit',
-    'tinderbox',
-    'hooded-lantern',
-    'oil-flask',
-    'cram-10',
-    'waterskin',
-    'silk-rope',
-    'tent',
+    { id: 'backpack' },
+    { id: 'bedroll' },
+    { id: 'mess-kit' },
+    { id: 'tinderbox' },
+    { id: 'lantern-hooded' },
+    { id: 'oil-flask', quantity: 3 },
+    { id: 'rations-cram-1-day', quantity: 10 },
+    { id: 'waterskin' },
+    { id: 'rope-silk-50' },
+    { id: 'tent-two-person' },
   ],
 };
 
 const SCHOLAR_TOOL_MAP: Record<string, string> = {
-  'Suprimentos de calígrafo': 'calligraphy-supplies',
+  'Suprimentos de calígrafo': 'calligraphers-supplies',
   'Ferramentas de cartógrafo': 'cartographers-tools',
   'Kit de herbalismo': 'herbalism-kit',
-  'Instrumento musical': 'musical-instrument',
   'Ferramentas de navegador': 'navigators-tools',
   Cachimbo: 'pipe',
+  Flauta: 'flute',
+  Violino: 'fiddle',
+  Harpa: 'harp',
+  Trombeta: 'trumpet',
+  Clarinete: 'clarinet',
+  Tambor: 'drum',
+  Trompa: 'horn',
+  Viola: 'viol',
 };
 
-/** Opções de equipamento do chamado → IDs do catálogo */
+/** Opções de equipamento do chamado → itens do PDF */
 const EQUIPMENT_OPTION_ITEMS: Record<string, string[]> = {
   'ring-mail': ['ring-mail'],
   hide: ['hide'],
   'leather-greatbow': ['leather-shirt', 'great-bow', 'quiver', 'arrows-20'],
-  'martial-shield': ['martial-weapon', 'shield'],
-  'martial-simple': ['martial-weapon', 'simple-weapon'],
+  'martial-shield': ['sword', 'shield'],
+  'martial-simple': ['sword', 'axe'],
   bow: ['bow', 'quiver', 'arrows-20'],
-  'two-simple': ['simple-weapon', 'simple-weapon'],
-  'short-sword': ['short-sword'],
-  sword: ['sword'],
+  'two-simple': ['spear', 'club'],
+  'short-sword': ['sword-short'],
+  sword: ['sword-long'],
   'leather-shirt': ['leather-shirt'],
   'armor-ranged-bow': ['leather-shirt', 'bow', 'quiver', 'arrows-20'],
   'great-bow': ['great-bow', 'quiver', 'arrows-20'],
-  'simple-melee': ['simple-weapon'],
+  'simple-melee': ['spear'],
 };
 
 function itemsFromOption(optionId: string): string[] {
   return EQUIPMENT_OPTION_ITEMS[optionId] ?? [];
 }
 
-function addItems(inventory: InventoryItem[], definitionIds: string[]): void {
-  for (const definitionId of definitionIds) {
-    const def = getItemDefinition(definitionId);
-    if (def?.stackable) {
-      const existing = inventory.find(
-        (i) => i.definitionId === definitionId && !i.equipped,
-      );
-      if (existing) {
-        existing.quantity += 1;
-        continue;
-      }
+function addItem(
+  inventory: InventoryItem[],
+  definitionId: string,
+  quantity = 1,
+): void {
+  const def = getItemDefinition(definitionId);
+  if (!def) return;
+
+  if (def.stackable) {
+    const existing = inventory.find(
+      (i) => i.definitionId === definitionId && !i.equipped,
+    );
+    if (existing) {
+      existing.quantity += quantity;
+      return;
     }
+    inventory.push({ ...createInventoryItem(definitionId), quantity });
+    return;
+  }
+
+  for (let i = 0; i < quantity; i++) {
     inventory.push(createInventoryItem(definitionId));
+  }
+}
+
+function addGearEntries(inventory: InventoryItem[], entries: GearEntry[]): void {
+  for (const entry of entries) {
+    addItem(inventory, entry.id, entry.quantity ?? 1);
   }
 }
 
@@ -103,10 +128,10 @@ function resolveCallingItems(
       continue;
     }
     if (fixed.includes('Kit de curandeiro')) ids.push('healers-kit');
-    if (fixed.includes('arma simples')) ids.push('simple-weapon');
+    if (fixed.includes('arma simples')) ids.push('spear');
     if (fixed.includes('Camisa de couro')) ids.push('leather-shirt');
     if (fixed.includes('Ferramentas de ladrão')) ids.push('thieves-tools');
-    if (fixed.includes('ferramenta à escolha')) ids.push('simple-weapon');
+    if (fixed.includes('ferramenta à escolha')) ids.push('hatchet');
   }
 
   for (const group of callingDef.optionGroups) {
@@ -131,16 +156,20 @@ export function buildStartingInventory(
 
   const culture = cultureId ? getCulture(cultureId) : null;
   const living = culture?.standardOfLiving ?? 'Comum';
-  const gearIds = CULTURE_GEAR[living] ?? CULTURE_GEAR.Comum;
-  addItems(inventory, gearIds);
+  const gearEntries = CULTURE_GEAR[living] ?? CULTURE_GEAR.Comum;
+  addGearEntries(inventory, gearEntries);
 
   if (callingId) {
     const callingDef = getCallingEquipment(callingId);
     if (callingDef) {
-      addItems(
-        inventory,
-        resolveCallingItems(callingId, callingDef, equipmentOptions, scholarTools),
-      );
+      for (const id of resolveCallingItems(
+        callingId,
+        callingDef,
+        equipmentOptions,
+        scholarTools,
+      )) {
+        addItem(inventory, id);
+      }
     }
   }
 

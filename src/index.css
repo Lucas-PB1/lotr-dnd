@@ -2069,6 +2069,13 @@ body {
   flex: 1;
 }
 
+.inventory-shop__source {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  color: var(--color-ink-muted);
+  line-height: 1.4;
+}
+
 .inventory-shop__wallet {
   margin: 0 0 1rem;
   font-size: 0.88rem;

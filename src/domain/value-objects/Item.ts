@@ -30,6 +30,8 @@ export interface ItemDefinition {
   baseAc?: number;
   armorCategory?: ArmorCategory;
   maxDexBonus?: number;
+  /** Desvantagem em Furtividade (armaduras do livro) */
+  stealthDisadvantage?: boolean;
   /** Arma requer duas mãos */
   twoHanded?: boolean;
   stackable?: boolean;

@@ -1,23 +1,12 @@
 import type { ItemDefinition } from '../../domain/value-objects/Item';
-import { ARMOR_CATALOG } from './catalog/armor';
-import { GEAR_CATALOG } from './catalog/gear';
-import { TOOL_CATALOG } from './catalog/tools';
-import { WEAPON_CATALOG } from './catalog/weapons';
+import {
+  PDF_CATALOG_SOURCE,
+  PDF_EQUIPMENT_CATALOG,
+} from './lotrPdfEquipment';
 
-const CUSTOM_ITEM: ItemDefinition = {
-  id: 'custom',
-  namePt: 'Item personalizado',
-  category: 'treasure',
-  description: 'Item adicionado manualmente pelo jogador.',
-};
+export { PDF_CATALOG_SOURCE };
 
-export const ITEM_CATALOG: ItemDefinition[] = [
-  ...WEAPON_CATALOG,
-  ...ARMOR_CATALOG,
-  ...GEAR_CATALOG,
-  ...TOOL_CATALOG,
-  CUSTOM_ITEM,
-];
+export const ITEM_CATALOG: ItemDefinition[] = PDF_EQUIPMENT_CATALOG;
 
 const catalogMap = new Map(ITEM_CATALOG.map((item) => [item.id, item]));
 
