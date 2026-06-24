@@ -47,7 +47,7 @@
     0 0 15px rgba(234, 191, 137, 0.35);
 }
 
-.st-leather-slot--filled .material-symbols-outlined {
+.st-leather-slot--filled svg {
   color: var(--color-st-secondary);
 }
 
@@ -614,8 +614,6 @@
   left: 0.875rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-st-outline);
-  font-size: 1.25rem;
   pointer-events: none;
 }
 
@@ -746,10 +744,8 @@
   color: var(--color-st-on-secondary-container);
 }
 
-.st-shop-card__icon .material-symbols-outlined {
-  font-size: 1.1rem;
-  line-height: 1;
-  overflow: hidden;
+.st-shop-card__icon svg {
+  display: block;
 }
 
 .st-shop-card__cat {

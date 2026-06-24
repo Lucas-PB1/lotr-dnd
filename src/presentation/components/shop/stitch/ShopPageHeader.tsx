@@ -1,4 +1,5 @@
 import { SHOP_UI } from '../../../../shared/constants/appLabels';
+import { WALLET_COIN_ICONS } from '../../icons';
 import { ParchmentCard, WalletChip } from '../../stitch';
 import { formatWallet, walletTotalCopper } from '../../inventory/inventoryItemDisplay';
 import { useShopActions } from '../hooks/useShopActions';
@@ -16,19 +17,19 @@ export function ShopPageHeader() {
       <ParchmentCard className="st-shop-wallet px-4 py-3 flex flex-wrap items-center gap-4">
         <div className="st-wallet-strip">
           <WalletChip
-            icon="monetization_on"
+            icon={WALLET_COIN_ICONS.gold}
             label="Ouro"
             value={currency.gold}
             onChange={(gold) => updateCurrency({ gold })}
           />
           <WalletChip
-            icon="payments"
+            icon={WALLET_COIN_ICONS.silver}
             label="Prata"
             value={currency.silver}
             onChange={(silver) => updateCurrency({ silver })}
           />
           <WalletChip
-            icon="toll"
+            icon={WALLET_COIN_ICONS.copper}
             label="Cobre"
             value={currency.copper}
             onChange={(copper) => updateCurrency({ copper })}

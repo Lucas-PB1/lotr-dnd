@@ -1,6 +1,7 @@
 import type { InventoryItem } from '../../../../domain/value-objects/Item';
 import { INVENTORY_UI } from '../../../../shared/constants/appLabels';
 import { CATEGORY_LABELS, getItemDefinition } from '../../../../shared/data/itemCatalog';
+import { ITEM_CATEGORY_ICONS, StitchIconPair } from '../../icons';
 import { ParchmentCard, StitchBadge } from '../../stitch';
 import {
   buildItemStatLines,
@@ -8,7 +9,6 @@ import {
   itemLabel,
   itemMetaShort,
 } from '../inventoryItemDisplay';
-import { MATERIAL_CATEGORY_ICONS } from './stitchInventoryIcons';
 import { InventoryItemActions } from './InventoryItemActions';
 
 type InventoryItemDetailProps = {
@@ -52,9 +52,12 @@ export function InventoryItemDetail({
       </h4>
       <div className="flex gap-6 flex-wrap">
         <div className="w-24 h-24 bg-[var(--color-st-surface-container)] rounded border border-[var(--color-st-outline-variant)] flex items-center justify-center shrink-0">
-          <span className="material-symbols-outlined text-5xl text-[var(--color-st-secondary)] material-symbols-outlined--filled">
-            {MATERIAL_CATEGORY_ICONS[cat]}
-          </span>
+          <StitchIconPair
+            pair={ITEM_CATEGORY_ICONS[cat]}
+            solid
+            size="2xl"
+            className="text-[var(--color-st-secondary)]"
+          />
         </div>
         <div className="flex-grow space-y-3 min-w-[12rem]">
           <div>

@@ -1,4 +1,5 @@
 import { SHOP_UI } from '../../../../shared/constants/appLabels';
+import { StitchIcon, UI_ICONS } from '../../icons';
 import type { ShopSortMode } from '../hooks/useShopCatalog';
 import type { ItemDefinition } from '../../../../domain/value-objects/Item';
 
@@ -31,9 +32,11 @@ export function ShopToolbar({
     <div className="st-shop-toolbar space-y-3">
       <div className="st-shop-toolbar__row">
         <div className="st-shop-search">
-          <span className="material-symbols-outlined st-shop-search__icon" aria-hidden>
-            search
-          </span>
+          <StitchIcon
+            icon={UI_ICONS.search}
+            size="md"
+            className="st-shop-search__icon text-[var(--color-st-outline)]"
+          />
           <input
             type="search"
             className="st-shop-search__input"

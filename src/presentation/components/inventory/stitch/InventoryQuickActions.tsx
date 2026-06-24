@@ -1,4 +1,5 @@
 import { INVENTORY_UI } from '../../../../shared/constants/appLabels';
+import { StitchIcon, UI_ICONS } from '../../icons';
 import { useSheetNavigation } from '../../../context/SheetNavigationContext';
 import { ParchmentCard } from '../../stitch';
 import { formatWallet } from '../inventoryItemDisplay';
@@ -18,7 +19,7 @@ export function InventoryQuickActions({ onSort }: InventoryQuickActionsProps) {
         onClick={() => goToTab('shop')}
         className="st-parchment px-6 py-4 rounded-lg border border-[var(--color-st-outline-variant)] flex items-center justify-center gap-3 hover:brightness-110 active:scale-95 transition-all"
       >
-        <span className="material-symbols-outlined">storefront</span>
+        <StitchIcon icon={UI_ICONS.shop} size="md" />
         <span className="font-st-label font-bold">{INVENTORY_UI.goToMarket}</span>
       </button>
       <button
@@ -26,7 +27,7 @@ export function InventoryQuickActions({ onSort }: InventoryQuickActionsProps) {
         onClick={onSort}
         className="st-parchment px-6 py-4 rounded-lg border border-[var(--color-st-outline-variant)] flex items-center justify-center gap-3 hover:brightness-110 active:scale-95 transition-all"
       >
-        <span className="material-symbols-outlined">inventory_2</span>
+        <StitchIcon icon={UI_ICONS.sort} size="md" />
         <span className="font-st-label font-bold">{INVENTORY_UI.sortInventory}</span>
       </button>
     </div>
@@ -39,9 +40,7 @@ export function InventoryTreasuryCard() {
 
   return (
     <ParchmentCard className="p-6 flex flex-col justify-center items-center text-center h-full">
-      <span className="material-symbols-outlined text-4xl text-[var(--color-st-tertiary)] mb-2">
-        account_balance_wallet
-      </span>
+      <StitchIcon icon={UI_ICONS.wallet} size="2xl" className="text-[var(--color-st-tertiary)] mb-2" />
       <h4 className="font-st-label uppercase text-[var(--color-st-on-surface-variant)] mb-1 m-0">
         {INVENTORY_UI.treasuryOverview}
       </h4>

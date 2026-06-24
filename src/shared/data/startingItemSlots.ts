@@ -97,6 +97,11 @@ const EQUIPMENT_BUNDLE_ITEMS: Record<string, string[]> = {
   'simple-melee': [],
 };
 
+export function resolveEquipmentOptionItemIds(groupId: string, optionId: string): string[] {
+  const groupKey = groupId === 'armor-ranged' && optionId === 'bow' ? 'armor-ranged-bow' : optionId;
+  return EQUIPMENT_BUNDLE_ITEMS[groupKey] ?? [];
+}
+
 const TOOL_PHRASE_MAP: Record<string, readonly string[]> = {
   "smith's tools": ['smiths-tools'],
   "smiths tools": ['smiths-tools'],

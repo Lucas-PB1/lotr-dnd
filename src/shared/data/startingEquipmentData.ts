@@ -14,7 +14,7 @@ export interface CallingEquipmentDefinition {
   toolNote?: string;
 }
 
-const STANDARD_OF_LIVING_GEAR: Record<string, { labelPt: string; items: string[]; silver: number }> = {
+export const STANDARD_OF_LIVING_GEAR: Record<string, { labelPt: string; items: string[]; silver: number }> = {
   Frugal: {
     labelPt: 'Frugal',
     items: [

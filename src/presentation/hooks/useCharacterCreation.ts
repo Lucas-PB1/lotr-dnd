@@ -137,6 +137,7 @@ export function useCharacterCreation() {
     rewardSlots,
     callingEquipment,
     bonusPreview,
+    baseAbilities: character.abilities,
     setChoice,
     updateRewardPick,
     updateEquipmentOption,

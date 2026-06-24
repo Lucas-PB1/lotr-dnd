@@ -6,6 +6,7 @@ interface ToggleButtonGroupProps {
   selected: string[];
   max: number;
   onChange: (ids: string[]) => void;
+  variant?: 'legacy' | 'stitch';
 }
 
 /** Grupo de botões toggle — substitui padrão repetido em SkillPicker / virtudes. */
@@ -15,6 +16,7 @@ export function ToggleButtonGroup({
   selected,
   max,
   onChange,
+  variant = 'legacy',
 }: ToggleButtonGroupProps) {
   const toggle = (id: string) => {
     if (selected.includes(id)) {
@@ -23,6 +25,33 @@ export function ToggleButtonGroup({
       onChange([...selected, id]);
     }
   };
+
+  if (variant === 'stitch') {
+    return (
+      <div className="toggle-group">
+        <p className="toggle-group__label m-0">
+          {label} ({selected.length}/{max})
+        </p>
+        <div className="toggle-group__chips">
+          {options.map((opt) => {
+            const isOn = selected.includes(opt.id);
+            const disabled = !isOn && selected.length >= max;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                className={`st-creation-chip${isOn ? ' st-creation-chip--on' : ''}`}
+                disabled={disabled}
+                onClick={() => toggle(opt.id)}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="toggle-group">

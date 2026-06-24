@@ -3,6 +3,7 @@ import type { InventoryItem } from '../../../../domain/value-objects/Item';
 import { InventoryService } from '../../../../domain/services/InventoryService';
 import { INVENTORY_UI } from '../../../../shared/constants/appLabels';
 import { getItemDefinition, itemCostInCopper } from '../../../../shared/data/itemCatalog';
+import { StitchIcon, UI_ICONS } from '../../icons';
 import { itemLabel } from '../inventoryItemDisplay';
 
 type InventoryItemActionsProps = {
@@ -62,13 +63,13 @@ export function InventoryItemActions({
       <div className="st-item-actions__buttons">
         {canEquip && (
           <button type="button" className="st-item-actions__btn st-item-actions__btn--primary" onClick={() => onEquip(item.instanceId)}>
-            <span className="material-symbols-outlined text-sm">upgrade</span>
+            <StitchIcon icon={UI_ICONS.equip} size="sm" />
             {INVENTORY_UI.equipItem}
           </button>
         )}
         {canUnequip && (
           <button type="button" className="st-item-actions__btn" onClick={() => onUnequip(item.instanceId)}>
-            <span className="material-symbols-outlined text-sm">remove_circle</span>
+            <StitchIcon icon={UI_ICONS.unequip} size="sm" />
             {INVENTORY_UI.unequipItem}
           </button>
         )}
@@ -78,7 +79,7 @@ export function InventoryItemActions({
             className="st-item-actions__btn st-item-actions__btn--use"
             onClick={() => runWithQty(onUse)}
           >
-            <span className="material-symbols-outlined text-sm">restaurant</span>
+            <StitchIcon icon={UI_ICONS.use} size="sm" />
             {INVENTORY_UI.useItem}
             {maxQty > 1 ? ` (${clampQty(qty)})` : ''}
           </button>
@@ -89,7 +90,7 @@ export function InventoryItemActions({
             className="st-item-actions__btn"
             onClick={() => runWithQty(onSell)}
           >
-            <span className="material-symbols-outlined text-sm">sell</span>
+            <StitchIcon icon={UI_ICONS.sell} size="sm" />
             {INVENTORY_UI.sellItem}
             {maxQty > 1 ? ` (${clampQty(qty)})` : ''}
           </button>
@@ -102,7 +103,7 @@ export function InventoryItemActions({
               onRemove(item.instanceId);
             }}
           >
-            <span className="material-symbols-outlined text-sm">delete</span>
+            <StitchIcon icon={UI_ICONS.delete} size="sm" />
             {INVENTORY_UI.removeItem}
           </button>
         )}

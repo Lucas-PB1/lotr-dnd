@@ -1,15 +1,17 @@
 import type { InventoryItem } from '../../../../domain/value-objects/Item';
 import { INVENTORY_UI } from '../../../../shared/constants/appLabels';
 import { getItemDefinition } from '../../../../shared/data/itemCatalog';
+import { EQUIPMENT_SLOT_ICONS } from '../../icons';
+import { StitchIconPair } from '../../icons';
 import { BurdenBar, ParchmentCard } from '../../stitch';
 import { TapScale } from '../../stitch/motion/TapScale';
 import { itemLabel } from '../inventoryItemDisplay';
-import { MATERIAL_SLOT_ICONS } from './stitchInventoryIcons';
+import type { IconPair } from '../../icons';
 
 type SlotConfig = {
   id: string;
   label: string;
-  icon: string;
+  icon: IconPair;
   item?: InventoryItem;
   onSelect?: () => void;
   selected?: boolean;
@@ -38,12 +40,12 @@ function EquipmentSlot({ label, icon, item, onSelect, selected }: SlotConfig) {
         aria-label={item ? itemLabel(item) : label}
         onClick={() => item && onSelect?.()}
       >
-        <span
-          className={`material-symbols-outlined text-4xl${filled ? ' material-symbols-outlined--filled' : ''}`}
-          style={{ color: filled ? undefined : 'var(--color-st-outline)' }}
-        >
-          {icon}
-        </span>
+        <StitchIconPair
+          pair={icon}
+          solid={filled}
+          size="2xl"
+          className={filled ? undefined : 'text-[var(--color-st-outline)]'}
+        />
       </TapScale>
       <span className="font-st-label text-[var(--color-st-on-surface-variant)] uppercase text-center">
         {label}
@@ -74,7 +76,7 @@ export function InventoryEquipmentGrid({
     {
       id: 'main',
       label: INVENTORY_UI.slotMainHand,
-      icon: MATERIAL_SLOT_ICONS.mainHand,
+      icon: EQUIPMENT_SLOT_ICONS.mainHand,
       item: mainHand,
       selected: mainHand?.instanceId === selectedItemId,
       onSelect: mainHand ? () => onSelectItem(mainHand.instanceId) : undefined,
@@ -82,7 +84,7 @@ export function InventoryEquipmentGrid({
     {
       id: 'off',
       label: INVENTORY_UI.slotOffHand,
-      icon: MATERIAL_SLOT_ICONS.offHand,
+      icon: EQUIPMENT_SLOT_ICONS.offHand,
       item: offHand,
       selected: offHand?.instanceId === selectedItemId,
       onSelect: offHand ? () => onSelectItem(offHand.instanceId) : undefined,
@@ -90,7 +92,7 @@ export function InventoryEquipmentGrid({
     {
       id: 'armor',
       label: INVENTORY_UI.slotArmor,
-      icon: MATERIAL_SLOT_ICONS.armor,
+      icon: EQUIPMENT_SLOT_ICONS.armor,
       item: armor,
       selected: armor?.instanceId === selectedItemId,
       onSelect: armor ? () => onSelectItem(armor.instanceId) : undefined,

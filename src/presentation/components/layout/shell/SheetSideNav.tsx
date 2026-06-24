@@ -1,7 +1,8 @@
 import type { CharacterProps } from '../../../../domain/entities/Character';
 import { SHEET_TABS } from '../../../../shared/constants/appLabels';
+import { SHEET_TAB_ICONS, StitchIconPair } from '../../icons';
 import type { SheetTabId } from './sheetTabTypes';
-import { SHEET_TAB_ICONS, SHEET_TAB_ORDER } from './sheetTabTypes';
+import { SHEET_TAB_ORDER } from './sheetTabTypes';
 
 type TabBadge = Partial<Record<SheetTabId, string>>;
 
@@ -47,11 +48,12 @@ export function SheetSideNav({ character, activeTab, onTabChange, badges }: Shee
               aria-current={active ? 'page' : undefined}
               onClick={() => onTabChange(tabId)}
             >
-              <span
-                className={`material-symbols-outlined${active && tabId === 'inventory' ? ' material-symbols-outlined--filled' : ''}`}
-              >
-                {SHEET_TAB_ICONS[tabId]}
-              </span>
+              <StitchIconPair
+                pair={SHEET_TAB_ICONS[tabId]}
+                solid={active}
+                size="md"
+                className="shrink-0"
+              />
               <span>{SHEET_TABS[tabId]}</span>
               {badge && <span className="st-sidenav__badge">{badge}</span>}
             </button>

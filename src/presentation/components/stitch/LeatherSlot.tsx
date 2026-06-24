@@ -1,12 +1,18 @@
 import type { ButtonHTMLAttributes } from 'react';
+import type { HeroIcon, IconPair } from '../icons';
+import { StitchIconPair } from '../icons';
 
 type LeatherSlotProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  icon: string;
+  icon: HeroIcon | IconPair;
   label: string;
   filled?: boolean;
   selected?: boolean;
   iconFilled?: boolean;
 };
+
+function resolveIconPair(icon: HeroIcon | IconPair): IconPair {
+  return typeof icon === 'function' ? { outline: icon } : icon;
+}
 
 export function LeatherSlot({
   icon,
@@ -17,6 +23,8 @@ export function LeatherSlot({
   className = '',
   ...rest
 }: LeatherSlotProps) {
+  const pair = resolveIconPair(icon);
+
   return (
     <div className="flex flex-col items-center gap-2">
       <button
@@ -25,12 +33,12 @@ export function LeatherSlot({
         aria-label={label}
         {...rest}
       >
-        <span
-          className={`material-symbols-outlined text-4xl${iconFilled ? ' material-symbols-outlined--filled' : ''}`}
-          style={{ color: filled ? undefined : 'var(--color-st-outline)' }}
-        >
-          {icon}
-        </span>
+        <StitchIconPair
+          pair={pair}
+          solid={iconFilled || filled}
+          size="2xl"
+          className={filled ? undefined : 'text-[var(--color-st-outline)]'}
+        />
       </button>
       <span className="font-st-label text-[var(--color-st-on-surface-variant)]">{label}</span>
     </div>

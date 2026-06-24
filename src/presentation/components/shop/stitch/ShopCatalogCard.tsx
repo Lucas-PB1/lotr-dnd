@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ItemDefinition } from '../../../../domain/value-objects/Item';
 import { itemCostInCopper } from '../../../../shared/data/itemCatalog';
 import { SHOP_UI } from '../../../../shared/constants/appLabels';
+import { ITEM_CATEGORY_ICONS, StitchIconPair } from '../../icons';
 import { ParchmentCard } from '../../stitch';
 import {
   buildItemStatLines,
@@ -10,7 +11,6 @@ import {
   formatItemCost,
 } from '../../inventory/inventoryItemDisplay';
 import type { InventoryItem } from '../../../../domain/value-objects/Item';
-import { SHOP_CATEGORY_MATERIAL_ICONS } from './shopCategoryIcons';
 
 type ShopCatalogCardProps = {
   item: ItemDefinition;
@@ -45,7 +45,7 @@ export function ShopCatalogCard({
     >
       <div className="st-shop-card__head">
         <span className="st-shop-card__icon" aria-hidden>
-          <span className="material-symbols-outlined">{SHOP_CATEGORY_MATERIAL_ICONS[item.category]}</span>
+          <StitchIconPair pair={ITEM_CATEGORY_ICONS[item.category]} size="md" />
         </span>
         <span className="st-shop-card__cat">{CATEGORY_LABELS[item.category]}</span>
         {owned > 0 && (

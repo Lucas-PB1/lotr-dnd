@@ -1,22 +1,22 @@
 import { useMemo } from 'react';
 import type { CreationChoices } from '../../../domain/services/CharacterCreationService';
-import { getItemDefinition } from '../../../shared/data/itemCatalog';
 import {
-  getCultureGearPreview,
   getStartingItemSlots,
   normalizeStartingItemChoices,
   type StartingItemSlotGroup,
 } from '../../../shared/data/startingItemSlots';
-import { CreationSelect } from './CreationSelect';
+import type { EquipmentCombatContext } from './equipmentItemDisplay';
+import { EquipmentStartingSlotPicker } from './EquipmentStartingSlotPicker';
 
 const GROUP_LABELS: Record<StartingItemSlotGroup, string> = {
-  origem: 'Origem (antecedente)',
+  origem: 'Origem',
   chamado: 'Chamado',
-  equipamento: 'Pacotes de equipamento',
+  equipamento: 'Pacotes',
 };
 
 interface StartingItemPickersProps {
   choices: CreationChoices;
+  combatContext: EquipmentCombatContext;
   onUpdateItemChoice: (slotId: string, itemId: string) => void;
 }
 
@@ -25,79 +25,48 @@ function groupSlots(slots: ReturnType<typeof getStartingItemSlots>) {
   return groups
     .map((group) => ({
       group,
-      slots: slots.filter((s) => s.group === group),
+      slots: slots.filter((slot) => slot.group === group),
     }))
-    .filter((g) => g.slots.length > 0);
+    .filter((entry) => entry.slots.length > 0);
 }
 
-export function StartingItemPickers({ choices, onUpdateItemChoice }: StartingItemPickersProps) {
+export function StartingItemPickers({
+  choices,
+  combatContext,
+  onUpdateItemChoice,
+}: StartingItemPickersProps) {
   const slots = useMemo(() => getStartingItemSlots(choices), [choices]);
-  const itemChoices = useMemo(
-    () => normalizeStartingItemChoices(choices),
-    [choices],
-  );
-  const culturePreview = useMemo(() => getCultureGearPreview(choices), [choices]);
+  const itemChoices = useMemo(() => normalizeStartingItemChoices(choices), [choices]);
   const grouped = useMemo(() => groupSlots(slots), [slots]);
 
+  if (grouped.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="starting-items">
-      <h4 className="starting-items__title">Itens no inventário</h4>
-
-      <div className="starting-items__culture">
-        <span className="starting-items__culture-label">Kit cultural (automático)</span>
-        <ul className="starting-items__culture-list">
-          {culturePreview.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-          <li>Bolsa com moedas de prata (padrão de vida)</li>
-        </ul>
-      </div>
-
-      {grouped.length === 0 ? (
-        <p className="starting-items__hint">
-          Escolha cultura, antecedente e chamado para definir armas e ferramentas.
-        </p>
-      ) : (
-        grouped.map(({ group, slots: groupSlots }) => (
-          <div key={group} className="starting-items__group">
-            <span className="starting-items__group-label">{GROUP_LABELS[group]}</span>
-            <div className="starting-items__grid">
+    <section className="st-creation-equip-block">
+      <h4 className="st-creation-equip-block__title">Escolhas detalhadas</h4>
+      <div className="st-creation-equip-choice-groups">
+        {grouped.map(({ group, slots: groupSlots }) => (
+          <div key={group} className="st-creation-equip-choice-group">
+            <span className="st-creation-equip-choice-group__label">{GROUP_LABELS[group]}</span>
+            <div className="st-creation-equip-slot-pickers">
               {groupSlots.map((slot) => {
                 const value = itemChoices[slot.id] ?? slot.allowedItemIds[0] ?? '';
                 return (
-                  <div key={slot.id} className="starting-items__field">
-                    <label className="starting-items__label" htmlFor={`item-slot-${slot.id}`}>
-                      {slot.labelPt}
-                    </label>
-                    {slot.hintPt ? (
-                      <span className="starting-items__hint-line">{slot.hintPt}</span>
-                    ) : null}
-                    <CreationSelect
-                      id={`item-slot-${slot.id}`}
-                      value={value}
-                      onChange={(e) => onUpdateItemChoice(slot.id, e.target.value)}
-                    >
-                      {slot.allowedItemIds.map((id) => {
-                        const def = getItemDefinition(id);
-                        return (
-                          <option key={id} value={id}>
-                            {def?.namePt ?? id}
-                          </option>
-                        );
-                      })}
-                    </CreationSelect>
-                  </div>
+                  <EquipmentStartingSlotPicker
+                    key={slot.id}
+                    slot={slot}
+                    value={value}
+                    combatContext={combatContext}
+                    onChange={(itemId) => onUpdateItemChoice(slot.id, itemId)}
+                  />
                 );
               })}
             </div>
           </div>
-        ))
-      )}
-
-      <p className="starting-items__sync">
-        As escolhas entram no inventário automaticamente — confira na aba{' '}
-        <span className="starting-items__sync-tab">Inventário</span>.
-      </p>
-    </div>
+        ))}
+      </div>
+    </section>
   );
 }

@@ -3,10 +3,10 @@ import type { InventoryItem } from '../../../../domain/value-objects/Item';
 import { InventoryService } from '../../../../domain/services/InventoryService';
 import { INVENTORY_UI } from '../../../../shared/constants/appLabels';
 import { getItemDefinition, itemCostInCopper } from '../../../../shared/data/itemCatalog';
+import { ITEM_CATEGORY_ICONS, StitchIcon, UI_ICONS } from '../../icons';
 import { LedgerRow, ParchmentCard } from '../../stitch';
 import { CARRY_FILTERS } from '../hooks/useInventoryDerived';
 import { itemDescription, itemLabel } from '../inventoryItemDisplay';
-import { MATERIAL_CATEGORY_ICONS } from './stitchInventoryIcons';
 
 type InventoryLedgerListProps = {
   items: InventoryItem[];
@@ -24,6 +24,9 @@ type InventoryLedgerListProps = {
   totalValueLabel: string;
   onAddCustom: (name: string) => boolean;
 };
+
+const actionBtnClass =
+  'p-1 rounded hover:bg-[var(--color-st-surface-container-high)] transition-colors';
 
 export function InventoryLedgerList({
   items,
@@ -51,7 +54,7 @@ export function InventoryLedgerList({
     <ParchmentCard className="p-6 flex flex-col min-h-[28rem]">
       <div className="flex justify-between items-center mb-4 gap-2 flex-wrap">
         <h3 className="font-st-title uppercase tracking-widest flex items-center gap-2 m-0">
-          <span className="material-symbols-outlined text-[var(--color-st-secondary)]">backpack</span>
+          <StitchIcon icon={UI_ICONS.backpack} size="md" className="text-[var(--color-st-secondary)]" />
           {INVENTORY_UI.packContents}
           {carriedCount > 0 && (
             <span className="text-sm text-[var(--color-st-on-surface-variant)] font-normal normal-case">
@@ -107,7 +110,7 @@ export function InventoryLedgerList({
             return (
               <LedgerRow
                 key={item.instanceId}
-                icon={MATERIAL_CATEGORY_ICONS[cat]}
+                icon={ITEM_CATEGORY_ICONS[cat]}
                 iconFilled={cat === 'treasure' || cat === 'custom'}
                 label={
                   <span className="min-w-0">
@@ -127,58 +130,60 @@ export function InventoryLedgerList({
                     {canEquip && (
                       <button
                         type="button"
-                        className="material-symbols-outlined text-sm text-[var(--color-st-outline)] hover:text-[var(--color-st-secondary)]"
+                        className={`${actionBtnClass} text-[var(--color-st-outline)] hover:text-[var(--color-st-secondary)]`}
                         title={INVENTORY_UI.equipItem}
                         onClick={(e) => {
                           e.stopPropagation();
                           onEquip(item.instanceId);
                         }}
                       >
-                        upgrade
+                        <StitchIcon icon={UI_ICONS.equip} size="sm" />
                       </button>
                     )}
                     {canUse && (
                       <button
                         type="button"
-                        className="material-symbols-outlined text-sm text-[var(--color-st-outline)] hover:text-[var(--color-st-tertiary)]"
+                        className={`${actionBtnClass} text-[var(--color-st-outline)] hover:text-[var(--color-st-tertiary)]`}
                         title={INVENTORY_UI.useItem}
                         onClick={(e) => {
                           e.stopPropagation();
                           onUse(item.instanceId);
                         }}
                       >
-                        restaurant
+                        <StitchIcon icon={UI_ICONS.use} size="sm" />
                       </button>
                     )}
                     {canSell && (
                       <button
                         type="button"
-                        className="material-symbols-outlined text-sm text-[var(--color-st-outline)] hover:text-[var(--color-st-secondary)]"
+                        className={`${actionBtnClass} text-[var(--color-st-outline)] hover:text-[var(--color-st-secondary)]`}
                         title={INVENTORY_UI.sellItem}
                         onClick={(e) => {
                           e.stopPropagation();
                           onSell(item.instanceId);
                         }}
                       >
-                        sell
+                        <StitchIcon icon={UI_ICONS.sell} size="sm" />
                       </button>
                     )}
                     {isCustom && (
                       <button
                         type="button"
-                        className="material-symbols-outlined text-sm text-[var(--color-st-error)]"
+                        className={`${actionBtnClass} text-[var(--color-st-error)]`}
                         title="Remover"
                         onClick={(e) => {
                           e.stopPropagation();
                           onRemove(item.instanceId);
                         }}
                       >
-                        delete
+                        <StitchIcon icon={UI_ICONS.delete} size="sm" />
                       </button>
                     )}
-                    <span className="material-symbols-outlined text-sm text-[var(--color-st-outline-variant)]">
-                      edit
-                    </span>
+                    <StitchIcon
+                      icon={UI_ICONS.edit}
+                      size="sm"
+                      className="text-[var(--color-st-outline-variant)]"
+                    />
                   </>
                 }
               />

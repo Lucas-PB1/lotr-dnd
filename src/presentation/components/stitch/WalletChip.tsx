@@ -1,14 +1,18 @@
+import type { HeroIcon } from '../icons';
+
 type WalletChipProps = {
-  icon: string;
+  icon: HeroIcon;
   label: string;
   value: number;
   onChange?: (value: number) => void;
 };
 
 export function WalletChip({ icon, label, value, onChange }: WalletChipProps) {
+  const Icon = icon;
+
   return (
     <div className="st-wallet-chip st-parchment">
-      <span className="material-symbols-outlined text-[var(--color-st-tertiary)]">{icon}</span>
+      <Icon className="w-5 h-5 text-[var(--color-st-tertiary)] shrink-0" aria-hidden />
       <div>
         <p className="font-st-label text-[var(--color-st-on-surface-variant)] m-0 leading-tight">{label}</p>
         {onChange ? (

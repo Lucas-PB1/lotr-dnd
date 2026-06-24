@@ -2,6 +2,8 @@ import type { AbilityName } from '../../shared/constants/gameConstants';
 import { ABILITY_ABBREVIATIONS } from '../../shared/constants/gameConstants';
 import type { CharacterProps } from '../entities/Character';
 import { Character } from '../entities/Character';
+import type { AbilityBonusSource } from './AbilityBonusService';
+import type { CreationChoices } from './CharacterCreationService';
 import { getCalling } from '../../shared/data/characterCreationData';
 import type { ItemDefinition } from '../value-objects/Item';
 import { getItemDefinition } from '../../shared/data/itemCatalog';
@@ -11,7 +13,7 @@ import {
 } from '../../shared/data/startingItemSlots';
 import { getVirtueById } from '../../shared/data/virtuesAndCraftsData';
 import type { InventoryItem } from '../value-objects/Item';
-import type { AbilityScores } from '../value-objects/CharacterValues';
+import type { AbilityScores, AbilityScoresProps } from '../value-objects/CharacterValues';
 import { CharacterCalculator } from './CharacterCalculator';
 import { MagicalItemService } from './MagicalItemService';
 
@@ -135,6 +137,65 @@ function getVirtueCombatEffects(
   }
 
   return { damageBonus, notes };
+}
+
+export type WeaponCreationPreview = {
+  attackBonus: number;
+  ability: AbilityName;
+  abilityMod: number;
+  abilityAlt?: AbilityName;
+  abilityAltMod?: number;
+  proficient: boolean;
+  proficiencyBonus: number;
+  damageFormula: string;
+  notes: string[];
+};
+
+export function previewWeaponForCreation(
+  def: ItemDefinition,
+  params: {
+    abilities: AbilityScoresProps;
+    abilityBonusSources: AbilityBonusSource[];
+    proficiencyBonus: number;
+    creationChoices: CreationChoices;
+  },
+): WeaponCreationPreview | null {
+  if (def.category !== 'weapon') return null;
+
+  const props = {
+    abilities: params.abilities,
+    abilityBonusSources: params.abilityBonusSources,
+    proficiencyBonus: params.proficiencyBonus,
+    creationChoices: params.creationChoices,
+  } as CharacterProps;
+
+  const item: InventoryItem = {
+    instanceId: 'creation-preview',
+    definitionId: def.id,
+    quantity: 1,
+    equipped: true,
+    notes: '',
+  };
+
+  const roll = buildAttackForWeapon(props, item, def);
+  const altMod = roll.breakdown.abilityAlt
+    ? CharacterCalculator.abilityScores(new Character(props)).get(roll.breakdown.abilityAlt).modifier
+    : undefined;
+
+  return {
+    attackBonus: roll.attackTotal,
+    ability: roll.breakdown.ability,
+    abilityMod: roll.breakdown.abilityMod,
+    abilityAlt: roll.breakdown.abilityAlt,
+    abilityAltMod: altMod,
+    proficient: roll.proficient,
+    proficiencyBonus: roll.breakdown.proficiency,
+    damageFormula: roll.damageFormula,
+    notes: [
+      ...roll.breakdown.virtueNotes,
+      ...(roll.proficient ? [] : ['Sem proficiência — sem bônus de proficiência no ataque']),
+    ],
+  };
 }
 
 function buildAttackForWeapon(

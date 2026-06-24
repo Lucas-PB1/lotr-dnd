@@ -1,12 +1,15 @@
-import { Button, Select } from 'flowbite-react';
-import type { AbilityName } from '../../../shared/constants/gameConstants';
+import { SparklesIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
 import { ABILITY_LABELS } from '../../../shared/constants/gameConstants';
 import type { RewardSlotDefinition } from '../../../shared/data/levelRewardData';
 import type { RewardSlotPick } from '../../../shared/data/rewardSlotUtils';
+import type { VirtueDefinition } from '../../../shared/data/virtuesAndCraftsData';
 import {
   getVirtuesForCulture,
   SCHOLAR_CRAFTS,
 } from '../../../shared/data/virtuesAndCraftsData';
+import { StitchIcon } from '../icons';
+import { RewardOptionCard } from './RewardOptionCard';
+import { getVirtueStatTags } from './virtueStatDisplay';
 
 interface RewardSlotPickerProps {
   slot: RewardSlotDefinition;
@@ -14,6 +17,52 @@ interface RewardSlotPickerProps {
   cultureId: string | null;
   usedVirtueIds: string[];
   onChange: (pick: RewardSlotPick) => void;
+}
+
+function VirtueGrid({
+  label,
+  virtues,
+  pick,
+  usedVirtueIds,
+  onChange,
+}: {
+  label: string;
+  virtues: VirtueDefinition[];
+  pick: RewardSlotPick;
+  usedVirtueIds: string[];
+  onChange: (pick: RewardSlotPick) => void;
+}) {
+  if (virtues.length === 0) return null;
+
+  return (
+    <div className="st-creation-reward-group">
+      <p className="st-creation-reward-group__label">{label}</p>
+      <div className="st-creation-reward-grid">
+        {virtues.map((virtue) => {
+          const disabled = usedVirtueIds.includes(virtue.id);
+          const selected = pick.virtueId === virtue.id;
+          return (
+            <RewardOptionCard
+              key={virtue.id}
+              title={virtue.namePt}
+              stats={getVirtueStatTags(virtue)}
+              summary={virtue.summaryPt}
+              selected={selected}
+              disabled={disabled && !selected}
+              onClick={() =>
+                onChange({
+                  ...pick,
+                  rewardType: 'virtue',
+                  virtueId: selected ? null : virtue.id,
+                  virtueAbilityChoice: null,
+                })
+              }
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export function RewardSlotPicker({
@@ -24,6 +73,9 @@ export function RewardSlotPicker({
   onChange,
 }: RewardSlotPickerProps) {
   const virtues = getVirtuesForCulture(cultureId);
+  const commonVirtues = virtues.filter((v) => v.scopes.includes('common'));
+  const culturalVirtues = virtues.filter((v) => !v.scopes.includes('common'));
+
   const canChooseCraft = slot.kind === 'craft' || slot.kind === 'virtue-or-craft';
   const canChooseVirtue = slot.kind === 'virtue' || slot.kind === 'virtue-or-craft';
   const rewardType =
@@ -34,7 +86,6 @@ export function RewardSlotPicker({
         : pick.rewardType;
 
   const selectedVirtue = virtues.find((v) => v.id === pick.virtueId);
-  const selectedCraft = SCHOLAR_CRAFTS.find((c) => c.id === pick.craftId);
 
   const setType = (type: 'virtue' | 'craft') => {
     onChange({
@@ -47,111 +98,98 @@ export function RewardSlotPicker({
   };
 
   return (
-    <div className="reward-slot rounded border border-amber-300/40 bg-white/30 p-3">
-      <p className="mb-2 text-xs font-bold text-amber-900">{slot.labelPt}</p>
-
+    <div className="reward-slot st-creation-reward-slot st-creation-reward-slot--editor">
       {slot.kind === 'virtue-or-craft' && (
-        <div className="mb-2 flex flex-wrap gap-1">
-          <Button
-            size="xs"
-            color={rewardType === 'virtue' ? 'warning' : 'light'}
+        <div className="st-creation-reward-type" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={rewardType === 'virtue'}
+            className={`st-creation-reward-type__btn${rewardType === 'virtue' ? ' st-creation-reward-type__btn--active' : ''}`}
             onClick={() => setType('virtue')}
           >
+            <StitchIcon icon={SparklesIcon} size="sm" />
             Virtude
-          </Button>
-          <Button
-            size="xs"
-            color={rewardType === 'craft' ? 'warning' : 'light'}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={rewardType === 'craft'}
+            className={`st-creation-reward-type__btn${rewardType === 'craft' ? ' st-creation-reward-type__btn--active' : ''}`}
             onClick={() => setType('craft')}
           >
+            <StitchIcon icon={WrenchScrewdriverIcon} size="sm" />
             Ofício
-          </Button>
+          </button>
         </div>
       )}
 
       {canChooseVirtue && rewardType === 'virtue' && (
-        <div className="space-y-2">
-          <Select
-            value={pick.virtueId ?? ''}
-            onChange={(e) =>
-              onChange({
-                ...pick,
-                rewardType: 'virtue',
-                virtueId: e.target.value || null,
-                virtueAbilityChoice: null,
-              })
-            }
-          >
-            <option value="">— Virtude —</option>
-            <optgroup label="Comuns">
-              {virtues
-                .filter((v) => v.scopes.includes('common'))
-                .map((v) => (
-                  <option key={v.id} value={v.id} disabled={usedVirtueIds.includes(v.id)}>
-                    {v.namePt}
-                    {usedVirtueIds.includes(v.id) ? ' (já escolhida)' : ''}
-                  </option>
-                ))}
-            </optgroup>
-            {cultureId && (
-              <optgroup label="Culturais">
-                {virtues
-                  .filter((v) => !v.scopes.includes('common'))
-                  .map((v) => (
-                    <option key={v.id} value={v.id} disabled={usedVirtueIds.includes(v.id)}>
-                      {v.namePt}
-                      {usedVirtueIds.includes(v.id) ? ' (já escolhida)' : ''}
-                    </option>
-                  ))}
-              </optgroup>
-            )}
-          </Select>
-          {selectedVirtue?.abilityChoice && (
-            <Select
-              value={pick.virtueAbilityChoice ?? ''}
-              onChange={(e) =>
-                onChange({
-                  ...pick,
-                  virtueAbilityChoice: (e.target.value as AbilityName) || null,
-                })
-              }
-            >
-              <option value="">— Atributo +1 —</option>
-              {selectedVirtue.abilityChoice.map((a) => (
-                <option key={a} value={a}>
-                  {ABILITY_LABELS[a]}
-                </option>
-              ))}
-            </Select>
+        <div className="st-creation-reward-slot__fields">
+          <VirtueGrid
+            label="Virtudes comuns"
+            virtues={commonVirtues}
+            pick={pick}
+            usedVirtueIds={usedVirtueIds}
+            onChange={onChange}
+          />
+          {culturalVirtues.length > 0 && (
+            <VirtueGrid
+              label="Virtudes culturais"
+              virtues={culturalVirtues}
+              pick={pick}
+              usedVirtueIds={usedVirtueIds}
+              onChange={onChange}
+            />
           )}
-          {selectedVirtue && (
-            <p className="text-xs text-amber-900/60">{selectedVirtue.summaryPt}</p>
+
+          {selectedVirtue?.abilityChoice && (
+            <div className="st-creation-ability-pick">
+              <p className="st-creation-ability-pick__label">Bônus de atributo</p>
+              <div className="toggle-group__chips">
+                {selectedVirtue.abilityChoice.map((ability) => (
+                  <button
+                    key={ability}
+                    type="button"
+                    className={`st-creation-chip${pick.virtueAbilityChoice === ability ? ' st-creation-chip--on' : ''}`}
+                    onClick={() =>
+                      onChange({
+                        ...pick,
+                        virtueAbilityChoice: ability,
+                      })
+                    }
+                  >
+                    {ABILITY_LABELS[ability]}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}
 
       {canChooseCraft && rewardType === 'craft' && (
-        <div className="space-y-2">
-          <Select
-            value={pick.craftId ?? ''}
-            onChange={(e) =>
-              onChange({
-                ...pick,
-                rewardType: 'craft',
-                craftId: e.target.value || null,
-              })
-            }
-          >
-            <option value="">— Ofício —</option>
-            {SCHOLAR_CRAFTS.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.namePt}
-              </option>
-            ))}
-          </Select>
-          {selectedCraft && (
-            <p className="text-xs text-amber-900/60">{selectedCraft.summaryPt}</p>
-          )}
+        <div className="st-creation-reward-slot__fields">
+          <div className="st-creation-reward-grid">
+            {SCHOLAR_CRAFTS.map((craft) => {
+              const selected = pick.craftId === craft.id;
+              return (
+                <RewardOptionCard
+                  key={craft.id}
+                  title={craft.namePt}
+                  summary={craft.summaryPt}
+                  selected={selected}
+                  onClick={() =>
+                    onChange({
+                      ...pick,
+                      rewardType: 'craft',
+                      craftId: selected ? null : craft.id,
+                    })
+                  }
+                />
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

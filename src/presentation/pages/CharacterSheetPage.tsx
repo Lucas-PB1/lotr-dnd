@@ -11,7 +11,6 @@ import { SheetInventoryTab } from '../components/layout/SheetInventoryTab';
 import { SheetMainTab } from '../components/layout/SheetMainTab';
 import { SheetShopTab } from '../components/layout/SheetShopTab';
 import { SheetStoryTab } from '../components/layout/SheetStoryTab';
-import { Section } from '../components/ui/FormFields';
 import { useCharacterSheet } from '../context/CharacterSheetContext';
 import { SheetNavigationProvider } from '../context/SheetNavigationContext';
 
@@ -64,13 +63,7 @@ export function CharacterSheetPage() {
   const tabContent = (() => {
     switch (activeTab) {
       case 'creation':
-        return (
-          <LegacyTabWrap>
-            <Section title="Criação de Personagem">
-              <CharacterCreationSection />
-            </Section>
-          </LegacyTabWrap>
-        );
+        return <CharacterCreationSection />;
       case 'adventure':
         return (
           <LegacyTabWrap>

@@ -11,11 +11,12 @@ interface CallingSkillsStepProps {
 
 export function CallingSkillsStep({ choices, calling, onSetChoice }: CallingSkillsStepProps) {
   if (!calling) {
-    return <p className="text-sm text-amber-900/60">Selecione um chamado no passo anterior.</p>;
+    return <p className="st-creation-empty">Selecione um chamado no passo anterior.</p>;
   }
 
   return (
     <ToggleButtonGroup
+      variant="stitch"
       label={`${calling.namePt}: perícias do chamado`}
       options={skillOptions(calling.skillChoices)}
       selected={choices.callingSkillChoices}
