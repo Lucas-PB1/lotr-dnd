@@ -35,7 +35,3 @@ export function EquipmentSection() {
     </div>
   );
 }
-
-export { AppearanceSection } from '../story/AppearanceSection';
-export { BackstorySection } from '../story/BackstorySection';
-export { FellowshipSection } from '../story/FellowshipSection';

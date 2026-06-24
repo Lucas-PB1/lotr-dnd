@@ -12,4 +12,10 @@ export const CREATION_UI = {
   heritageTitle: 'Herança cultural',
   bonusTitle: 'Bônus de atributos',
   complete: 'Concluído',
+  finalizeTitle: 'Finalizar crônica',
+  finalizeHint: 'Abre a ficha completa do herói. Você pode voltar a qualquer aba para editar.',
+  finalizeButton: 'Ver ficha do herói',
+  finalizeDisabled: 'Complete todas as seções da criação para finalizar.',
+  openSheetButton: 'Abrir ficha',
+  alreadyFinalized: 'Crônica finalizada — a ficha está pronta para consulta.',
 } as const;

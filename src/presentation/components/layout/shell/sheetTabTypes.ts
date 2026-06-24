@@ -5,6 +5,6 @@ export const SHEET_TAB_ORDER: SheetTabId[] = [
   'dice',
   'inventory',
   'shop',
-  'summary',
   'story',
+  'summary',
 ];

@@ -1,7 +1,7 @@
 export const ABILITY_ROLL_UI = {
   pageTitle: 'Gerar atributos',
   pageHint: 'Métodos do livro (págs. 72–80) para definir os seis atributos base do herói.',
-  pageNote: 'Bônus de cultura, virtudes e chamado são aplicados depois, na Criação e no Resumo.',
+  pageNote: 'Bônus de cultura, virtudes e chamado são aplicados depois, na Criação e na Ficha.',
   methods: {
     roll: 'Rolagem 4d6',
     standardArray: 'Array padrão',

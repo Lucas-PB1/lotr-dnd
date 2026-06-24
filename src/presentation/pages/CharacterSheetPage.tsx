@@ -1,5 +1,6 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
+import { getInitialSheetTab } from '../../application/sheet/getInitialSheetTab';
 import { APP_SUBTITLE, APP_TITLE } from '../../shared/constants/appLabels';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
@@ -13,19 +14,11 @@ import { SheetStoryTab } from '../components/layout/SheetStoryTab';
 import { useCharacterSheet } from '../context/CharacterSheetContext';
 import { SheetNavigationProvider } from '../context/SheetNavigationContext';
 
-function LegacyTabWrap({ children }: { children: ReactNode }) {
-  return (
-    <div className="st-legacy-wrap">
-      {children}
-    </div>
-  );
-}
-
 export function CharacterSheetPage() {
   const { character, resetCharacter, isSaving } = useCharacterSheet();
   const [resetOpen, setResetOpen] = useState(false);
   const [sheetKey, setSheetKey] = useState(0);
-  const [activeTab, setActiveTab] = useState<SheetTabId>('creation');
+  const [activeTab, setActiveTab] = useState<SheetTabId>(() => getInitialSheetTab(character));
 
   const progress = useMemo(
     () => getCreationProgress(character.creationChoices),
@@ -70,17 +63,9 @@ export function CharacterSheetPage() {
       case 'shop':
         return <SheetShopTab />;
       case 'summary':
-        return (
-          <LegacyTabWrap>
-            <SheetFinalTab />
-          </LegacyTabWrap>
-        );
+        return <SheetFinalTab />;
       case 'story':
-        return (
-          <LegacyTabWrap>
-            <SheetStoryTab />
-          </LegacyTabWrap>
-        );
+        return <SheetStoryTab />;
       default:
         return null;
     }

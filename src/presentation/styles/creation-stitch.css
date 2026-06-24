@@ -1188,6 +1188,75 @@
   font-style: italic;
 }
 
+.st-creation-finalize {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-st-md);
+  border: 1px solid color-mix(in srgb, var(--color-st-secondary) 35%, var(--color-st-outline-variant));
+  background: color-mix(in srgb, var(--color-st-secondary) 8%, var(--color-st-surface-container));
+}
+
+.st-creation-finalize--done {
+  border-color: color-mix(in srgb, var(--color-st-tertiary) 35%, var(--color-st-outline-variant));
+  background: color-mix(in srgb, var(--color-st-tertiary) 8%, var(--color-st-surface-container));
+}
+
+.st-creation-finalize__copy {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.st-creation-finalize__title {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-st-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-st-on-surface);
+}
+
+.st-creation-finalize__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--color-st-on-surface-variant);
+}
+
+.st-creation-finalize__btn {
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-st-sm);
+  border: 1px solid var(--color-st-outline-variant);
+  background: var(--color-st-surface-container);
+  color: var(--color-st-on-surface);
+  font-family: var(--font-st-label);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.st-creation-finalize__btn:hover:not(:disabled) {
+  border-color: var(--color-st-tertiary);
+  background: color-mix(in srgb, var(--color-st-tertiary) 14%, var(--color-st-surface-container));
+}
+
+.st-creation-finalize__btn--primary {
+  border-color: color-mix(in srgb, var(--color-st-secondary) 50%, var(--color-st-outline-variant));
+  background: color-mix(in srgb, var(--color-st-secondary) 18%, var(--color-st-surface-container));
+}
+
+.st-creation-finalize__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .st-creation-header__progress-fill,
   .st-creation-section__chevron {

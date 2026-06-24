@@ -32,3 +32,8 @@ export function getCreationProgress(raw: CreationChoices | undefined): CreationP
 
   return { done, total, label: `${pct}%` };
 }
+
+export function isCreationComplete(raw: CreationChoices | undefined): boolean {
+  const { done, total } = getCreationProgress(raw);
+  return total > 0 && done === total;
+}

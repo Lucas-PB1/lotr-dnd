@@ -64,6 +64,8 @@ export interface CharacterProps {
   additionalEquipment: string;
   additionalFeatures: string;
   characterAppearanceNotes: string;
+  /** Herói finalizado — abre direto na aba Ficha nas visitas seguintes. */
+  sheetFinalized?: boolean;
 }
 
 function createDefaultSavingThrows(): SavingThrowState {
@@ -136,6 +138,7 @@ export function createEmptyCharacterProps(id: string): CharacterProps {
     additionalEquipment: '',
     additionalFeatures: '',
     characterAppearanceNotes: '',
+    sheetFinalized: false,
   };
 }
 

@@ -8,7 +8,7 @@ export const SHEET_TABS = {
   dice: 'Atributos',
   inventory: 'Inventário',
   shop: 'Mercado',
-  summary: 'Resumo',
+  summary: 'Ficha',
   story: 'História',
 } as const;
 
@@ -18,8 +18,8 @@ export const SHEET_SECTIONS = {
   magicalTreasures: 'Tesouros & recompensas',
   storyChronicle: 'Crônica do herói',
   fellowship: 'Comunidade & herdeiro',
-  summaryTitle: 'Resumo para impressão',
-  summaryHint: 'Visão geral do herói — ideal para consulta na mesa e impressão (Ctrl+P).',
+  summaryTitle: 'Ficha do herói',
+  summaryHint: 'Visão completa do personagem — consulta na mesa e impressão (Ctrl+P).',
 } as const;
 
 export const MAGICAL_UI = {

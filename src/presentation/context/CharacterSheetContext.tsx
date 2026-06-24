@@ -33,6 +33,7 @@ function loadOrCreate(id: string): CharacterDto {
     ...loaded,
     creationChoices,
     abilities,
+    sheetFinalized: loaded.sheetFinalized ?? false,
   });
 }
 

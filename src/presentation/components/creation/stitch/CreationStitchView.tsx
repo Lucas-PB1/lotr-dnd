@@ -1,4 +1,4 @@
-import { getCreationProgress } from '../../../../application/creation/creationProgress';
+import { getCreationProgress, isCreationComplete } from '../../../../application/creation/creationProgress';
 import { CREATION_UI } from '../../../../shared/constants/creationLabels';
 import { AbilityBonusPreview } from '../AbilityBonusPreview';
 import { CallingSkillsStep } from '../steps/CallingSkillsStep';
@@ -6,6 +6,7 @@ import { CultureOriginStep } from '../steps/CultureOriginStep';
 import { EquipmentStep } from '../steps/EquipmentStep';
 import { RewardsStep } from '../steps/RewardsStep';
 import { useCharacterCreation } from '../../../hooks/useCharacterCreation';
+import { CreationFinalizeBar } from './CreationFinalizeBar';
 import { CreationManuscriptSection } from './CreationManuscriptSection';
 import { CreationProgressHeader } from './CreationProgressHeader';
 import {
@@ -32,6 +33,7 @@ export function CreationStitchView() {
 
   const progress = getCreationProgress(choices);
   const percent = progress.total > 0 ? Math.round((progress.done / progress.total) * 100) : 0;
+  const creationComplete = isCreationComplete(choices);
 
   const sections = [
     {
@@ -108,6 +110,8 @@ export function CreationStitchView() {
       </div>
 
       <AbilityBonusPreview sources={bonusPreview} variant="stitch" />
+
+      <CreationFinalizeBar creationComplete={creationComplete} />
     </div>
   );
 }

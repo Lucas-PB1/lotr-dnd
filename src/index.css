@@ -6,6 +6,8 @@
 @import './presentation/styles/stitch-primitives.css';
 @import './presentation/styles/creation-stitch.css';
 @import './presentation/styles/dice-stitch.css';
+@import './presentation/styles/story-stitch.css';
+@import './presentation/styles/sheet-stitch.css';
 @source '../.flowbite-react/class-list.json';
 
 @theme {
