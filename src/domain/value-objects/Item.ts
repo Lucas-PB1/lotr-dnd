@@ -58,3 +58,11 @@ export function createInventoryItem(
     equipped,
   };
 }
+
+/** Item livre fora das tabelas do livro */
+export function createCustomInventoryItem(namePt: string): InventoryItem {
+  return {
+    ...createInventoryItem('custom'),
+    notes: namePt.trim(),
+  };
+}

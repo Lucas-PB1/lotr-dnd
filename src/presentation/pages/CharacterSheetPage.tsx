@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Badge, Card, TabItem, Tabs } from 'flowbite-react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
-import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
+import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
 import { SheetFinalTab } from '../components/layout/SheetFinalTab';
@@ -22,7 +22,7 @@ export function CharacterSheetPage() {
   );
 
   const rewardSlotsFilled = useMemo(() => {
-    const picks = migrateCreationChoices(character.creationChoices).rewardPicks ?? [];
+    const picks = normalizeCreationChoices(character.creationChoices).rewardPicks ?? [];
     return picks.filter(
       (p) => (p.rewardType === 'virtue' && p.virtueId) || (p.rewardType === 'craft' && p.craftId),
     ).length;

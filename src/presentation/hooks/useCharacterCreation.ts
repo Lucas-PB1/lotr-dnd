@@ -10,7 +10,7 @@ import {
 } from '../../shared/data/characterCreationData';
 import { getRewardSlots } from '../../shared/data/levelRewardData';
 import {
-  migrateCreationChoices,
+  normalizeCreationChoices,
   upsertPick,
   type RewardSlotPick,
 } from '../../shared/data/rewardSlotUtils';
@@ -22,7 +22,7 @@ import { useCharacterSheet } from '../context/CharacterSheetContext';
 
 export function useCharacterCreation() {
   const { character, updateCharacter } = useCharacterSheet();
-  const choices = migrateCreationChoices(character.creationChoices);
+  const choices = normalizeCreationChoices(character.creationChoices);
 
   const culture = choices.cultureId ? getCulture(choices.cultureId) : null;
   const background =

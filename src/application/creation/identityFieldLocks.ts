@@ -1,5 +1,5 @@
 import type { CreationChoices } from '../../domain/services/CharacterCreationService';
-import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
+import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 
 export interface IdentityFieldLocks {
   culture: boolean;
@@ -10,7 +10,7 @@ export interface IdentityFieldLocks {
 
 /** Campos derivados da criação — não editáveis na ficha após definidos. */
 export function getIdentityFieldLocks(choices: CreationChoices | undefined): IdentityFieldLocks {
-  const c = migrateCreationChoices(choices);
+  const c = normalizeCreationChoices(choices);
   return {
     culture: Boolean(c.cultureId),
     distinctiveFeatures: Boolean(c.backgroundId),

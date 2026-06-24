@@ -3,7 +3,7 @@ import { getIdentityFieldLocks } from '../../../application/creation/identityFie
 import { CharacterCreationService } from '../../../domain/services/CharacterCreationService';
 import { getCalling } from '../../../shared/data/characterCreationData';
 import { FIELD_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
-import { migrateCreationChoices } from '../../../shared/data/rewardSlotUtils';
+import { normalizeCreationChoices } from '../../../shared/data/rewardSlotUtils';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
 import { TextField } from '../ui/FormFields';
 
@@ -19,7 +19,7 @@ function OriginItem({ label, value, wide }: { label: string; value: string; wide
 
 export function IdentitySection() {
   const { character, updateCharacter } = useCharacterSheet();
-  const choices = migrateCreationChoices(character.creationChoices);
+  const choices = normalizeCreationChoices(character.creationChoices);
   const locks = getIdentityFieldLocks(choices);
   const calling = choices.callingId ? getCalling(choices.callingId) : null;
 

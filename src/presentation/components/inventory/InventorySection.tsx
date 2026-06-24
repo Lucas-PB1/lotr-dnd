@@ -12,7 +12,7 @@ import {
   SHOP_CATEGORY_FILTERS,
 } from '../../../shared/data/itemCatalog';
 import type { ItemDefinition } from '../../../domain/value-objects/Item';
-import { createCustomInventoryItem } from '../../../shared/data/inventoryMigration';
+import { createCustomInventoryItem } from '../../../domain/value-objects/Item';
 import { inventoryToSummaryText } from '../../../shared/data/startingInventoryBuilder';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
 

@@ -59,8 +59,8 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         id: 'weapons-melee',
         labelPt: 'Armas corpo a corpo',
         options: [
-          { id: 'martial-shield', labelPt: 'Arma marcial + escudo' },
-          { id: 'martial-simple', labelPt: 'Arma marcial + arma simples' },
+          { id: 'melee-martial-shield', labelPt: 'Arma marcial corpo a corpo + escudo' },
+          { id: 'melee-martial-and-simple', labelPt: 'Arma marcial corpo a corpo + arma simples corpo a corpo' },
         ],
       },
       {
@@ -68,7 +68,7 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         labelPt: 'Armas à distância',
         options: [
           { id: 'bow', labelPt: 'Arco + aljava (20 flechas)' },
-          { id: 'two-simple', labelPt: 'Duas armas simples corpo a corpo' },
+          { id: 'two-simple-melee', labelPt: 'Duas armas simples corpo a corpo' },
         ],
       },
     ],
@@ -90,8 +90,8 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         id: 'weapons-melee',
         labelPt: 'Armas corpo a corpo',
         options: [
-          { id: 'martial-shield', labelPt: 'Arma marcial + escudo' },
-          { id: 'martial-simple', labelPt: 'Arma marcial + arma simples' },
+          { id: 'melee-martial-shield', labelPt: 'Arma marcial corpo a corpo + escudo' },
+          { id: 'melee-martial-and-simple', labelPt: 'Arma marcial corpo a corpo + arma simples corpo a corpo' },
         ],
       },
       {
@@ -99,7 +99,7 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         labelPt: 'Armas à distância',
         options: [
           { id: 'bow', labelPt: 'Arco + aljava (20 flechas)' },
-          { id: 'two-simple', labelPt: 'Duas armas simples' },
+          { id: 'two-simple-melee', labelPt: 'Duas armas simples corpo a corpo' },
         ],
       },
     ],
@@ -112,8 +112,8 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         id: 'blade',
         labelPt: 'Lâmina',
         options: [
-          { id: 'short-sword', labelPt: 'Espada curta (short sword)' },
-          { id: 'sword', labelPt: 'Espada (sword)' },
+          { id: 'short-sword', labelPt: 'Espada curta (Sword, Short)' },
+          { id: 'sword', labelPt: 'Espada (Sword)' },
         ],
       },
       {
@@ -149,8 +149,8 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         id: 'blade',
         labelPt: 'Lâmina',
         options: [
-          { id: 'short-sword', labelPt: 'Espada curta' },
-          { id: 'sword', labelPt: 'Espada' },
+          { id: 'short-sword', labelPt: 'Espada curta (Sword, Short)' },
+          { id: 'sword', labelPt: 'Espada (Sword)' },
         ],
       },
       {
@@ -179,8 +179,8 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         id: 'weapons-melee',
         labelPt: 'Armas corpo a corpo',
         options: [
-          { id: 'martial-shield', labelPt: 'Arma marcial + escudo' },
-          { id: 'martial-simple', labelPt: 'Arma marcial + arma simples' },
+          { id: 'melee-martial-shield', labelPt: 'Arma marcial corpo a corpo + escudo' },
+          { id: 'melee-martial-and-simple', labelPt: 'Arma marcial corpo a corpo + arma simples corpo a corpo' },
         ],
       },
       {
@@ -188,7 +188,7 @@ export const CALLING_EQUIPMENT: CallingEquipmentDefinition[] = [
         labelPt: 'Armas à distância',
         options: [
           { id: 'great-bow', labelPt: 'Great bow + aljava (20 flechas)' },
-          { id: 'two-simple', labelPt: 'Duas armas simples' },
+          { id: 'two-simple-melee', labelPt: 'Duas armas simples corpo a corpo' },
         ],
       },
     ],

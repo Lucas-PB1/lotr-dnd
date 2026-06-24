@@ -1,6 +1,6 @@
 import type { CreationChoices } from '../../domain/services/CharacterCreationService';
 import { CALLINGS } from '../../shared/data/characterCreationData';
-import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
+import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 
 export interface CreationProgress {
   done: number;
@@ -9,7 +9,7 @@ export interface CreationProgress {
 }
 
 export function getCreationProgress(raw: CreationChoices | undefined): CreationProgress {
-  const c = migrateCreationChoices(raw);
+  const c = normalizeCreationChoices(raw);
   const calling = c.callingId ? CALLINGS.find((x) => x.id === c.callingId) : null;
   const requiredCallingSkills = calling?.skillChoiceCount ?? 0;
   const isRanger = c.cultureId === 'rangers';

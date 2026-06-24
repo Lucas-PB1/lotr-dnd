@@ -6,7 +6,7 @@
 import type { ItemDefinition } from '../../domain/value-objects/Item';
 
 export const PDF_WEAPON_CATALOG: ItemDefinition[] = [
-  // —— Simple Melee Weapons (p. 74) ——
+  // —— Armas simples corpo a corpo (p. 74) ——
   { id: 'axe', namePt: 'Machado (Axe)', category: 'weapon', equipSlot: 'mainHand', costSilver: 5, weight: 3, damage: '1d4', damageType: 'cortante', properties: ['versátil (1d8)'] },
   { id: 'club', namePt: 'Clava (Club)', category: 'weapon', equipSlot: 'mainHand', costCopper: 1, weight: 2, damage: '1d4', damageType: 'concussão', properties: ['leve'] },
   { id: 'club-great', namePt: 'Clava grande (Club, Great)', category: 'weapon', equipSlot: 'mainHand', costCopper: 2, weight: 10, damage: '1d8', damageType: 'concussão', properties: ['duas mãos'], twoHanded: true },
@@ -16,9 +16,9 @@ export const PDF_WEAPON_CATALOG: ItemDefinition[] = [
   { id: 'spear', namePt: 'Lança (Spear)', category: 'weapon', equipSlot: 'mainHand', costSilver: 1, weight: 3, damage: '1d6', damageType: 'perfurante', properties: ['arremesso (6/18 m)', 'versátil (1d8)'] },
   { id: 'spear-short', namePt: 'Lança curta (Spear, Short)', category: 'weapon', equipSlot: 'mainHand', costCopper: 5, weight: 2, damage: '1d6', damageType: 'perfurante', properties: ['arremesso (9/36 m)'] },
   { id: 'staff', namePt: 'Cajado (Staff)', category: 'weapon', equipSlot: 'mainHand', costCopper: 2, weight: 1, damage: '1d4', damageType: 'concussão', properties: ['versátil (1d6)'] },
-  // —— Simple Ranged (p. 74) ——
+  // —— Armas simples à distância (p. 74) ——
   { id: 'bow', namePt: 'Arco (Bow)', category: 'weapon', equipSlot: 'mainHand', costSilver: 25, weight: 2, damage: '1d6', damageType: 'perfurante', range: '24/96 m', properties: ['munição (24/96 m)', 'duas mãos'], twoHanded: true },
-  // —— Martial Melee (p. 75) ——
+  // —— Armas marciais corpo a corpo (p. 75) ——
   { id: 'axe-battle', namePt: 'Machado de batalha (Axe, Battle)', category: 'weapon', equipSlot: 'mainHand', costSilver: 10, weight: 4, damage: '1d8', damageType: 'cortante', properties: ['pesada', 'versátil (1d10)'] },
   { id: 'axe-great', namePt: 'Machado grande (Axe, Great)', category: 'weapon', equipSlot: 'mainHand', costSilver: 30, weight: 7, damage: '1d12', damageType: 'cortante', properties: ['pesada', 'duas mãos'], twoHanded: true },
   { id: 'hammer-heavy', namePt: 'Martelo pesado (Hammer, Heavy)', category: 'weapon', equipSlot: 'mainHand', costSilver: 10, weight: 4, damage: '1d8', damageType: 'concussão', properties: ['pesada', 'versátil (1d10)'] },
@@ -27,7 +27,7 @@ export const PDF_WEAPON_CATALOG: ItemDefinition[] = [
   { id: 'sword', namePt: 'Espada (Sword)', category: 'weapon', equipSlot: 'mainHand', costSilver: 15, weight: 2, damage: '1d6', damageType: 'cortante', properties: ['finesse', 'versátil (1d8)'] },
   { id: 'sword-long', namePt: 'Espada longa (Sword, Long)', category: 'weapon', equipSlot: 'mainHand', costSilver: 20, weight: 3, damage: '1d8', damageType: 'cortante', properties: ['pesada', 'versátil (1d10)'] },
   { id: 'sword-short', namePt: 'Espada curta (Sword, Short)', category: 'weapon', equipSlot: 'mainHand', costSilver: 10, weight: 2, damage: '1d6', damageType: 'perfurante', properties: ['finesse', 'leve'] },
-  // —— Martial Ranged (p. 75) ——
+  // —— Armas marciais à distância (p. 75) ——
   { id: 'great-bow', namePt: 'Great Bow', category: 'weapon', equipSlot: 'mainHand', costSilver: 50, weight: 3, damage: '1d8', damageType: 'perfurante', range: '45/180 m', properties: ['munição (45/180 m)', 'pesada', 'duas mãos'], twoHanded: true },
   // —— Munição (p. 71) ——
   { id: 'arrows-20', namePt: 'Flechas (20)', category: 'ammo', costSilver: 1, weight: 1, stackable: true, description: 'Munição para arco ou great bow.' },

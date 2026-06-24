@@ -24,8 +24,7 @@ export function createEmptyPick(slotId: string): RewardSlotPick {
   };
 }
 
-/** Garante campos novos em saves antigos do localStorage. */
-export function migrateCreationChoices(
+export function normalizeCreationChoices(
   choices: CreationChoices | undefined | null,
 ): CreationChoices {
   const base: CreationChoices = {
@@ -37,31 +36,6 @@ export function migrateCreationChoices(
     rangerSkillChoices: choices?.rangerSkillChoices ?? [],
     callingSkillChoices: choices?.callingSkillChoices ?? [],
   };
-
-  const legacy = choices as CreationChoices & {
-    rewardType?: 'virtue' | 'craft' | null;
-    virtueId?: string | null;
-    craftId?: string | null;
-    virtueAbilityChoice?: AbilityName | null;
-  };
-
-  if (
-    base.rewardPicks.length === 0 &&
-    legacy?.rewardType &&
-    (legacy.virtueId || legacy.craftId)
-  ) {
-    const slotId =
-      legacy.rewardType === 'craft' ? 'legacy-craft-1' : 'culture-starting-virtue';
-    base.rewardPicks = [
-      {
-        slotId,
-        rewardType: legacy.rewardType,
-        virtueId: legacy.virtueId ?? null,
-        craftId: legacy.craftId ?? null,
-        virtueAbilityChoice: legacy.virtueAbilityChoice ?? null,
-      },
-    ];
-  }
 
   if (
     base.callingId &&

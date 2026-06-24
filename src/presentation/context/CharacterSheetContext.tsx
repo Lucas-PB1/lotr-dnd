@@ -1,8 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { CharacterDto } from '../../application/mappers/CharacterMapper';
 import { CombatStatsService } from '../../domain/services/CombatStatsService';
-import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
-import { migrateCharacterInventory } from '../../shared/data/inventoryMigration';
+import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 import {
   characterService,
   DEFAULT_CHARACTER_ID,
@@ -23,11 +22,10 @@ const CharacterSheetContext = createContext<CharacterSheetContextValue | null>(n
 
 function loadOrCreate(id: string): CharacterDto {
   const loaded = characterService.load.execute(id) ?? characterService.create.execute(id);
-  const migrated = migrateCharacterInventory({
+  return CombatStatsService.applyDerivedStats({
     ...loaded,
-    creationChoices: migrateCreationChoices(loaded.creationChoices),
+    creationChoices: normalizeCreationChoices(loaded.creationChoices),
   });
-  return CombatStatsService.applyDerivedStats(migrated);
 }
 
 export function CharacterSheetProvider({ children }: { children: React.ReactNode }) {
@@ -50,7 +48,7 @@ export function CharacterSheetProvider({ children }: { children: React.ReactNode
     setCharacter((prev) => {
       const merged = { ...prev, ...partial };
       if (merged.creationChoices) {
-        merged.creationChoices = migrateCreationChoices(merged.creationChoices);
+        merged.creationChoices = normalizeCreationChoices(merged.creationChoices);
       }
       return CombatStatsService.applyDerivedStats(merged);
     });
