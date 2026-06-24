@@ -27,10 +27,14 @@ npm run parse:treasure
 
 O rascunho automático vai para `data/extracted/treasure-index-draft.json` (curadoria manual necessária).
 
-## PDF local (não versionado)
+## PDFs locais (não versionados)
 
-Os scripts de extração esperam o livro em:
+Os scripts de extração leem o livro de regras em:
 
-`Lord Of The Rings Roleplay.pdf` (raiz do projeto)
+`doc/senhor-dos-aneis-rpg-regras.pdf`
 
-Esse arquivo **não** deve ir para o GitHub (tamanho ~30 MB e conteúdo sob direitos autorais da Free League).
+A ficha oficial em PDF pode ficar em:
+
+`doc/senhor-dos-aneis-ficha-oficial.pdf`
+
+A pasta `doc/` inteira está no `.gitignore` (tamanho ~30 MB e direitos autorais da Free League).

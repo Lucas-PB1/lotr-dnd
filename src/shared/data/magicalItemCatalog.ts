@@ -21,10 +21,6 @@ export function getMagicalCatalogByGroup(groupId: string): MagicalItemDefinition
   const group = MAGICAL_CATALOG_GROUPS.find((g) => g.id === groupId);
   if (!group) return [];
 
-  if (group.id === 'wondrous') {
-    return MAGICAL_ITEMS_CATALOG.filter((d) => d.tier === 'marvellous' || d.tier === 'wondrous');
-  }
-
   return MAGICAL_ITEMS_CATALOG.filter((d) => d.tier === group.tier);
 }
 

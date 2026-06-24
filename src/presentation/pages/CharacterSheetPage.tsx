@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
+import { APP_SUBTITLE, APP_TITLE, SHEET_TABS } from '../../shared/constants/appLabels';
 import { Badge, Card, TabItem, Tabs } from 'flowbite-react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
-import { normalizeCreationChoices } from '../../shared/data/rewardSlotUtils';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
 import { SheetToolbar } from '../components/layout/SheetToolbar';
@@ -23,12 +23,15 @@ export function CharacterSheetPage() {
     [character.creationChoices],
   );
 
-  const rewardSlotsFilled = useMemo(() => {
-    const picks = normalizeCreationChoices(character.creationChoices).rewardPicks ?? [];
-    return picks.filter(
-      (p) => (p.rewardType === 'virtue' && p.virtueId) || (p.rewardType === 'craft' && p.craftId),
-    ).length;
-  }, [character.creationChoices]);
+  const storyProgress = useMemo(() => {
+    let filled = 0;
+    if (character.characterBackstory.trim()) filled += 1;
+    if (character.fellowship.fellowshipName.trim() || character.fellowship.patrons.trim()) {
+      filled += 1;
+    }
+    if (character.appearance.age.trim() || character.appearance.hair.trim()) filled += 1;
+    return filled;
+  }, [character]);
 
   const handleReset = () => {
     resetCharacter();
@@ -56,7 +59,7 @@ export function CharacterSheetPage() {
             active
             title={
               <span className="sheet-tab__label">
-                Criação
+                {SHEET_TABS.creation}
                 <Badge color="warning" size="xs" className="ml-2">
                   {progress.label}
                 </Badge>
@@ -68,14 +71,14 @@ export function CharacterSheetPage() {
             </Section>
           </TabItem>
 
-          <TabItem title="Ficha — Página 1">
+          <TabItem title={SHEET_TABS.adventure}>
             <SheetMainTab />
           </TabItem>
 
           <TabItem
             title={
               <span className="sheet-tab__label">
-                Inventário
+                {SHEET_TABS.inventory}
                 {(character.inventory?.length ?? 0) > 0 && (
                   <Badge color="success" size="xs" className="ml-2">
                     {character.inventory.length}
@@ -87,17 +90,17 @@ export function CharacterSheetPage() {
             <SheetInventoryTab />
           </TabItem>
 
-          <TabItem title="Ficha Final">
+          <TabItem title={SHEET_TABS.summary}>
             <SheetFinalTab />
           </TabItem>
 
           <TabItem
             title={
               <span className="sheet-tab__label">
-                História
-                {rewardSlotsFilled > 0 && (
+                {SHEET_TABS.story}
+                {storyProgress > 0 && (
                   <Badge color="info" size="xs" className="ml-2">
-                    {rewardSlotsFilled} virtudes/ofícios
+                    {storyProgress}/3
                   </Badge>
                 )}
               </span>
@@ -109,7 +112,8 @@ export function CharacterSheetPage() {
       </Card>
 
       <footer className="sheet-footer">
-        <p>LOTR Roleplaying (5E) · Free League Publishing</p>
+        <p>{APP_TITLE} · Free League Publishing</p>
+        <p className="sheet-footer__sub">{APP_SUBTITLE}</p>
       </footer>
 
       <ResetCharacterModal

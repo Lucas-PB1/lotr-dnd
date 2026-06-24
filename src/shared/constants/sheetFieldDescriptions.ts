@@ -56,7 +56,7 @@ export const FIELD_DESCRIPTIONS = {
   toolProficiencies: 'Ferramentas, idiomas e proficiências especiais.',
   equipment: 'Itens de partida e equipamento atual.',
   featuresTraitsVirtues: 'Habilidades de cultura, chamado, virtudes e traços únicos.',
-  rewardsAndMagicalItems: 'Recompensas de aventuras e objetos de poder.',
+  rewardsAndMagicalItems: 'Tesouros de aventura, melhorias de nível e objetos de poder.',
   fellowshipName: 'Nome da Comunidade formada pelo grupo.',
   fellowshipPoints: 'Pontos de Comunidade disponíveis para investir.',
   heirName: 'Herdeiro que receberá legado ao fim da campanha.',

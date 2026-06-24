@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { MAGICAL_UI } from '../../../shared/constants/appLabels';
 import { MagicalItemService } from '../../../domain/services/MagicalItemService';
 import { createCustomMagicalItem } from '../../../domain/value-objects/MagicalItem';
 import {
@@ -75,10 +76,8 @@ export function MagicalItemsPanel() {
       <div className="magical-hub__main">
         <header className="magical-hub__head">
           <div>
-            <h3 className="magical-hub__title">Objetos de poder</h3>
-            <p className="magical-hub__sub">
-              Recompensas, armas famosas e tesouros do Treasure Index.
-            </p>
+            <h3 className="magical-hub__title">{MAGICAL_UI.panelTitle}</h3>
+            <p className="magical-hub__sub">{MAGICAL_UI.panelSubtitle}</p>
           </div>
           {(bonuses.acBonus > 0 || bonuses.attackBonus > 0 || bonuses.damageBonus > 0) && (
             <div className="magical-hub__bonuses">
@@ -95,7 +94,7 @@ export function MagicalItemsPanel() {
             className="lore-action lore-action--primary"
             onClick={() => setCatalogOpen((v) => !v)}
           >
-            {catalogOpen ? 'Fechar catálogo' : '+ Do catálogo'}
+            {catalogOpen ? 'Fechar lista' : '+ Adicionar do livro'}
           </button>
           <div className="magical-hub__custom">
             <input
@@ -256,7 +255,7 @@ export function MagicalItemsPanel() {
 
         {character.rewardsAndMagicalItems.trim() && (
           <details className="magical-hub__legacy">
-            <summary>Notas legadas (texto antigo)</summary>
+            <summary>{MAGICAL_UI.legacyNotes}</summary>
             <p>{character.rewardsAndMagicalItems}</p>
           </details>
         )}
@@ -266,8 +265,8 @@ export function MagicalItemsPanel() {
         <aside className="magical-hub__catalog story-hub__aside story-hub__aside--open">
           <div className="lore-inspire lore-inspire--compact">
             <header className="lore-inspire__head">
-              <h4 className="lore-inspire__title">Catálogo do livro</h4>
-              <span className="lore-inspire__hint">Clique para adicionar</span>
+              <h4 className="lore-inspire__title">{MAGICAL_UI.catalogTitle}</h4>
+              <span className="lore-inspire__hint">{MAGICAL_UI.catalogHint}</span>
             </header>
 
             <div className="lore-inspire__tabs" role="tablist">

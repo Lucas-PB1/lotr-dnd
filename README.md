@@ -1,22 +1,18 @@
-# LOTR Roleplaying — Ficha de Personagem
+# Ficha Terra-média — O Senhor dos Anéis RPG
 
-Aplicação React para preencher a ficha de **The Lord of the Rings™ Roleplaying** (Free League / 5E).
+Aplicação web para preencher a ficha de **The Lord of the Rings™ Roleplaying** (Free League).
 
-## Funcionalidades
+Repositório sugerido no GitHub: `ficha-terra-media-lotr` (hoje: `lotr-dnd`).
 
-- Criação de personagem (cultura, chamado, virtudes/ofícios, equipamento inicial)
-- Ficha editável com auto-save em `localStorage`
-- Inventário estruturado, loja e cálculo de carga
-- Combate: CA, ataques, dano e integração com virtudes
-- Itens mágicos e recompensas (catálogo do Treasure Index)
-- Aba História com sugestões do livro (antecedente, comunidade, aparência)
-- Ficha final para impressão (`Ctrl+P`)
+## Abas da ficha
 
-## Tecnologias
-
-- React 19 + TypeScript + Vite
-- Flowbite React + Tailwind CSS v4
-- Persistência local (sem backend)
+| Aba | Conteúdo |
+|-----|----------|
+| **Criação** | Cultura, chamado, virtudes e equipamento inicial |
+| **Aventura** | Atributos, perícias, combate, equipamento e tesouros |
+| **Inventário** | Itens, loja e carga |
+| **Resumo** | Visão geral para mesa e impressão |
+| **História** | Comunidade, aparência e crônica |
 
 ## Desenvolvimento
 
@@ -25,58 +21,51 @@ npm install
 npm run dev
 ```
 
-Abra [http://localhost:5173](http://localhost:5173).
-
 ```bash
-npm run build    # produção
-npm run preview  # testar o build localmente
+npm run build
+npm run preview
 ```
 
-### Scripts de extração (opcional)
+### PDFs locais (pasta `doc/`)
 
-Requer o PDF do livro **apenas na sua máquina** (não versionado):
+Crie a pasta `doc/` na raiz e coloque os arquivos com estes nomes (não versionados):
+
+| Arquivo | Conteúdo |
+|---------|----------|
+| `doc/senhor-dos-aneis-rpg-regras.pdf` | Livro de regras (OCR dos scripts) |
+| `doc/senhor-dos-aneis-ficha-oficial.pdf` | Ficha oficial em PDF (referência) |
+
+Se você já tinha os PDFs com nomes antigos na raiz, renomeie e mova:
+
+- `Lord Of The Rings Roleplay.pdf` → `doc/senhor-dos-aneis-rpg-regras.pdf`
+- `The-Lord-of-the-Rings-Roleplaying-character-sheet.pdf` → `doc/senhor-dos-aneis-ficha-oficial.pdf`
 
 | Comando | Uso |
 |---------|-----|
-| `npm run extract:equipment` | Cap. 4 — equipamento |
-| `npm run extract:treasure` | Rewards + Treasure Index |
+| `npm run extract:equipment` | Equipamento (Cap. 4) |
+| `npm run extract:treasure` | Recompensas + Treasure Index |
 | `npm run parse:treasure` | Rascunho JSON do índice |
-| `npm run parse:creation` | Dados de criação |
-
-Coloque o arquivo na raiz: `Lord Of The Rings Roleplay.pdf`
 
 ## Deploy na Vercel
 
-1. Envie o repositório para o GitHub (veja checklist abaixo).
-2. Em [vercel.com](https://vercel.com) → **Add New Project** → importe o repo.
-3. A Vercel detecta Vite automaticamente (`vercel.json` já define build e `dist/`).
-4. Não há variáveis de ambiente obrigatórias (app 100% client-side).
-
-Ou via CLI:
+1. Importe o repositório em [vercel.com/new](https://vercel.com/new)
+2. Framework **Vite** — build `npm run build`, pasta `dist`
+3. Sem variáveis de ambiente
 
 ```bash
-npx vercel
 npx vercel --prod
 ```
 
-## Checklist antes do `git push`
+## Antes do push
 
-- [ ] PDF do livro **não** está no commit (fica local + `.gitignore`)
-- [ ] `npm run build` passa sem erros
-- [ ] Repositório remoto configurado: `git remote -v`
-- [ ] Primeiro push: `git push -u origin main`
+- [ ] `npm run build` ok
+- [ ] PDF do livro **fora** do Git (só local)
+- [ ] Se o repo for público: considere purgar o PDF do histórico antigo (ver commit anterior ao `853ef36`)
 
-## Arquitetura
+## Stack
 
-```
-src/
-├── domain/           # Entidades, regras, serviços (combate, inventário, itens mágicos)
-├── application/      # Casos de uso
-├── infrastructure/   # localStorage
-├── presentation/     # UI React
-└── shared/data/      # Catálogos (equipamento, virtudes, tesouros)
-```
+React 19 · TypeScript · Vite · Flowbite · Tailwind · localStorage
 
 ## Aviso legal
 
-Este projeto é uma ferramenta de fãs. *The Lord of the Rings* e *The Lord of the Rings Roleplaying* são marcas da Middle-earth Enterprises / Free League Publishing. Não distribua o PDF oficial do livro no repositório público.
+Ferramenta de fãs. Marcas de *The Lord of the Rings* / Free League Publishing. Não publique o PDF oficial no repositório.

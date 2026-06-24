@@ -175,7 +175,7 @@ export const PDF_EQUIPMENT_CATALOG: ItemDefinition[] = [
 
 /** Metadados da extração — para referência na UI */
 export const PDF_CATALOG_SOURCE = {
-  pdf: 'Lord Of The Rings Roleplay.pdf',
+  pdf: 'doc/senhor-dos-aneis-rpg-regras.pdf',
   chapter: 'Capítulo 4 — Equipment',
   pages: '71–76 (OCR)',
   ocrFile: 'data/extracted/equipment-ocr.txt',

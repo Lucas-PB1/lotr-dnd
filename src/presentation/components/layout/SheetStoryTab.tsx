@@ -3,6 +3,7 @@ import {
   BackstorySection,
   FellowshipSection,
 } from '../sections/DetailsSection';
+import { SHEET_SECTIONS } from '../../../shared/constants/appLabels';
 import { SECTION_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
 import { SheetPanel } from './SheetPanel';
 
@@ -11,7 +12,7 @@ export function SheetStoryTab() {
     <div className="sheet-page-2">
       <div className="sheet-page2-grid">
         <SheetPanel
-          title="Comunidade & Herdeiro"
+          title={SHEET_SECTIONS.fellowship}
           description={SECTION_DESCRIPTIONS.fellowship}
           accent="emerald"
         >
@@ -27,7 +28,7 @@ export function SheetStoryTab() {
       </div>
 
       <SheetPanel
-        title="Crônicas do herói"
+        title={SHEET_SECTIONS.storyChronicle}
         description={SECTION_DESCRIPTIONS.backstory}
         accent="slate"
         className="sheet-panel--story"

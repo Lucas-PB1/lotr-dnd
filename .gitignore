@@ -18,11 +18,8 @@ dist-ssr
 !.env.example
 .vercel
 
-# PDF do livro (uso local para OCR — não versionar; ~30 MB + direitos autorais)
-Lord Of The Rings Roleplay.pdf
-
-# Cópia duplicada na raiz (a versão servida fica em public/)
-/The-Lord-of-the-Rings-Roleplaying-character-sheet.pdf
+# Documentação local (PDFs do jogo — não versionar; direitos autorais + tamanho)
+doc/
 
 # Editor directories and files
 .vscode/*

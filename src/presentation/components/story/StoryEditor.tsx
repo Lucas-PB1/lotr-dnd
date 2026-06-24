@@ -43,7 +43,7 @@ export function StoryEditor({
             className={`segmented-control__btn${tab === 'treasure' ? ' segmented-control__btn--active' : ''}`}
             onClick={() => setTab('treasure')}
           >
-            Tesouros
+            Relíquias
           </button>
         </div>
         <span className="story-editor__meta">

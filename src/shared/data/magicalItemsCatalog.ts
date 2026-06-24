@@ -5,7 +5,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   // ── Recompensas (war gear upgrades, p.81) ──
   {
     id: 'reward-keen',
-    namePt: 'Afiado (Keen)',
+    namePt: 'Afiado',
+    nameEn: 'Keen',
     tier: 'reward',
     category: 'weapon',
     descriptionPt: 'Recompensa de nível. Crítico em 19–20.',
@@ -14,7 +15,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   },
   {
     id: 'reward-fell',
-    namePt: 'Cruel (Fell)',
+    namePt: 'Cruel',
+    nameEn: 'Fell',
     tier: 'reward',
     category: 'weapon',
     descriptionPt: 'Recompensa de nível. Críticos mais letais.',
@@ -23,7 +25,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   },
   {
     id: 'reward-grievous',
-    namePt: 'Penetrante (Grievous)',
+    namePt: 'Penetrante',
+    nameEn: 'Grievous',
     tier: 'reward',
     category: 'weapon',
     descriptionPt: 'Recompensa de nível.',
@@ -32,7 +35,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   },
   {
     id: 'reward-close-fitting',
-    namePt: 'Justa (Close-fitting)',
+    namePt: 'Justa',
+    nameEn: 'Close-fitting',
     tier: 'reward',
     category: 'armor',
     descriptionPt: 'Recompensa de nível para armadura.',
@@ -41,7 +45,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   },
   {
     id: 'reward-cunning-make',
-    namePt: 'Obra Habilidosa (Cunning-make)',
+    namePt: 'Obra habilidosa',
+    nameEn: 'Cunning-make',
     tier: 'reward',
     category: 'armor',
     descriptionPt: 'Armadura ou escudo. Metade do peso.',
@@ -50,7 +55,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   },
   {
     id: 'reward-reinforced',
-    namePt: 'Reforçado (Reinforced)',
+    namePt: 'Reforçado',
+    nameEn: 'Reinforced',
     tier: 'reward',
     category: 'shield',
     descriptionPt: 'Recompensa para escudo.',
@@ -61,7 +67,7 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   // ── Armas/Armaduras famosas (Enchanted Rewards, p.133+) ──
   {
     id: 'enchanted-superior',
-    namePt: 'Obra Superior (Superior Craftsmanship)',
+    namePt: 'Obra superior',
     nameEn: 'Superior Craftsmanship',
     tier: 'famous_weapon',
     category: 'weapon',
@@ -75,7 +81,8 @@ export const MAGICAL_ITEMS_CATALOG: MagicalItemDefinition[] = [
   },
   {
     id: 'enchanted-foe-slaying',
-    namePt: 'Matadora de Inimigos (Foe-slaying)',
+    namePt: 'Matadora de inimigos',
+    nameEn: 'Foe-slaying',
     tier: 'famous_weapon',
     category: 'weapon',
     identifyDc: 20,
@@ -271,8 +278,9 @@ export const MAGICAL_TIER_LABELS: Record<MagicalItemDefinition['tier'], string> 
 };
 
 export const MAGICAL_CATALOG_GROUPS = [
-  { id: 'rewards', icon: '⚔', title: 'Recompensas', tier: 'reward' as const },
+  { id: 'rewards', icon: '⚔', title: 'Melhorias de nível', tier: 'reward' as const },
   { id: 'famous_weapon', icon: '🗡', title: 'Armas famosas', tier: 'famous_weapon' as const },
   { id: 'famous_armour', icon: '🛡', title: 'Armaduras famosas', tier: 'famous_armour' as const },
-  { id: 'wondrous', icon: '✨', title: 'Maravilhosos', tier: ['marvellous', 'wondrous'] as const },
+  { id: 'marvellous', icon: '🌟', title: 'Artefatos maravilhosos', tier: 'marvellous' as const },
+  { id: 'wondrous', icon: '✨', title: 'Itens maravilhosos', tier: 'wondrous' as const },
 ];

@@ -132,7 +132,7 @@ function main() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        source: OCR_PATH,
+        source: 'data/extracted/treasure-ocr.txt',
         itemCount: unique.length,
         items: unique,
       },

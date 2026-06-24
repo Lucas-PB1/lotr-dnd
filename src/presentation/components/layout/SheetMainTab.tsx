@@ -6,6 +6,7 @@ import { SkillsSection } from '../sections/SkillsSection';
 import { CombatVitalityPanel } from '../sections/CombatSection';
 import { EquipmentSection } from '../sections/DetailsSection';
 import { SECTION_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
+import { SHEET_SECTIONS } from '../../../shared/constants/appLabels';
 import { Section } from '../ui/FormFields';
 import { SheetPanel } from './SheetPanel';
 
@@ -46,7 +47,7 @@ export function SheetMainTab() {
       </div>
 
       <Section
-        title="Equipamento, Traços & Recompensas"
+        title={SHEET_SECTIONS.equipmentVirtues}
         description={SECTION_DESCRIPTIONS.equipment}
         icon="🎒"
       >

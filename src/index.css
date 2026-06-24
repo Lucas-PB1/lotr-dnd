@@ -4293,7 +4293,13 @@ body {
   font-size: 0.8rem;
 }
 
-/* ── Ficha Final (somente leitura, visual moderno) ── */
+.sheet-footer__sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
+  color: #c4b5a5;
+}
+
+/* ── Resumo da ficha (somente leitura) ── */
 
 .sheet-final-view {
   font-size: 0.875rem;

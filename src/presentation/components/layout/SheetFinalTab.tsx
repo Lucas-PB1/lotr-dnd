@@ -25,6 +25,7 @@ import { FinalDeathSaves } from '../display/final/FinalDeathSaves';
 import { FinalHpHero } from '../display/final/FinalHpHero';
 import { EquipmentOverviewPanel } from '../equipment/EquipmentOverviewPanel';
 import { TraitsVirtuesPanel } from '../equipment/TraitsVirtuesPanel';
+import { SHEET_SECTIONS } from '../../../shared/constants/appLabels';
 import { getMagicalItemDefinition, MAGICAL_TIER_LABELS } from '../../../shared/data/magicalItemCatalog';
 import { AbilityScoreDisplay } from '../sections/AbilityScoreDisplay';
 import { SheetPanel } from './SheetPanel';
@@ -98,8 +99,8 @@ export function SheetFinalTab() {
     <div className="sheet-final-view">
       <div className="sheet-final__toolbar no-print">
         <div>
-          <p className="sheet-final__hint-title">Ficha Final</p>
-          <p className="sheet-final__hint">Resumo para consulta ou impressão — passe o mouse para dicas.</p>
+          <p className="sheet-final__hint-title">{SHEET_SECTIONS.summaryTitle}</p>
+          <p className="sheet-final__hint">{SHEET_SECTIONS.summaryHint}</p>
         </div>
         <Button color="warning" size="sm" onClick={handlePrint} className="sheet-final__print-btn">
           Imprimir ficha
@@ -242,7 +243,7 @@ export function SheetFinalTab() {
       </div>
 
       <DisplaySection
-        title="Equipamento & Traços"
+        title={SHEET_SECTIONS.equipmentSummary}
         description={SECTION_DESCRIPTIONS.equipment}
         icon="🎒"
         collapsible
@@ -253,7 +254,7 @@ export function SheetFinalTab() {
           <TraitsVirtuesPanel compact />
           {(character.ownedMagicalItems ?? []).length > 0 && (
             <div className="sheet-final__magical">
-              <h4 className="sheet-final__magical-title">Objetos de poder</h4>
+              <h4 className="sheet-final__magical-title">{SHEET_SECTIONS.magicalTreasures}</h4>
               <ul className="sheet-final__magical-list">
                 {(character.ownedMagicalItems ?? []).map((item) => {
                   const def = getMagicalItemDefinition(item.definitionId);
@@ -282,7 +283,7 @@ export function SheetFinalTab() {
             </div>
           )}
           {character.rewardsAndMagicalItems.trim() && (
-            <DisplayText label="Notas legadas" value={character.rewardsAndMagicalItems} compact />
+            <DisplayText label="Anotações antigas" value={character.rewardsAndMagicalItems} compact />
           )}
           {character.additionalFeatures.trim() && (
             <DisplayText label="Complementos" value={character.additionalFeatures} compact />

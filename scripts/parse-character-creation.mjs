@@ -17,7 +17,7 @@ const dataModule = await import(
 const { HEROIC_CULTURES, CALLINGS } = dataModule;
 
 const payload = {
-  source: 'Lord Of The Rings Roleplay — Cap. 3 (validado com OCR pág. 20–75)',
+  source: 'Senhor dos Anéis RPG — regras, Cap. 3 (validado com OCR pág. 20–75)',
   extractedAt: new Date().toISOString(),
   cultures: HEROIC_CULTURES,
   callings: CALLINGS,

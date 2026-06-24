@@ -9,7 +9,8 @@ import { PDFParse } from 'pdf-parse';
 import Tesseract from 'tesseract.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PDF_PATH = path.join(__dirname, '../Lord Of The Rings Roleplay.pdf');
+import { RULEBOOK_PATH, RULEBOOK_REL } from './docPaths.mjs';
+
 const OUT_DIR = path.join(__dirname, '../data/extracted');
 
 const PAGE_RANGES = [
@@ -66,14 +67,15 @@ async function extractRange(buf, startPage, endPage, totalPages) {
 }
 
 async function main() {
-  if (!fs.existsSync(PDF_PATH)) {
-    console.error('PDF não encontrado:', PDF_PATH);
+  if (!fs.existsSync(RULEBOOK_PATH)) {
+    console.error('PDF não encontrado:', RULEBOOK_PATH);
+    console.error('Coloque o livro em doc/senhor-dos-aneis-rpg-regras.pdf (veja README).');
     process.exit(1);
   }
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const buf = fs.readFileSync(PDF_PATH);
+  const buf = fs.readFileSync(RULEBOOK_PATH);
   const parser = new PDFParse({ data: buf });
   const info = await parser.getInfo();
   const totalPages = info.total;
@@ -95,7 +97,7 @@ async function main() {
   fs.writeFileSync(path.join(OUT_DIR, 'treasure-ocr.txt'), combined, 'utf8');
   fs.writeFileSync(
     path.join(OUT_DIR, 'treasure-ocr.json'),
-    JSON.stringify({ pdfPath: PDF_PATH, totalPages, pages: allPages }, null, 2),
+    JSON.stringify({ pdfPath: RULEBOOK_REL, totalPages, pages: allPages }, null, 2),
     'utf8',
   );
 

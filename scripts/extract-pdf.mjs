@@ -2,17 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PDFParse } from 'pdf-parse';
+import { RULEBOOK_PATH } from './docPaths.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PDF_PATH = path.join(__dirname, '../Lord Of The Rings Roleplay.pdf');
 
-if (!fs.existsSync(PDF_PATH)) {
-  console.error('PDF não encontrado:', PDF_PATH);
-  console.error('Coloque o arquivo do livro na raiz do projeto (uso local, não versionado).');
+if (!fs.existsSync(RULEBOOK_PATH)) {
+  console.error('PDF não encontrado:', RULEBOOK_PATH);
+  console.error('Coloque o livro de regras em doc/ (veja scripts/docPaths.mjs).');
   process.exit(1);
 }
 
-const buf = fs.readFileSync(PDF_PATH);
+const buf = fs.readFileSync(RULEBOOK_PATH);
 const parser = new PDFParse({ data: buf });
 const result = await parser.getText();
 const text = result.text;
