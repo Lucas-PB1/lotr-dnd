@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
 import { getInitialSheetTab } from '../../application/sheet/getInitialSheetTab';
-import { APP_SUBTITLE, APP_TITLE } from '../../shared/constants/appLabels';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
 import { SheetAppShell } from '../components/layout/shell/SheetAppShell';
@@ -81,14 +80,6 @@ export function CharacterSheetPage() {
         tabBadges={tabBadges}
         isSaving={isSaving}
         onResetClick={() => setResetOpen(true)}
-        footer={
-          <footer className="border-t border-[var(--color-st-outline-variant)] py-8 mt-8 text-center">
-            <p className="font-st-label text-[var(--color-st-on-surface-variant)] m-0">
-              {APP_TITLE} · Free League Publishing
-            </p>
-            <p className="text-sm text-[var(--color-st-outline)] mt-1 m-0">{APP_SUBTITLE}</p>
-          </footer>
-        }
       >
         {tabContent}
       </SheetAppShell>

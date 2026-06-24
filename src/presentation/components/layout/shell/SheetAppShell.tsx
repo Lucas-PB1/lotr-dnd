@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { CharacterProps } from '../../../../domain/entities/Character';
 import type { SheetTabId } from './sheetTabTypes';
+import { SheetAppFooter } from './SheetAppFooter';
 import { SheetMainCanvas } from './SheetMainCanvas';
 import { SheetSideNav } from './SheetSideNav';
 import { SheetTopBar } from './SheetTopBar';
@@ -13,7 +14,6 @@ type SheetAppShellProps = {
   isSaving: boolean;
   onResetClick: () => void;
   children: ReactNode;
-  footer?: ReactNode;
 };
 
 export function SheetAppShell({
@@ -24,11 +24,16 @@ export function SheetAppShell({
   isSaving,
   onResetClick,
   children,
-  footer,
 }: SheetAppShellProps) {
   return (
     <div className="stitch-app st-shell">
-      <SheetTopBar isSaving={isSaving} onResetClick={onResetClick} />
+      <SheetTopBar
+        character={character}
+        activeTab={activeTab}
+        isSaving={isSaving}
+        onResetClick={onResetClick}
+        onTabChange={onTabChange}
+      />
       <SheetSideNav
         character={character}
         activeTab={activeTab}
@@ -37,8 +42,8 @@ export function SheetAppShell({
       />
       <SheetMainCanvas activeTab={activeTab} onTabChange={onTabChange} tabBadges={tabBadges}>
         {children}
+        <SheetAppFooter />
       </SheetMainCanvas>
-      {footer}
     </div>
   );
 }

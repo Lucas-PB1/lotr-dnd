@@ -61,6 +61,12 @@ body:has(.stitch-app) {
   background-image: none;
 }
 
+@media (min-width: 1024px) {
+  body:has(.stitch-app) {
+    overflow: hidden;
+  }
+}
+
 .stitch-app .font-st-display {
   font-family: var(--font-st-display);
 }
