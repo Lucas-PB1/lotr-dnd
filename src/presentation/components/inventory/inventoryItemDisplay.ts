@@ -45,6 +45,15 @@ export function buildItemStatLines(def: ItemDefinition): string[] {
   return lines;
 }
 
+export function itemDescription(item: InventoryItem): string | undefined {
+  const def = getItemDefinition(item.definitionId);
+  if (item.definitionId === 'custom') return item.notes;
+  if (def?.description) return def.description;
+  if (!def) return undefined;
+  const stats = buildItemStatLines(def);
+  return stats.length > 0 ? stats.join(' · ') : undefined;
+}
+
 export function itemMetaShort(item: InventoryItem): string {
   const def = getItemDefinition(item.definitionId);
   if (!def) return '';

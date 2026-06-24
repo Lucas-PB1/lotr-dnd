@@ -1,22 +1,33 @@
-import { useMemo, useState } from 'react';
-import { APP_SUBTITLE, APP_TITLE, SHEET_TABS } from '../../shared/constants/appLabels';
-import { Badge, Card, TabItem, Tabs } from 'flowbite-react';
+import { useMemo, useState, type ReactNode } from 'react';
+import { AnimatePresence } from 'motion/react';
 import { getCreationProgress } from '../../application/creation/creationProgress';
+import { APP_SUBTITLE, APP_TITLE } from '../../shared/constants/appLabels';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
-import { SheetToolbar } from '../components/layout/SheetToolbar';
+import { SheetAppShell } from '../components/layout/shell/SheetAppShell';
+import type { SheetTabId } from '../components/layout/shell/sheetTabTypes';
 import { SheetFinalTab } from '../components/layout/SheetFinalTab';
 import { SheetInventoryTab } from '../components/layout/SheetInventoryTab';
 import { SheetMainTab } from '../components/layout/SheetMainTab';
-import { SheetPageHeader } from '../components/layout/SheetPageHeader';
+import { SheetShopTab } from '../components/layout/SheetShopTab';
 import { SheetStoryTab } from '../components/layout/SheetStoryTab';
 import { Section } from '../components/ui/FormFields';
 import { useCharacterSheet } from '../context/CharacterSheetContext';
+import { SheetNavigationProvider } from '../context/SheetNavigationContext';
+
+function LegacyTabWrap({ children }: { children: ReactNode }) {
+  return (
+    <div className="st-legacy-wrap">
+      {children}
+    </div>
+  );
+}
 
 export function CharacterSheetPage() {
   const { character, resetCharacter, isSaving } = useCharacterSheet();
   const [resetOpen, setResetOpen] = useState(false);
   const [sheetKey, setSheetKey] = useState(0);
+  const [activeTab, setActiveTab] = useState<SheetTabId>('creation');
 
   const progress = useMemo(
     () => getCreationProgress(character.creationChoices),
@@ -33,94 +44,87 @@ export function CharacterSheetPage() {
     return filled;
   }, [character]);
 
+  const tabBadges = useMemo(
+    () => ({
+      creation: progress.label,
+      inventory: (character.inventory?.length ?? 0) > 0 ? String(character.inventory!.length) : undefined,
+      story: storyProgress > 0 ? `${storyProgress}/3` : undefined,
+    }),
+    [progress.label, character.inventory, storyProgress],
+  );
+
   const handleReset = () => {
     resetCharacter();
     setSheetKey((key) => key + 1);
     setResetOpen(false);
+    setActiveTab('creation');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return (
-    <div className="sheet-page">
-      <SheetPageHeader character={character} />
-
-      <Card className="sheet-content border-2 border-amber-400/50 bg-[var(--color-parchment)] p-4 shadow-xl sm:p-6">
-        <SheetToolbar
-          isSaving={isSaving}
-          onResetClick={() => setResetOpen(true)}
-        />
-        <Tabs
-          key={sheetKey}
-          aria-label="Navegação da ficha"
-          variant="pills"
-          className="sheet-tabs"
-        >
-          <TabItem
-            active
-            title={
-              <span className="sheet-tab__label">
-                {SHEET_TABS.creation}
-                <Badge color="warning" size="xs" className="ml-2">
-                  {progress.label}
-                </Badge>
-              </span>
-            }
-          >
+  const tabContent = (() => {
+    switch (activeTab) {
+      case 'creation':
+        return (
+          <LegacyTabWrap>
             <Section title="Criação de Personagem">
               <CharacterCreationSection />
             </Section>
-          </TabItem>
-
-          <TabItem title={SHEET_TABS.adventure}>
+          </LegacyTabWrap>
+        );
+      case 'adventure':
+        return (
+          <LegacyTabWrap>
             <SheetMainTab />
-          </TabItem>
-
-          <TabItem
-            title={
-              <span className="sheet-tab__label">
-                {SHEET_TABS.inventory}
-                {(character.inventory?.length ?? 0) > 0 && (
-                  <Badge color="success" size="xs" className="ml-2">
-                    {character.inventory.length}
-                  </Badge>
-                )}
-              </span>
-            }
-          >
-            <SheetInventoryTab />
-          </TabItem>
-
-          <TabItem title={SHEET_TABS.summary}>
+          </LegacyTabWrap>
+        );
+      case 'inventory':
+        return <SheetInventoryTab />;
+      case 'shop':
+        return <SheetShopTab />;
+      case 'summary':
+        return (
+          <LegacyTabWrap>
             <SheetFinalTab />
-          </TabItem>
-
-          <TabItem
-            title={
-              <span className="sheet-tab__label">
-                {SHEET_TABS.story}
-                {storyProgress > 0 && (
-                  <Badge color="info" size="xs" className="ml-2">
-                    {storyProgress}/3
-                  </Badge>
-                )}
-              </span>
-            }
-          >
+          </LegacyTabWrap>
+        );
+      case 'story':
+        return (
+          <LegacyTabWrap>
             <SheetStoryTab />
-          </TabItem>
-        </Tabs>
-      </Card>
+          </LegacyTabWrap>
+        );
+      default:
+        return null;
+    }
+  })();
 
-      <footer className="sheet-footer">
-        <p>{APP_TITLE} · Free League Publishing</p>
-        <p className="sheet-footer__sub">{APP_SUBTITLE}</p>
-      </footer>
+  return (
+    <SheetNavigationProvider goToTab={setActiveTab}>
+      <SheetAppShell
+        key={sheetKey}
+        character={character}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        tabBadges={tabBadges}
+        isSaving={isSaving}
+        onResetClick={() => setResetOpen(true)}
+        footer={
+          <footer className="border-t border-[var(--color-st-outline-variant)] py-8 mt-8 text-center">
+            <p className="font-st-label text-[var(--color-st-on-surface-variant)] m-0">
+              {APP_TITLE} · Free League Publishing
+            </p>
+            <p className="text-sm text-[var(--color-st-outline)] mt-1 m-0">{APP_SUBTITLE}</p>
+          </footer>
+        }
+      >
+        <AnimatePresence mode="wait">{tabContent}</AnimatePresence>
+      </SheetAppShell>
 
       <ResetCharacterModal
         open={resetOpen}
         onClose={() => setResetOpen(false)}
         onConfirm={handleReset}
       />
-    </div>
+    </SheetNavigationProvider>
   );
 }

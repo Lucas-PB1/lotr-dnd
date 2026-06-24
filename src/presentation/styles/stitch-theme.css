@@ -1,0 +1,108 @@
+/** Design tokens Stitch (export update.html) — Terra-média escuro */
+@theme {
+  --font-st-display: 'EB Garamond', Georgia, serif;
+  --font-st-body: 'Literata', Georgia, serif;
+  --font-st-label: 'Work Sans', system-ui, sans-serif;
+
+  --color-st-background: #15140c;
+  --color-st-surface: #15140c;
+  --color-st-surface-dim: #15140c;
+  --color-st-surface-container: #212017;
+  --color-st-surface-container-low: #1d1c13;
+  --color-st-surface-container-high: #2c2a21;
+  --color-st-surface-container-highest: #37352b;
+  --color-st-surface-variant: #37352b;
+  --color-st-surface-bright: #3b3930;
+
+  --color-st-on-surface: #e7e2d4;
+  --color-st-on-surface-variant: #c5c8bd;
+  --color-st-on-background: #e7e2d4;
+
+  --color-st-primary: #bdcbae;
+  --color-st-on-primary: #28341f;
+  --color-st-primary-container: #2d3924;
+  --color-st-on-primary-container: #95a387;
+
+  --color-st-secondary: #eabf89;
+  --color-st-on-secondary: #442b02;
+  --color-st-secondary-container: #614318;
+  --color-st-on-secondary-container: #dbb17c;
+  --color-st-secondary-fixed: #ffddb4;
+
+  --color-st-tertiary: #e9c349;
+  --color-st-on-tertiary: #3c2f00;
+  --color-st-tertiary-container: #cba72f;
+  --color-st-on-tertiary-container: #4e3d00;
+
+  --color-st-outline: #8f9289;
+  --color-st-outline-variant: #454840;
+
+  --color-st-error: #ffb4ab;
+
+  --spacing-st-gutter: 1.5rem;
+  --spacing-st-card-gap: 1rem;
+  --spacing-st-container-padding: 2rem;
+  --spacing-st-section-margin: 3rem;
+
+  --radius-st-sm: 0.125rem;
+  --radius-st-md: 0.25rem;
+  --radius-st-lg: 0.5rem;
+  --radius-st-xl: 0.75rem;
+}
+
+.stitch-app {
+  font-family: var(--font-st-body);
+  color: var(--color-st-on-surface);
+  background-color: var(--color-st-background);
+}
+
+body:has(.stitch-app) {
+  background: var(--color-st-background);
+  background-image: none;
+}
+
+.stitch-app .font-st-display {
+  font-family: var(--font-st-display);
+}
+
+.stitch-app .font-st-label {
+  font-family: var(--font-st-label);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.stitch-app .font-st-title {
+  font-family: var(--font-st-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2rem;
+}
+
+.stitch-app .font-st-headline {
+  font-family: var(--font-st-display);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined--filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}

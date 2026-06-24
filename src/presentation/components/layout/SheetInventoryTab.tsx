@@ -1,21 +1,5 @@
-import { SECTION_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
-import { InventorySection } from '../inventory/InventorySection';
-import { CurrencySection } from '../sections/combat/CurrencySection';
-import { SheetPanel } from './SheetPanel';
+import { InventoryStitchView } from '../inventory/stitch/InventoryStitchView';
 
 export function SheetInventoryTab() {
-  return (
-    <div className="sheet-inventory-tab">
-      <SheetPanel
-        title="Inventário & Loja"
-        description={SECTION_DESCRIPTIONS.equipment}
-        accent="gold"
-      >
-        <div className="sheet-inventory-tab__top">
-          <CurrencySection />
-        </div>
-        <InventorySection />
-      </SheetPanel>
-    </div>
-  );
+  return <InventoryStitchView />;
 }

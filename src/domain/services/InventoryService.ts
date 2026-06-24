@@ -167,6 +167,22 @@ export class InventoryService {
     };
   }
 
+  /** Adiciona item sem custo (presente do mestre, loot narrativo). */
+  static grantItem(
+    props: CharacterProps,
+    definitionId: string,
+    quantity = 1,
+  ): Partial<CharacterProps> | null {
+    const def = getItemDefinition(definitionId);
+    if (!def) return null;
+
+    const inventory = this.addItem(props.inventory ?? [], definitionId, quantity);
+    return {
+      inventory,
+      equipment: inventoryToSummaryText(inventory),
+    };
+  }
+
   static sell(
     props: CharacterProps,
     instanceId: string,
@@ -193,6 +209,41 @@ export class InventoryService {
     return {
       inventory,
       currency,
+      equipment: inventoryToSummaryText(inventory),
+    };
+  }
+
+  /** Consumíveis, munição, empilháveis de uso e itens personalizados */
+  static isUsable(
+    def: ItemDefinition | undefined,
+    item: InventoryItem,
+  ): boolean {
+    if (item.definitionId === 'custom') return true;
+    if (!def) return false;
+    if (def.category === 'consumable' || def.category === 'ammo') return true;
+    if (def.stackable && !def.equipSlot) return true;
+    return false;
+  }
+
+  static applyUse(
+    props: CharacterProps,
+    instanceId: string,
+    quantity = 1,
+  ): Partial<CharacterProps> | null {
+    const item = props.inventory.find((i) => i.instanceId === instanceId);
+    if (!item) return null;
+
+    const def = getItemDefinition(item.definitionId);
+    if (!this.isUsable(def, item)) return null;
+
+    const useQty = Math.min(Math.max(1, quantity), item.quantity);
+    let inventory = item.equipped
+      ? this.unequip(props.inventory, instanceId)
+      : props.inventory;
+    inventory = this.removeItem(inventory, instanceId, useQty);
+
+    return {
+      inventory,
       equipment: inventoryToSummaryText(inventory),
     };
   }
