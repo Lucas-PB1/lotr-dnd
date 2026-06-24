@@ -29,6 +29,8 @@ import {
   getCraftById,
   getVirtueById,
 } from '../../shared/data/virtuesAndCraftsData';
+import { getAppearancePresets } from '../../shared/data/storySuggestionsData';
+import { StorySuggestionsService } from './StorySuggestionsService';
 
 export interface CreationChoices {
   cultureId: string | null;
@@ -288,6 +290,26 @@ export class CharacterCreationService {
       toolParts.push(`Erudito: ${choices.scholarToolChoices.join(', ')}`);
     }
 
+    const appearancePreset = getAppearancePresets(choices.cultureId)[0];
+    const seedAppearance =
+      !props.appearance.age &&
+      !props.appearance.height &&
+      appearancePreset
+        ? {
+            age: appearancePreset.age,
+            height: appearancePreset.height,
+            weight: appearancePreset.weight,
+            hair: appearancePreset.hair,
+            eyes: appearancePreset.eyes,
+            skin: appearancePreset.skin,
+          }
+        : props.appearance;
+
+    const seedNotes =
+      !props.characterAppearanceNotes.trim() && appearancePreset
+        ? appearancePreset.notes
+        : props.characterAppearanceNotes;
+
     return {
       creationChoices: normalizedChoices,
       culture: culture?.namePt ?? '',
@@ -306,6 +328,17 @@ export class CharacterCreationService {
         ? { ...props.currency, silver }
         : props.currency,
       hitDice: calling ? `1d${calling.hitDie}` : props.hitDice,
+      characterBackstory: StorySuggestionsService.shouldSeedBackstory(props)
+        ? StorySuggestionsService.buildStarterBackstory(choices)
+        : props.characterBackstory,
+      fellowship: StorySuggestionsService.shouldSeedPatrons(props)
+        ? {
+            ...props.fellowship,
+            patrons: StorySuggestionsService.buildStarterPatrons(choices),
+          }
+        : props.fellowship,
+      appearance: seedAppearance,
+      characterAppearanceNotes: seedNotes,
     };
   }
 }

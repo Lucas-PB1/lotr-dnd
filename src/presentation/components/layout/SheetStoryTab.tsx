@@ -4,34 +4,36 @@ import {
   FellowshipSection,
 } from '../sections/DetailsSection';
 import { SECTION_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
-import { Section } from '../ui/FormFields';
+import { SheetPanel } from './SheetPanel';
 
 export function SheetStoryTab() {
   return (
     <div className="sheet-page-2">
       <div className="sheet-page2-grid">
-        <Section
+        <SheetPanel
           title="Comunidade & Herdeiro"
           description={SECTION_DESCRIPTIONS.fellowship}
-          icon="🏛"
+          accent="emerald"
         >
           <FellowshipSection />
-        </Section>
-        <Section
+        </SheetPanel>
+        <SheetPanel
           title="Aparência"
           description={SECTION_DESCRIPTIONS.appearance}
-          icon="👤"
+          accent="gold"
         >
           <AppearanceSection />
-        </Section>
+        </SheetPanel>
       </div>
-      <Section
-        title="História & Notas Adicionais"
+
+      <SheetPanel
+        title="Crônicas do herói"
         description={SECTION_DESCRIPTIONS.backstory}
-        icon="📜"
+        accent="slate"
+        className="sheet-panel--story"
       >
         <BackstorySection />
-      </Section>
+      </SheetPanel>
     </div>
   );
 }
