@@ -18,7 +18,11 @@ interface LorePickerProps {
   groups: LoreGroup[];
   onPick: (value: string, target: LoreGroup['target']) => void;
   defaultTabId?: string;
+  activeTabId?: string;
+  onTabChange?: (tabId: string) => void;
   title?: string;
+  variant?: 'default' | 'compact';
+  insertTargetLabel?: string;
 }
 
 function previewText(value: string, max = 72): string {
@@ -30,48 +34,81 @@ export function LorePicker({
   groups,
   onPick,
   defaultTabId,
+  activeTabId,
+  onTabChange,
   title = 'Inspirações',
+  variant = 'default',
+  insertTargetLabel,
 }: LorePickerProps) {
-  const [tabId, setTabId] = useState(defaultTabId ?? groups[0]?.id ?? '');
+  const [internalTab, setInternalTab] = useState(defaultTabId ?? groups[0]?.id ?? '');
   const [pickedKey, setPickedKey] = useState<string | null>(null);
+
+  const tabId = activeTabId ?? internalTab;
+
+  const setTabId = (id: string) => {
+    if (onTabChange) onTabChange(id);
+    else setInternalTab(id);
+  };
 
   useEffect(() => {
     if (!groups.some((g) => g.id === tabId)) {
-      setTabId(groups[0]?.id ?? '');
+      const fallback = groups[0]?.id ?? '';
+      if (onTabChange) onTabChange(fallback);
+      else setInternalTab(fallback);
     }
-  }, [groups, tabId]);
+  }, [groups, tabId, onTabChange]);
 
   if (groups.length === 0) return null;
 
   const active = groups.find((g) => g.id === tabId) ?? groups[0];
+  const isCompact = variant === 'compact';
 
   const handlePick = (opt: LoreOption, group: LoreGroup) => {
     onPick(opt.value, group.target);
     setPickedKey(`${group.id}:${opt.label}`);
-    window.setTimeout(() => setPickedKey(null), 500);
+    window.setTimeout(() => setPickedKey(null), 600);
   };
 
+  const tabButtons = groups.map((group) => (
+    <button
+      key={group.id}
+      type="button"
+      role="tab"
+      aria-selected={tabId === group.id}
+      className={
+        isCompact
+          ? `lore-inspire__tab${tabId === group.id ? ' lore-inspire__tab--active' : ''}`
+          : `segmented-control__btn segmented-control__btn--icon${tabId === group.id ? ' segmented-control__btn--active' : ''}`
+      }
+      onClick={() => setTabId(group.id)}
+    >
+      <span className="lore-inspire__tab-icon" aria-hidden>
+        {group.icon}
+      </span>
+      <span className="lore-inspire__tab-label">{group.title}</span>
+    </button>
+  ));
+
   return (
-    <div className="lore-inspire" role="region" aria-label={title}>
+    <div
+      className={`lore-inspire${isCompact ? ' lore-inspire--compact' : ''}`}
+      role="region"
+      aria-label={title}
+    >
       <header className="lore-inspire__head">
         <h4 className="lore-inspire__title">{title}</h4>
-        <span className="lore-inspire__hint">Toque para inserir</span>
+        {insertTargetLabel && (
+          <span className="lore-inspire__target">
+            → {insertTargetLabel}
+          </span>
+        )}
       </header>
 
-      <div className="segmented-control segmented-control--scroll" role="tablist">
-        {groups.map((group) => (
-          <button
-            key={group.id}
-            type="button"
-            role="tab"
-            aria-selected={tabId === group.id}
-            className={`segmented-control__btn segmented-control__btn--icon${tabId === group.id ? ' segmented-control__btn--active' : ''}`}
-            onClick={() => setTabId(group.id)}
-          >
-            <span aria-hidden>{group.icon}</span>
-            {group.title}
-          </button>
-        ))}
+      <div
+        className={isCompact ? 'lore-inspire__tabs' : 'segmented-control segmented-control--scroll'}
+        role="tablist"
+      >
+        {tabButtons}
       </div>
 
       {active.subtitle && (
@@ -89,8 +126,14 @@ export function LorePicker({
               role="listitem"
               className={`lore-inspire__card${picked ? ' lore-inspire__card--picked' : ''}`}
               onClick={() => handlePick(opt, active)}
+              title={`Inserir em ${insertTargetLabel ?? 'campo ativo'}`}
             >
-              <span className="lore-inspire__card-label">{opt.label}</span>
+              <span className="lore-inspire__card-top">
+                <span className="lore-inspire__card-label">{opt.label}</span>
+                <span className="lore-inspire__card-add" aria-hidden>
+                  {picked ? '✓' : '+'}
+                </span>
+              </span>
               <span className="lore-inspire__card-preview">{previewText(opt.value)}</span>
             </button>
           );

@@ -1,7 +1,7 @@
-import { FIELD_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
 import { TextArea } from '../ui/FormFields';
 import { EquipmentOverviewPanel } from '../equipment/EquipmentOverviewPanel';
+import { MagicalItemsPanel } from '../equipment/MagicalItemsPanel';
 import { TraitsVirtuesPanel } from '../equipment/TraitsVirtuesPanel';
 
 export function EquipmentSection() {
@@ -12,6 +12,7 @@ export function EquipmentSection() {
       <div className="equipment-section__structured">
         <EquipmentOverviewPanel />
         <TraitsVirtuesPanel />
+        <MagicalItemsPanel />
       </div>
 
       <div className="equipment-grid equipment-grid--notes">
@@ -20,13 +21,6 @@ export function EquipmentSection() {
           value={character.toolProficiencies}
           onChange={(toolProficiencies) => updateCharacter({ toolProficiencies })}
           description="Ferramentas, idiomas e proficiências extras (uma por linha)."
-          rows={3}
-        />
-        <TextArea
-          label="Recompensas e itens mágicos"
-          value={character.rewardsAndMagicalItems}
-          onChange={(rewardsAndMagicalItems) => updateCharacter({ rewardsAndMagicalItems })}
-          description={FIELD_DESCRIPTIONS.rewardsAndMagicalItems}
           rows={3}
         />
         <TextArea

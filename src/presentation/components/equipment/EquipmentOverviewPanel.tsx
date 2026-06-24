@@ -100,6 +100,16 @@ export function EquipmentOverviewPanel({ compact = false }: EquipmentOverviewPan
                     {!attack.proficient && (
                       <span className="equip-overview__warn">sem proficiência</span>
                     )}
+                    {attack.breakdown.magicalNotes.length > 0 && (
+                      <span className="equip-overview__magical">
+                        {attack.breakdown.magicalNotes.join(' · ')}
+                      </span>
+                    )}
+                    {attack.breakdown.virtueNotes.length > 0 && (
+                      <span className="equip-overview__virtue">
+                        {attack.breakdown.virtueNotes.join(' · ')}
+                      </span>
+                    )}
                   </div>
                 )}
                 {!attack && armor && (

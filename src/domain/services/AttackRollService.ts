@@ -13,6 +13,7 @@ import { getVirtueById } from '../../shared/data/virtuesAndCraftsData';
 import type { InventoryItem } from '../value-objects/Item';
 import type { AbilityScores } from '../value-objects/CharacterValues';
 import { CharacterCalculator } from './CharacterCalculator';
+import { MagicalItemService } from './MagicalItemService';
 
 export interface AttackRollBreakdown {
   abilityMod: number;
@@ -20,7 +21,10 @@ export interface AttackRollBreakdown {
   abilityAlt?: AbilityName;
   proficiency: number;
   virtueDamageBonus: number;
+  magicalAttackBonus: number;
+  magicalDamageBonus: number;
   virtueNotes: string[];
+  magicalNotes: string[];
 }
 
 export interface WeaponAttackRoll {
@@ -148,8 +152,16 @@ function buildAttackForWeapon(
   const strengthBased = primary === 'strength';
 
   const virtueFx = getVirtueCombatEffects(props, { ranged, strengthBased });
-  const attackTotal = abilityMod + proficiency;
-  const damageMod = abilityMod + virtueFx.damageBonus;
+  const magicalFx = MagicalItemService.getWeaponBonusesForInstance(props, item.instanceId);
+  const attackTotal = abilityMod + proficiency + magicalFx.attackBonus;
+  const damageMod = abilityMod + virtueFx.damageBonus + magicalFx.damageBonus;
+
+  const magicalNotes: string[] = [];
+  if (magicalFx.attackBonus || magicalFx.damageBonus) {
+    magicalNotes.push(
+      `Item mágico: ${formatMod(magicalFx.attackBonus)} atq, ${formatMod(magicalFx.damageBonus)} dano`,
+    );
+  }
 
   const abilityLabel = ABILITY_ABBREVIATIONS[primary];
   const profPart = proficient ? `, Prof ${formatMod(proficiency)}` : ', sem prof.';
@@ -158,7 +170,7 @@ function buildAttackForWeapon(
       ? ` (ou ${ABILITY_ABBREVIATIONS[alt]} ${formatMod(scores.get(alt).modifier)})`
       : '';
 
-  const attackFormula = `d20 ${formatMod(attackTotal)} (${abilityLabel} ${formatMod(abilityMod)}${profPart})${altPart}`;
+  const attackFormula = `d20 ${formatMod(attackTotal)} (${abilityLabel} ${formatMod(abilityMod)}${profPart}${magicalFx.attackBonus ? `, Mág ${formatMod(magicalFx.attackBonus)}` : ''})${altPart}`;
 
   const dice = def.damage ?? '—';
   const damageFormula =
@@ -183,7 +195,10 @@ function buildAttackForWeapon(
       abilityAlt: alt,
       proficiency,
       virtueDamageBonus: virtueFx.damageBonus,
+      magicalAttackBonus: magicalFx.attackBonus,
+      magicalDamageBonus: magicalFx.damageBonus,
       virtueNotes: virtueFx.notes,
+      magicalNotes,
     },
   };
 }

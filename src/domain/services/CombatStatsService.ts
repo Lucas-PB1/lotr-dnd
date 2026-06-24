@@ -5,6 +5,7 @@ import { getVirtueById } from '../../shared/data/virtuesAndCraftsData';
 import { getItemDefinition } from '../../shared/data/itemCatalog';
 import { InventoryService } from './InventoryService';
 import { AttackRollService } from './AttackRollService';
+import { MagicalItemService } from './MagicalItemService';
 import { CharacterCalculator } from './CharacterCalculator';
 
 /** Cálculos derivados de combate (5E / LOTR Roleplaying). */
@@ -81,6 +82,8 @@ export class CombatStatsService {
       const shieldDef = getItemDefinition(shieldItem.definitionId);
       if (shieldDef?.armorCategory === 'shield') ac += 2;
     }
+
+    ac += MagicalItemService.getEquippedBonuses(props).acBonus;
 
     const picks = props.creationChoices?.rewardPicks ?? [];
     for (const pick of picks) {

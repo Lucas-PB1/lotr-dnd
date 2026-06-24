@@ -25,6 +25,7 @@ import { FinalDeathSaves } from '../display/final/FinalDeathSaves';
 import { FinalHpHero } from '../display/final/FinalHpHero';
 import { EquipmentOverviewPanel } from '../equipment/EquipmentOverviewPanel';
 import { TraitsVirtuesPanel } from '../equipment/TraitsVirtuesPanel';
+import { getMagicalItemDefinition, MAGICAL_TIER_LABELS } from '../../../shared/data/magicalItemCatalog';
 import { AbilityScoreDisplay } from '../sections/AbilityScoreDisplay';
 import { SheetPanel } from './SheetPanel';
 
@@ -250,8 +251,38 @@ export function SheetFinalTab() {
         <div className="sheet-final__equipment-blocks">
           <EquipmentOverviewPanel compact />
           <TraitsVirtuesPanel compact />
+          {(character.ownedMagicalItems ?? []).length > 0 && (
+            <div className="sheet-final__magical">
+              <h4 className="sheet-final__magical-title">Objetos de poder</h4>
+              <ul className="sheet-final__magical-list">
+                {(character.ownedMagicalItems ?? []).map((item) => {
+                  const def = getMagicalItemDefinition(item.definitionId);
+                  const name =
+                    item.definitionId === 'custom-magical'
+                      ? (item.notes ?? 'Item mágico')
+                      : (def?.namePt ?? item.definitionId);
+                  return (
+                    <li key={item.instanceId} className="sheet-final__magical-item">
+                      <strong>{name}</strong>
+                      {def && (
+                        <span className="sheet-final__magical-tier">
+                          {MAGICAL_TIER_LABELS[def.tier]}
+                        </span>
+                      )}
+                      {item.equipped && <span className="sheet-final__magical-badge">equipado</span>}
+                      {!item.identified && (
+                        <span className="sheet-final__magical-badge sheet-final__magical-badge--dim">
+                          não identificado
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
           {character.rewardsAndMagicalItems.trim() && (
-            <DisplayText label="Recompensas" value={character.rewardsAndMagicalItems} compact />
+            <DisplayText label="Notas legadas" value={character.rewardsAndMagicalItems} compact />
           )}
           {character.additionalFeatures.trim() && (
             <DisplayText label="Complementos" value={character.additionalFeatures} compact />

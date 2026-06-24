@@ -7,6 +7,7 @@ import type { AbilityScoreMode } from '../../shared/constants/pointBuyConstants'
 import type { AbilityBonusSource } from '../services/AbilityBonusService';
 import type { CreationChoices } from '../services/CharacterCreationService';
 import type { InventoryItem } from '../value-objects/Item';
+import type { OwnedMagicalItem } from '../value-objects/MagicalItem';
 import { DEFAULT_CREATION_CHOICES } from '../services/CharacterCreationService';
 import type {
   AbilityScoresProps,
@@ -51,6 +52,7 @@ export interface CharacterProps {
   attacks: AttackProps[];
   passiveWisdom: number | null;
   rewardsAndMagicalItems: string;
+  ownedMagicalItems: OwnedMagicalItem[];
   currency: CurrencyProps;
   toolProficiencies: string;
   inventory: InventoryItem[];
@@ -116,6 +118,7 @@ export function createEmptyCharacterProps(id: string): CharacterProps {
     attacks: createDefaultAttacks(),
     passiveWisdom: null,
     rewardsAndMagicalItems: '',
+    ownedMagicalItems: [],
     currency: { copper: 0, silver: 0, gold: 0 },
     toolProficiencies: '',
     inventory: [],
