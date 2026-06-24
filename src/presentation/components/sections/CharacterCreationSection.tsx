@@ -24,6 +24,7 @@ export function CharacterCreationSection() {
     setChoice,
     updateRewardPick,
     updateEquipmentOption,
+    updateStartingItemChoice,
   } = useCharacterCreation();
 
   return (
@@ -86,6 +87,7 @@ export function CharacterCreationSection() {
               callingEquipment={callingEquipment}
               onSetChoice={setChoice}
               onUpdateEquipmentOption={updateEquipmentOption}
+              onUpdateStartingItemChoice={updateStartingItemChoice}
             />
           </AccordionContent>
         </AccordionPanel>

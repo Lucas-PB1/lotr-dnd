@@ -33,6 +33,7 @@ export function normalizeCreationChoices(
     rewardPicks: choices?.rewardPicks ?? [],
     equipmentOptions: choices?.equipmentOptions ?? {},
     scholarToolChoices: choices?.scholarToolChoices ?? [],
+    startingItemChoices: choices?.startingItemChoices ?? {},
     rangerSkillChoices: choices?.rangerSkillChoices ?? [],
     callingSkillChoices: choices?.callingSkillChoices ?? [],
   };

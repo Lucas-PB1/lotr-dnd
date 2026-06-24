@@ -66,6 +66,7 @@ export function useCharacterCreation() {
         rangerBonusAbility: null,
         rangerSkillChoices: [],
         rewardPicks: [],
+        startingItemChoices: {},
       };
       const c = getCulture(partial.cultureId ?? '');
       if (c?.subcultures.length === 1) {
@@ -79,7 +80,13 @@ export function useCharacterCreation() {
         callingSkillChoices: [],
         equipmentOptions: getDefaultEquipmentOptions(partial.callingId),
         scholarToolChoices: [],
+        startingItemChoices: {},
       };
+    }
+
+    if (partial.backgroundId !== undefined) {
+      const { 'background-tool': _, ...rest } = next.startingItemChoices ?? {};
+      next.startingItemChoices = rest;
     }
 
     applyChoices(next);
@@ -91,9 +98,34 @@ export function useCharacterCreation() {
   };
 
   const updateEquipmentOption = (groupId: string, optionId: string) => {
+    const weaponSlotIds = new Set([
+      'pick-martial-melee',
+      'pick-simple-with-martial',
+      'pick-simple-melee-a',
+      'pick-simple-melee-b',
+      'pick-extra-simple-melee',
+    ]);
+    const cleanedChoices = { ...(choices.startingItemChoices ?? {}) };
+    if (groupId === 'weapons-melee' || groupId === 'weapons-ranged' || groupId === 'weapons-extra') {
+      for (const key of weaponSlotIds) {
+        delete cleanedChoices[key];
+      }
+    }
+
     applyChoices({
       ...choices,
+      startingItemChoices: cleanedChoices,
       equipmentOptions: { ...(choices.equipmentOptions ?? {}), [groupId]: optionId },
+    });
+  };
+
+  const updateStartingItemChoice = (slotId: string, itemId: string) => {
+    applyChoices({
+      ...choices,
+      startingItemChoices: {
+        ...(choices.startingItemChoices ?? {}),
+        [slotId]: itemId,
+      },
     });
   };
 
@@ -108,5 +140,6 @@ export function useCharacterCreation() {
     setChoice,
     updateRewardPick,
     updateEquipmentOption,
+    updateStartingItemChoice,
   };
 }

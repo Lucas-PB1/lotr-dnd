@@ -19,6 +19,9 @@ import {
   getDefaultEquipmentOptions,
 } from '../../shared/data/startingEquipmentData';
 import {
+  normalizeStartingItemChoices,
+} from '../../shared/data/startingItemSlots';
+import {
   buildStartingInventory,
   inventoryToSummaryText,
 } from '../../shared/data/startingInventoryBuilder';
@@ -39,6 +42,8 @@ export interface CreationChoices {
   rewardPicks: RewardSlotPick[];
   equipmentOptions: Record<string, string>;
   scholarToolChoices: string[];
+  /** Escolhas de itens reais do catálogo (armas, ferramentas de origem, etc.) */
+  startingItemChoices: Record<string, string>;
 }
 
 export const DEFAULT_CREATION_CHOICES: CreationChoices = {
@@ -53,6 +58,7 @@ export const DEFAULT_CREATION_CHOICES: CreationChoices = {
   rewardPicks: [],
   equipmentOptions: {},
   scholarToolChoices: [],
+  startingItemChoices: {},
 };
 
 const RANGER_SKILL_OPTIONS = ['explore', 'hunting', 'oldLore', 'perception', 'stealth', 'travel'];
@@ -83,7 +89,20 @@ export class CharacterCreationService {
       scholarToolChoices = [];
     }
 
-    return { ...next, rewardPicks, equipmentOptions, scholarToolChoices };
+    const startingItemChoices = normalizeStartingItemChoices({
+      ...next,
+      rewardPicks,
+      equipmentOptions,
+      scholarToolChoices,
+    });
+
+    return {
+      ...next,
+      rewardPicks,
+      equipmentOptions,
+      scholarToolChoices,
+      startingItemChoices,
+    };
   }
 
   static buildAbilityBonusSources(choices: CreationChoices): AbilityBonusSource[] {
@@ -219,15 +238,16 @@ export class CharacterCreationService {
         ? choices.equipmentOptions
         : getDefaultEquipmentOptions(choices.callingId);
 
-    const shouldBuildInventory = (props.inventory ?? []).length === 0;
-    const inventory = shouldBuildInventory
-      ? buildStartingInventory(
-          choices.cultureId,
-          choices.callingId,
-          equipmentOptions,
-          choices.scholarToolChoices ?? [],
-        )
-      : props.inventory;
+    const normalizedChoices = {
+      ...choices,
+      equipmentOptions,
+      startingItemChoices: normalizeStartingItemChoices({
+        ...choices,
+        equipmentOptions,
+      }),
+    };
+
+    const inventory = buildStartingInventory(normalizedChoices);
 
     const living = culture?.standardOfLiving ?? 'Comum';
     const silverByLiving: Record<string, number> = { Frugal: 10, Comum: 15, Próspero: 20 };
@@ -269,7 +289,7 @@ export class CharacterCreationService {
     }
 
     return {
-      creationChoices: { ...choices, equipmentOptions },
+      creationChoices: normalizedChoices,
       culture: culture?.namePt ?? '',
       distinctiveFeatures: background?.distinctiveFeatures.join(', ') ?? props.distinctiveFeatures,
       shadowPath: calling?.shadowPathPt ?? props.shadowPath,
@@ -281,10 +301,8 @@ export class CharacterCreationService {
       toolProficiencies: toolParts.join('\n'),
       featuresTraitsVirtues: this.buildRewardsAndFeaturesText(choices),
       inventory,
-      equipment: shouldBuildInventory
-        ? inventoryToSummaryText(inventory)
-        : props.equipment,
-      currency: shouldBuildInventory
+      equipment: inventoryToSummaryText(inventory),
+      currency: culture
         ? { ...props.currency, silver }
         : props.currency,
       hitDice: calling ? `1d${calling.hitDie}` : props.hitDice,
