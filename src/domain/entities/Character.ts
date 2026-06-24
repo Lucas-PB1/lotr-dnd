@@ -6,6 +6,7 @@ import {
 import type { AbilityScoreMode } from '../../shared/constants/pointBuyConstants';
 import type { AbilityBonusSource } from '../services/AbilityBonusService';
 import type { CreationChoices } from '../services/CharacterCreationService';
+import type { InventoryItem } from '../value-objects/Item';
 import { DEFAULT_CREATION_CHOICES } from '../services/CharacterCreationService';
 import type {
   AbilityScoresProps,
@@ -52,6 +53,7 @@ export interface CharacterProps {
   rewardsAndMagicalItems: string;
   currency: CurrencyProps;
   toolProficiencies: string;
+  inventory: InventoryItem[];
   equipment: string;
   featuresTraitsVirtues: string;
   fellowship: FellowshipProps;
@@ -116,6 +118,7 @@ export function createEmptyCharacterProps(id: string): CharacterProps {
     rewardsAndMagicalItems: '',
     currency: { copper: 0, silver: 0, gold: 0 },
     toolProficiencies: '',
+    inventory: [],
     equipment: '',
     featuresTraitsVirtues: '',
     fellowship: {

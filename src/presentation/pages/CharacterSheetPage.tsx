@@ -5,6 +5,7 @@ import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
 import { SheetFinalTab } from '../components/layout/SheetFinalTab';
+import { SheetInventoryTab } from '../components/layout/SheetInventoryTab';
 import { SheetMainTab } from '../components/layout/SheetMainTab';
 import { SheetPageHeader } from '../components/layout/SheetPageHeader';
 import { SheetStoryTab } from '../components/layout/SheetStoryTab';
@@ -60,6 +61,21 @@ export function CharacterSheetPage() {
 
           <TabItem title="Ficha — Página 1">
             <SheetMainTab />
+          </TabItem>
+
+          <TabItem
+            title={
+              <span className="sheet-tab__label">
+                Inventário
+                {(character.inventory?.length ?? 0) > 0 && (
+                  <Badge color="success" size="xs" className="ml-2">
+                    {character.inventory.length}
+                  </Badge>
+                )}
+              </span>
+            }
+          >
+            <SheetInventoryTab />
           </TabItem>
 
           <TabItem title="Ficha Final">

@@ -1,0 +1,62 @@
+import type { ItemDefinition } from '../../../domain/value-objects/Item';
+
+/** Armas — LOTR Roleplaying (5E). Preços em peças de prata salvo indicação. */
+export const WEAPON_CATALOG: ItemDefinition[] = [
+  // —— Simples corpo a corpo ——
+  { id: 'club', namePt: 'Clava', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 1, damage: '1d4', damageType: 'concussão', properties: ['leve'] },
+  { id: 'dagger', namePt: 'Adaga', category: 'weapon', equipSlot: 'mainHand', weight: 1, costSilver: 20, damage: '1d4', damageType: 'perfurante', properties: ['finesse', 'leve', 'arremesso'] },
+  { id: 'greatclub', namePt: 'Clava grande', category: 'weapon', equipSlot: 'mainHand', weight: 10, costSilver: 2, damage: '1d8', damageType: 'concussão', properties: ['duas mãos'] },
+  { id: 'handaxe', namePt: 'Machado de mão', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 50, damage: '1d6', damageType: 'cortante', properties: ['leve', 'arremesso'] },
+  { id: 'axe', namePt: 'Machado', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 50, damage: '1d6', damageType: 'cortante', properties: ['arremesso'] },
+  { id: 'javelin', namePt: 'Azagaia', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 5, damage: '1d6', damageType: 'perfurante', properties: ['arremesso'] },
+  { id: 'light-hammer', namePt: 'Martelo leve', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 20, damage: '1d4', damageType: 'concussão', properties: ['leve', 'arremesso'] },
+  { id: 'hammer', namePt: 'Martelo', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 20, damage: '1d4', damageType: 'concussão' },
+  { id: 'mace', namePt: 'Maça', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 50, damage: '1d6', damageType: 'concussão' },
+  { id: 'quarterstaff', namePt: 'Bordão', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 2, damage: '1d6', damageType: 'concussão', properties: ['versátil (1d8)'] },
+  { id: 'staff', namePt: 'Cajado', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 2, damage: '1d6', damageType: 'concussão', properties: ['versátil (1d8)'] },
+  { id: 'sickle', namePt: 'Foice', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 10, damage: '1d4', damageType: 'cortante', properties: ['leve'] },
+  { id: 'spear', namePt: 'Lança', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 10, damage: '1d6', damageType: 'perfurante', properties: ['arremesso', 'versátil (1d8)'] },
+  // —— Simples à distância ——
+  { id: 'dart', namePt: 'Dardo', category: 'weapon', equipSlot: 'mainHand', weight: 0, costCopper: 5, damage: '1d4', damageType: 'perfurante', properties: ['finesse', 'arremesso'] },
+  { id: 'light-crossbow', namePt: 'Besta leve', category: 'weapon', equipSlot: 'mainHand', weight: 5, costSilver: 250, damage: '1d8', damageType: 'perfurante', range: '24/96 m', properties: ['munição', 'recarga', 'duas mãos'], twoHanded: true },
+  { id: 'shortbow', namePt: 'Arco curto', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 250, damage: '1d6', damageType: 'perfurante', range: '24/96 m', properties: ['munição', 'duas mãos'], twoHanded: true },
+  { id: 'bow', namePt: 'Arco', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 250, damage: '1d8', damageType: 'perfurante', range: '45/180 m', properties: ['munição', 'pesada', 'duas mãos'], twoHanded: true },
+  { id: 'great-bow', namePt: 'Great bow', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 500, damage: '1d10', damageType: 'perfurante', range: '45/180 m', properties: ['munição', 'pesada', 'duas mãos'], twoHanded: true },
+  { id: 'sling', namePt: 'Funda', category: 'weapon', equipSlot: 'mainHand', weight: 0, costSilver: 1, damage: '1d4', damageType: 'concussão', range: '9/36 m', properties: ['munição'] },
+  // —— Marciais corpo a corpo ——
+  { id: 'battleaxe', namePt: 'Machado de batalha', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 100, damage: '1d8', damageType: 'cortante', properties: ['versátil (1d10)'] },
+  { id: 'flail', namePt: 'Mangual', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 100, damage: '1d8', damageType: 'concussão' },
+  { id: 'glaive', namePt: 'Glaive', category: 'weapon', equipSlot: 'mainHand', weight: 6, costSilver: 200, damage: '1d10', damageType: 'cortante', properties: ['pesada', 'alcance', 'duas mãos'], twoHanded: true },
+  { id: 'greataxe', namePt: 'Machado grande', category: 'weapon', equipSlot: 'mainHand', weight: 7, costSilver: 300, damage: '1d12', damageType: 'cortante', properties: ['pesada', 'duas mãos'], twoHanded: true },
+  { id: 'greatsword', namePt: 'Espada grande', category: 'weapon', equipSlot: 'mainHand', weight: 6, costSilver: 500, damage: '2d6', damageType: 'cortante', properties: ['pesada', 'duas mãos'], twoHanded: true },
+  { id: 'halberd', namePt: 'Alabarda', category: 'weapon', equipSlot: 'mainHand', weight: 6, costSilver: 200, damage: '1d10', damageType: 'cortante', properties: ['pesada', 'alcance', 'duas mãos'], twoHanded: true },
+  { id: 'lance', namePt: 'Lança de cavalaria', category: 'weapon', equipSlot: 'mainHand', weight: 6, costSilver: 100, damage: '1d12', damageType: 'perfurante', properties: ['alcance', 'especial'] },
+  { id: 'longsword', namePt: 'Espada longa', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 150, damage: '1d8', damageType: 'cortante', properties: ['versátil (1d10)'] },
+  { id: 'sword', namePt: 'Espada', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 150, damage: '1d8', damageType: 'cortante', properties: ['versátil (1d10)'] },
+  { id: 'short-sword', namePt: 'Espada curta', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 100, damage: '1d6', damageType: 'perfurante', properties: ['finesse', 'leve'] },
+  { id: 'maul', namePt: 'Malho', category: 'weapon', equipSlot: 'mainHand', weight: 10, costSilver: 100, damage: '2d6', damageType: 'concussão', properties: ['pesada', 'duas mãos'], twoHanded: true },
+  { id: 'heavy-hammer', namePt: 'Martelo pesado', category: 'weapon', equipSlot: 'mainHand', weight: 10, costSilver: 100, damage: '2d6', damageType: 'concussão', properties: ['pesada', 'duas mãos'], twoHanded: true },
+  { id: 'mattock', namePt: 'Enxó', category: 'weapon', equipSlot: 'mainHand', weight: 10, costSilver: 100, damage: '2d6', damageType: 'concussão', properties: ['pesada', 'duas mãos'], twoHanded: true },
+  { id: 'morningstar', namePt: 'Estrela da manhã', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 150, damage: '1d8', damageType: 'perfurante' },
+  { id: 'pike', namePt: 'Pique', category: 'weapon', equipSlot: 'mainHand', weight: 18, costSilver: 50, damage: '1d10', damageType: 'perfurante', properties: ['pesada', 'alcance', 'duas mãos'], twoHanded: true },
+  { id: 'rapier', namePt: 'Rapieira', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 250, damage: '1d8', damageType: 'perfurante', properties: ['finesse'] },
+  { id: 'scimitar', namePt: 'Cimitarra', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 250, damage: '1d6', damageType: 'cortante', properties: ['finesse', 'leve'] },
+  { id: 'trident', namePt: 'Tridente', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 50, damage: '1d6', damageType: 'perfurante', properties: ['arremesso', 'versátil (1d8)'] },
+  { id: 'war-pick', namePt: 'Picareta de guerra', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 50, damage: '1d8', damageType: 'perfurante' },
+  { id: 'warhammer', namePt: 'Martelo de guerra', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 150, damage: '1d8', damageType: 'concussão', properties: ['versátil (1d10)'] },
+  { id: 'whip', namePt: 'Chicote', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 20, damage: '1d4', damageType: 'cortante', properties: ['finesse', 'alcance'] },
+  // —— Marciais à distância ——
+  { id: 'blowgun', namePt: 'Zarabatana', category: 'weapon', equipSlot: 'mainHand', weight: 1, costSilver: 100, damage: '1', damageType: 'perfurante', range: '7,5/30 m', properties: ['munição', 'recarga'], twoHanded: true },
+  { id: 'hand-crossbow', namePt: 'Besta de mão', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 750, damage: '1d6', damageType: 'perfurante', range: '9/36 m', properties: ['munição', 'leve', 'recarga'] },
+  { id: 'heavy-crossbow', namePt: 'Besta pesada', category: 'weapon', equipSlot: 'mainHand', weight: 18, costSilver: 500, damage: '1d10', damageType: 'perfurante', range: '30/120 m', properties: ['munição', 'pesada', 'recarga', 'duas mãos'], twoHanded: true },
+  { id: 'longbow', namePt: 'Arco longo', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 500, damage: '1d8', damageType: 'perfurante', range: '45/180 m', properties: ['munição', 'pesada', 'duas mãos'], twoHanded: true },
+  { id: 'net', namePt: 'Rede', category: 'weapon', equipSlot: 'mainHand', weight: 3, costSilver: 10, damage: '—', properties: ['especial', 'arremesso'] },
+  // —— Genéricos (criação de personagem) ——
+  { id: 'martial-weapon', namePt: 'Arma marcial', category: 'weapon', equipSlot: 'mainHand', weight: 4, costSilver: 150, damage: '1d8', damageType: 'variável', description: 'Substitua por uma arma marcial específica.' },
+  { id: 'simple-weapon', namePt: 'Arma simples', category: 'weapon', equipSlot: 'mainHand', weight: 2, costSilver: 20, damage: '1d6', damageType: 'variável', description: 'Substitua por uma arma simples específica.' },
+  // —— Munição ——
+  { id: 'arrows-20', namePt: 'Flechas (20)', category: 'ammo', weight: 1, costSilver: 10, stackable: true, description: 'Munição para arco.' },
+  { id: 'crossbow-bolts-20', namePt: 'Virotes de besta (20)', category: 'ammo', weight: 2, costSilver: 10, stackable: true },
+  { id: 'sling-bullets-20', namePt: 'Balas de funda (20)', category: 'ammo', weight: 2, costCopper: 4, stackable: true },
+  { id: 'blowgun-needles-20', namePt: 'Agulhas de zarabatana (20)', category: 'ammo', weight: 1, costSilver: 10, stackable: true },
+];

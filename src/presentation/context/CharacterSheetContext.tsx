@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { CharacterDto } from '../../application/mappers/CharacterMapper';
 import { CombatStatsService } from '../../domain/services/CombatStatsService';
 import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
+import { migrateCharacterInventory } from '../../shared/data/inventoryMigration';
 import {
   characterService,
   DEFAULT_CHARACTER_ID,
@@ -22,10 +23,10 @@ const CharacterSheetContext = createContext<CharacterSheetContextValue | null>(n
 
 function loadOrCreate(id: string): CharacterDto {
   const loaded = characterService.load.execute(id) ?? characterService.create.execute(id);
-  const migrated = {
+  const migrated = migrateCharacterInventory({
     ...loaded,
     creationChoices: migrateCreationChoices(loaded.creationChoices),
-  };
+  });
   return CombatStatsService.applyDerivedStats(migrated);
 }
 

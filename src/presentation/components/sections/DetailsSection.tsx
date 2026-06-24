@@ -15,27 +15,18 @@ export function EquipmentSection() {
         rows={5}
       />
       <TextArea
-        label="Equipamento"
-        value={character.equipment}
-        onChange={(equipment) => updateCharacter({ equipment })}
-        description={FIELD_DESCRIPTIONS.equipment}
-        hint="Gerado pela cultura + chamado na criação. Edite se necessário."
-        rows={5}
-        className="equipment-grid__auto"
-      />
-      <TextArea
         label="Características, Traços e Virtudes"
         value={character.featuresTraitsVirtues}
         onChange={(featuresTraitsVirtues) => updateCharacter({ featuresTraitsVirtues })}
         description={FIELD_DESCRIPTIONS.featuresTraitsVirtues}
-        rows={5}
+        rows={4}
       />
       <TextArea
         label="Recompensas e Itens Mágicos"
         value={character.rewardsAndMagicalItems}
         onChange={(rewardsAndMagicalItems) => updateCharacter({ rewardsAndMagicalItems })}
         description={FIELD_DESCRIPTIONS.rewardsAndMagicalItems}
-        rows={5}
+        rows={4}
       />
     </div>
   );

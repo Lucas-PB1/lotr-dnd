@@ -16,9 +16,12 @@ import {
   upsertPick,
 } from '../../shared/data/rewardSlotUtils';
 import {
-  buildStartingEquipmentText,
   getDefaultEquipmentOptions,
 } from '../../shared/data/startingEquipmentData';
+import {
+  buildStartingInventory,
+  inventoryToSummaryText,
+} from '../../shared/data/startingInventoryBuilder';
 import {
   getCraftById,
   getVirtueById,
@@ -216,12 +219,19 @@ export class CharacterCreationService {
         ? choices.equipmentOptions
         : getDefaultEquipmentOptions(choices.callingId);
 
-    const { equipment, silver } = buildStartingEquipmentText(
-      choices.cultureId,
-      choices.callingId,
-      equipmentOptions,
-      choices.scholarToolChoices ?? [],
-    );
+    const shouldBuildInventory = (props.inventory ?? []).length === 0;
+    const inventory = shouldBuildInventory
+      ? buildStartingInventory(
+          choices.cultureId,
+          choices.callingId,
+          equipmentOptions,
+          choices.scholarToolChoices ?? [],
+        )
+      : props.inventory;
+
+    const living = culture?.standardOfLiving ?? 'Comum';
+    const silverByLiving: Record<string, number> = { Frugal: 10, Comum: 15, Próspero: 20 };
+    const silver = silverByLiving[living] ?? 15;
 
     const skills = { ...props.skills };
     for (const skill of LOTR_SKILLS) {
@@ -270,8 +280,13 @@ export class CharacterCreationService {
       savingThrows,
       toolProficiencies: toolParts.join('\n'),
       featuresTraitsVirtues: this.buildRewardsAndFeaturesText(choices),
-      equipment,
-      currency: { ...props.currency, silver },
+      inventory,
+      equipment: shouldBuildInventory
+        ? inventoryToSummaryText(inventory)
+        : props.equipment,
+      currency: shouldBuildInventory
+        ? { ...props.currency, silver }
+        : props.currency,
       hitDice: calling ? `1d${calling.hitDie}` : props.hitDice,
     };
   }

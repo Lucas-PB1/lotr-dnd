@@ -2,6 +2,8 @@ import type { CharacterProps } from '../entities/Character';
 import { Character } from '../entities/Character';
 import { getCalling, getCulture } from '../../shared/data/characterCreationData';
 import { getVirtueById } from '../../shared/data/virtuesAndCraftsData';
+import { getItemDefinition } from '../../shared/data/itemCatalog';
+import { InventoryService } from './InventoryService';
 import { CharacterCalculator } from './CharacterCalculator';
 
 /** Cálculos derivados de combate (5E / LOTR Roleplaying). */
@@ -49,10 +51,35 @@ export class CombatStatsService {
     return culture?.speed ?? props.speed;
   }
 
-  /** Sem armadura: 10 + mod. Destreza + bônus de virtudes */
+  /** CA com armadura/escudo equipados + bônus de virtudes */
   static armorClass(props: CharacterProps): number {
     const dexMod = CharacterCalculator.abilityScores(new Character(props)).get('dexterity').modifier;
-    let ac = 10 + dexMod;
+    const inventory = props.inventory ?? [];
+
+    const armorItem = InventoryService.getEquipped(inventory, 'armor');
+    const shieldItem = InventoryService.getEquipped(inventory, 'offHand');
+
+    let ac: number;
+
+    if (armorItem) {
+      const armorDef = getItemDefinition(armorItem.definitionId);
+      if (armorDef?.armorCategory === 'light') {
+        ac = (armorDef.baseAc ?? 11) + dexMod;
+      } else if (armorDef?.armorCategory === 'medium') {
+        ac = (armorDef.baseAc ?? 12) + Math.min(dexMod, armorDef.maxDexBonus ?? 2);
+      } else if (armorDef?.armorCategory === 'heavy') {
+        ac = armorDef.baseAc ?? 16;
+      } else {
+        ac = (armorDef?.baseAc ?? 10) + dexMod;
+      }
+    } else {
+      ac = 10 + dexMod;
+    }
+
+    if (shieldItem) {
+      const shieldDef = getItemDefinition(shieldItem.definitionId);
+      if (shieldDef?.armorCategory === 'shield') ac += 2;
+    }
 
     const picks = props.creationChoices?.rewardPicks ?? [];
     for (const pick of picks) {
