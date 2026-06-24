@@ -1,3 +1,6 @@
+import { useCharacterSheet } from '../../../context/CharacterSheetContext';
+import { useSheetPdfExport } from '../../../hooks/useSheetPdfExport';
+import { SheetPdfContent } from '../pdf/SheetPdfContent';
 import { SheetPlayAbilitiesPanel } from './SheetPlayAbilitiesPanel';
 import { SheetPlayAttacksPanel } from './SheetPlayAttacksPanel';
 import { SheetPlayCombatStrip } from './SheetPlayCombatStrip';
@@ -10,9 +13,12 @@ import { SheetPlaySkillsPanel } from './SheetPlaySkillsPanel';
 import { SheetPlayToolbar } from './SheetPlayToolbar';
 
 export function SheetStitchView() {
+  const { character } = useCharacterSheet();
+  const { pdfRef, exportPdf, exporting, error } = useSheetPdfExport();
+
   return (
     <div className="st-sheet">
-      <SheetPlayToolbar />
+      <SheetPlayToolbar onExportPdf={exportPdf} exportingPdf={exporting} exportError={error} />
       <SheetPlayHero />
 
       <div className="st-sheet-play-grid">
@@ -31,6 +37,10 @@ export function SheetStitchView() {
       </div>
 
       <SheetPlayReferencePanel />
+
+      <div ref={pdfRef} className="st-pdf-root" aria-hidden="true">
+        <SheetPdfContent character={character} />
+      </div>
     </div>
   );
 }

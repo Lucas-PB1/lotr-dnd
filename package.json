@@ -27,6 +27,8 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "flowbite-react": "^0.12.17",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "motion": "^12.41.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

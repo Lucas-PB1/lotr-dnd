@@ -80,6 +80,12 @@
   color: var(--color-st-on-surface);
 }
 
+.st-sheet-toolbar__error {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--color-st-error);
+}
+
 .st-sheet-hero {
   padding: 1rem 1.1rem;
   border-radius: var(--radius-st-md);
