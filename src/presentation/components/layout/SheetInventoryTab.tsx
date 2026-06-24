@@ -7,11 +7,11 @@ export function SheetInventoryTab() {
   return (
     <div className="sheet-inventory-tab">
       <SheetPanel
-        title="Inventário"
+        title="Inventário & Loja"
         description={SECTION_DESCRIPTIONS.equipment}
         accent="gold"
       >
-        <div className="sheet-inventory-tab__wallet">
+        <div className="sheet-inventory-tab__top">
           <CurrencySection />
         </div>
         <InventorySection />
