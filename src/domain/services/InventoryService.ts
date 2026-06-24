@@ -7,6 +7,7 @@ import {
   itemCostInCopper,
 } from '../../shared/data/itemCatalog';
 import { inventoryToSummaryText } from '../../shared/data/startingInventoryBuilder';
+import { AttackRollService } from './AttackRollService';
 
 export class InventoryService {
   static getEquipped(
@@ -224,34 +225,7 @@ export class InventoryService {
     props: CharacterProps,
     inventory: InventoryItem[] = props.inventory,
   ): AttackProps[] {
-    const weapons = inventory.filter((item) => {
-      if (!item.equipped) return false;
-      const def = getItemDefinition(item.definitionId);
-      return def?.category === 'weapon';
-    });
-
-    const attacks = [...props.attacks];
-
-    weapons.forEach((item, index) => {
-      const def = getItemDefinition(item.definitionId);
-      if (!def) return;
-
-      const row = attacks[index] ?? {
-        weapon: '',
-        atkBonus: '',
-        damage: '',
-        range: '',
-      };
-
-      attacks[index] = {
-        ...row,
-        weapon: def.namePt,
-        damage: def.damage ?? row.damage,
-        range: def.range ?? row.range,
-      };
-    });
-
-    return attacks;
+    return AttackRollService.syncAttackRows({ ...props, inventory });
   }
 
   static totalWeight(inventory: InventoryItem[]): number {

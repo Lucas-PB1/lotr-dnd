@@ -20,49 +20,13 @@ import {
   DisplayStat,
   DisplayText,
 } from '../display/DisplayField';
-import { InventoryService } from '../../../domain/services/InventoryService';
-import { getItemDefinition } from '../../../shared/data/itemCatalog';
-import type { InventoryItem } from '../../../domain/value-objects/Item';
 import { FinalCombatStrip } from '../display/final/FinalCombatStrip';
 import { FinalDeathSaves } from '../display/final/FinalDeathSaves';
 import { FinalHpHero } from '../display/final/FinalHpHero';
+import { EquipmentOverviewPanel } from '../equipment/EquipmentOverviewPanel';
+import { TraitsVirtuesPanel } from '../equipment/TraitsVirtuesPanel';
 import { AbilityScoreDisplay } from '../sections/AbilityScoreDisplay';
 import { SheetPanel } from './SheetPanel';
-
-function inventoryItemLabel(item: InventoryItem): string {
-  if (item.definitionId === 'custom') return item.notes ?? 'Item';
-  return getItemDefinition(item.definitionId)?.namePt ?? item.definitionId;
-}
-
-function FinalInventoryList() {
-  const { character } = useCharacterSheet();
-  const inventory = character.inventory ?? [];
-  const equipped = inventory.filter((i) => i.equipped);
-  const carried = inventory.filter((i) => !i.equipped);
-
-  if (inventory.length === 0) {
-    return <DisplayText label="Equipamento" value={character.equipment} compact />;
-  }
-
-  const formatList = (items: InventoryItem[]) =>
-    items.map((i) => `${inventoryItemLabel(i)}${i.quantity > 1 ? ` ×${i.quantity}` : ''}`).join(', ');
-
-  return (
-    <>
-      {equipped.length > 0 && (
-        <DisplayText label="Equipado" value={formatList(equipped)} compact />
-      )}
-      {carried.length > 0 && (
-        <DisplayText label="Inventário" value={formatList(carried)} compact />
-      )}
-      <DisplayText
-        label="Peso total"
-        value={`${InventoryService.totalWeight(inventory)} lb`}
-        compact
-      />
-    </>
-  );
-}
 
 function FinalAbilityCard({ ability }: { ability: AbilityName }) {
   return (
@@ -283,11 +247,15 @@ export function SheetFinalTab() {
         collapsible
         defaultOpen
       >
-        <div className="sheet-final__text-blocks">
-          <DisplayText label="Proficiências" value={character.toolProficiencies} compact />
-          <FinalInventoryList />
-          <DisplayText label="Traços e virtudes" value={character.featuresTraitsVirtues} compact />
-          <DisplayText label="Recompensas" value={character.rewardsAndMagicalItems} compact />
+        <div className="sheet-final__equipment-blocks">
+          <EquipmentOverviewPanel compact />
+          <TraitsVirtuesPanel compact />
+          {character.rewardsAndMagicalItems.trim() && (
+            <DisplayText label="Recompensas" value={character.rewardsAndMagicalItems} compact />
+          )}
+          {character.additionalFeatures.trim() && (
+            <DisplayText label="Complementos" value={character.additionalFeatures} compact />
+          )}
         </div>
       </DisplaySection>
 

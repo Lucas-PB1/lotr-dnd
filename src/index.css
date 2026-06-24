@@ -1259,11 +1259,18 @@ body {
 }
 
 .save-row__mod {
-  min-width: 2rem;
+  min-width: 4.5rem;
   text-align: center;
-  font-size: 0.85rem;
-  font-weight: 600;
+}
+
+.save-row__roll,
+.skill-row__roll {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
   color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .save-row__name {
@@ -1692,11 +1699,8 @@ body {
 }
 
 .skill-row__mod {
-  min-width: 2rem;
+  min-width: 4.5rem;
   text-align: center;
-  font-weight: 700;
-  font-size: 0.78rem;
-  color: var(--color-accent);
 }
 
 .skill-row__name {
@@ -1865,6 +1869,104 @@ body {
   background: var(--color-surface-muted);
 }
 
+.attacks-panel__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-ink-muted);
+  line-height: 1.45;
+}
+
+.attacks-panel__hint--spaced {
+  margin-top: 0.65rem;
+}
+
+.attacks-panel__legend {
+  margin: 0.65rem 0 0;
+  font-size: 0.68rem;
+  color: var(--color-ink-muted);
+  line-height: 1.45;
+}
+
+.attack-roll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.attack-roll-card {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.attack-roll-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.attack-roll-card__name {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.attack-roll-card__tag {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+}
+
+.attack-roll-card__tag--warn {
+  background: rgba(220, 38, 38, 0.12);
+  color: #b91c1c;
+}
+
+.attack-roll-card__row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.35rem;
+  align-items: baseline;
+  margin-bottom: 0.2rem;
+}
+
+.attack-roll-card__label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-muted);
+}
+
+.attack-roll-card__formula {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.attack-roll-card__meta {
+  font-size: 0.68rem;
+  color: var(--color-ink-muted);
+  margin-top: 0.15rem;
+}
+
+.attack-roll-card__virtues {
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.65rem;
+  color: var(--color-emerald);
+  line-height: 1.35;
+}
+
 .header-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1902,6 +2004,344 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+}
+
+.equipment-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.equipment-section__structured {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 1rem;
+}
+
+.equipment-grid--notes {
+  margin-top: 0.25rem;
+}
+
+.equipment-grid__wide {
+  grid-column: 1 / -1;
+}
+
+/* ── Equipamento (visão estruturada) ── */
+.equip-overview {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  box-shadow: var(--shadow-card);
+}
+
+.equip-overview--empty {
+  padding: 1rem;
+}
+
+.equip-overview__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.equip-overview__title,
+.traits-panel__section-title {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-muted);
+}
+
+.equip-overview__weight {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-ink-subtle);
+}
+
+.equip-overview__hint,
+.equip-overview__footnote,
+.traits-panel__empty {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+  line-height: 1.45;
+}
+
+.equip-overview__footnote {
+  margin-top: 0.65rem;
+  font-size: 0.74rem;
+}
+
+.equip-overview__slots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.equip-overview__slot {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+}
+
+.equip-overview__slot-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+}
+
+.equip-overview__slot-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-subtle);
+}
+
+.equip-overview__slot-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.equip-overview__combat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+}
+
+.equip-overview__roll {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.78rem;
+  color: var(--color-ink);
+  line-height: 1.35;
+}
+
+.equip-overview__roll-k {
+  display: inline-block;
+  min-width: 2.4rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-ink-subtle);
+  margin-right: 0.35rem;
+}
+
+.equip-overview__meta {
+  margin: 0.3rem 0 0;
+  font-size: 0.74rem;
+  color: var(--color-ink-muted);
+}
+
+.equip-overview__warn {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-warning, #b45309);
+}
+
+.equip-overview__carried {
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--color-border);
+}
+
+.equip-overview__carried-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-subtle);
+}
+
+.equip-overview__item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.equip-overview__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  font-size: 0.74rem;
+}
+
+.equip-overview__item-name {
+  color: var(--color-ink);
+}
+
+.equip-overview__item-stat {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  color: var(--color-ink-muted);
+}
+
+.equip-overview--compact .equip-overview__footnote {
+  display: none;
+}
+
+/* ── Traços & virtudes (cards) ── */
+.traits-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  box-shadow: var(--shadow-card);
+}
+
+.traits-panel__proficiencies {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.traits-panel__prof-list {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.traits-panel__prof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.traits-panel__prof-source {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.traits-panel__prof-text {
+  color: var(--color-ink-muted);
+}
+
+.traits-panel__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+
+.traits-card {
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.traits-card--virtue {
+  border-left: 3px solid var(--color-accent-gold, #c9a227);
+}
+
+.traits-card--calling {
+  border-left: 3px solid var(--color-accent-slate, #64748b);
+}
+
+.traits-card--culture {
+  border-left: 3px solid var(--color-accent-emerald, #059669);
+}
+
+.traits-card__head {
+  margin-bottom: 0.25rem;
+}
+
+.traits-card__title {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.traits-card__subtitle {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-subtle);
+}
+
+.traits-card__line {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--color-ink-muted);
+}
+
+.traits-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.traits-card__tag {
+  display: inline-block;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.traits-card__tag--bonus {
+  background: rgba(5, 150, 105, 0.12);
+  color: #047857;
+  border: 1px solid rgba(5, 150, 105, 0.25);
+}
+
+.traits-card__tag--note {
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--color-ink-muted);
+  border: 1px solid var(--color-border);
+}
+
+.traits-panel--fallback .traits-panel__pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+  color: var(--color-ink-muted);
+}
+
+.traits-panel--compact .traits-card__line {
+  font-size: 0.74rem;
+}
+
+.sheet-final__equipment-blocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.sheet-final__equipment-blocks .display-text {
+  grid-column: 1 / -1;
 }
 
 .equipment-grid .field--textarea,
@@ -2241,6 +2681,11 @@ body {
 @media (max-width: 768px) {
   .equipment-grid,
   .backstory-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-section__structured,
+  .sheet-final__equipment-blocks {
     grid-template-columns: 1fr;
   }
 }

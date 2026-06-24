@@ -4,6 +4,7 @@ import { getCalling, getCulture } from '../../shared/data/characterCreationData'
 import { getVirtueById } from '../../shared/data/virtuesAndCraftsData';
 import { getItemDefinition } from '../../shared/data/itemCatalog';
 import { InventoryService } from './InventoryService';
+import { AttackRollService } from './AttackRollService';
 import { CharacterCalculator } from './CharacterCalculator';
 
 /** Cálculos derivados de combate (5E / LOTR Roleplaying). */
@@ -112,6 +113,7 @@ export class CombatStatsService {
       initiative: this.initiative(props),
       speed: this.speed(props),
       hitDice: this.hitDiceLabel(props),
+      attacks: AttackRollService.syncAttackRows(props),
       hitPoints: {
         maximum: maxHp,
         current,

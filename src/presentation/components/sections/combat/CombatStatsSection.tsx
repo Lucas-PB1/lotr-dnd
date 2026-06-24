@@ -38,7 +38,7 @@ export function CombatStatsSection() {
         />
         <StatBox
           label="Inic."
-          value={formatMod(character.initiative)}
+          value={`d20 ${formatMod(character.initiative)}`}
           description={FIELD_DESCRIPTIONS.initiative}
           compact
         />

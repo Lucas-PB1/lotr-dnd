@@ -8,6 +8,7 @@ import {
   ABILITY_DESCRIPTIONS,
 } from '../../../shared/constants/sheetFieldDescriptions';
 import { CharacterCalculator } from '../../../domain/services/CharacterCalculator';
+import { formatRollFormula } from '../../../domain/services/AttackRollService';
 import { Character } from '../../../domain/entities/Character';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
 import { AbilityBonusesSection } from './AbilityBonusesSection';
@@ -101,7 +102,9 @@ function SavingThrowRow({ ability }: { ability: AbilityName }) {
           })
         }
       />
-      <span className="save-row__mod">{save.formattedModifier()}</span>
+      <span className="save-row__mod" title={formatRollFormula(save.modifier)}>
+        <span className="save-row__roll">{formatRollFormula(save.modifier)}</span>
+      </span>
       <Label className="save-row__name">{ABILITY_LABELS[ability]}</Label>
     </div>
   );

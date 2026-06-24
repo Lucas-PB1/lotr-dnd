@@ -1,78 +1,82 @@
-import { TextInput } from 'flowbite-react';
-import type { AttackProps } from '../../../../domain/value-objects/CharacterValues';
+import { useMemo } from 'react';
+import { AttackRollService } from '../../../../domain/services/AttackRollService';
 import { useCharacterSheet } from '../../../context/CharacterSheetContext';
 
 export function AttacksSection() {
-  const { character, updateCharacter } = useCharacterSheet();
+  const { character } = useCharacterSheet();
 
-  const updateAttack = (index: number, partial: Partial<AttackProps>) => {
-    const attacks = character.attacks.map((atk, i) =>
-      i === index ? { ...atk, ...partial } : atk,
-    );
-    updateCharacter({ attacks });
-  };
+  const weaponAttacks = useMemo(
+    () => AttackRollService.getEquippedWeaponAttacks(character),
+    [character],
+  );
+
+  const extraAttacks = useMemo(() => {
+    return character.attacks.slice(weaponAttacks.length);
+  }, [character.attacks, weaponAttacks.length]);
 
   return (
     <div className="attacks-panel">
-      <h3 className="subsection-title">Ataques</h3>
-      <div className="attacks-table-wrap">
-        <table className="attacks-table">
-          <thead>
-            <tr>
-              <th>Arma</th>
-              <th>Bônus Atq.</th>
-              <th>Dano</th>
-              <th>Alcance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {character.attacks.map((attack, index) => (
-              <tr key={index}>
-                <td>
-                  <TextInput
-                    sizing="sm"
-                    color="gray"
-                    value={attack.weapon}
-                    placeholder="Arma"
-                    onChange={(e) => updateAttack(index, { weapon: e.target.value })}
-                    className="field__input"
-                  />
-                </td>
-                <td>
-                  <TextInput
-                    sizing="sm"
-                    color="gray"
-                    value={attack.atkBonus}
-                    placeholder="+0"
-                    onChange={(e) => updateAttack(index, { atkBonus: e.target.value })}
-                    className="field__input field__input--number"
-                  />
-                </td>
-                <td>
-                  <TextInput
-                    sizing="sm"
-                    color="gray"
-                    value={attack.damage}
-                    placeholder="1d8"
-                    onChange={(e) => updateAttack(index, { damage: e.target.value })}
-                    className="field__input"
-                  />
-                </td>
-                <td>
-                  <TextInput
-                    sizing="sm"
-                    color="gray"
-                    value={attack.range}
-                    placeholder="1,5 m"
-                    onChange={(e) => updateAttack(index, { range: e.target.value })}
-                    className="field__input"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <h3 className="subsection-title">Ataques &amp; dano</h3>
+
+      {weaponAttacks.length === 0 ? (
+        <p className="attacks-panel__hint">
+          Equipe uma arma no inventário para ver bônus de ataque e dano calculados.
+        </p>
+      ) : (
+        <div className="attack-roll-list">
+          {weaponAttacks.map((roll) => (
+            <article key={roll.instanceId} className="attack-roll-card">
+              <header className="attack-roll-card__head">
+                <h4 className="attack-roll-card__name">{roll.weaponName}</h4>
+                {!roll.proficient && (
+                  <span className="attack-roll-card__tag attack-roll-card__tag--warn">
+                    sem proficiência
+                  </span>
+                )}
+              </header>
+
+              <div className="attack-roll-card__row">
+                <span className="attack-roll-card__label">Ataque</span>
+                <span className="attack-roll-card__formula">{roll.attackFormula}</span>
+              </div>
+
+              <div className="attack-roll-card__row">
+                <span className="attack-roll-card__label">Dano</span>
+                <span className="attack-roll-card__formula">{roll.damageFormula}</span>
+              </div>
+
+              {roll.range ? (
+                <div className="attack-roll-card__meta">Alcance: {roll.range}</div>
+              ) : null}
+
+              {roll.properties.length > 0 ? (
+                <div className="attack-roll-card__meta">
+                  {roll.properties.join(' · ')}
+                </div>
+              ) : null}
+
+              {roll.breakdown.virtueNotes.length > 0 ? (
+                <ul className="attack-roll-card__virtues">
+                  {roll.breakdown.virtueNotes.map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </article>
+          ))}
+        </div>
+      )}
+
+      {extraAttacks.length > 0 && (
+        <p className="attacks-panel__hint attacks-panel__hint--spaced">
+          Linhas extras (socos, magia, etc.) — edite na ficha final se necessário.
+        </p>
+      )}
+
+      <p className="attacks-panel__legend">
+        Perícias e resistências: use <strong>d20 + modificador</strong> na coluna ao lado.
+        Virtudes com vantagem ou condições aparecem como lembrete — aplique na mesa.
+      </p>
     </div>
   );
 }

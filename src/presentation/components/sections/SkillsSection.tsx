@@ -3,6 +3,7 @@ import { ABILITY_LABELS, LOTR_SKILLS } from '../../../shared/constants/gameConst
 import { FIELD_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
 import { Character } from '../../../domain/entities/Character';
 import { CharacterCalculator } from '../../../domain/services/CharacterCalculator';
+import { formatRollFormula } from '../../../domain/services/AttackRollService';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
 import { NumberField, StatBox } from '../ui/FormFields';
 
@@ -45,7 +46,9 @@ function SkillRow({ skillId }: { skillId: string }) {
           })
         }
       />
-      <span className="skill-row__mod">{skillMod.formattedModifier()}</span>
+      <span className="skill-row__mod" title={formatRollFormula(skillMod.modifier)}>
+        <span className="skill-row__roll">{formatRollFormula(skillMod.modifier)}</span>
+      </span>
       <Label className="skill-row__name">
         {skillDef.name}
         <span className="skill-row__ability">{ABILITY_LABELS[skillDef.ability].slice(0, 3)}</span>
