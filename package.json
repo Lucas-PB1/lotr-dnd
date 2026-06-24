@@ -1,0 +1,30 @@
+{
+  "name": "lotr-character-sheet",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "extract:pdf": "node scripts/extract-pdf-ocr.mjs",
+    "parse:creation": "node --experimental-strip-types scripts/parse-character-creation.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "canvas": "^3.2.3",
+    "pdf-parse": "^2.4.5",
+    "tailwindcss": "^4.3.1",
+    "tesseract.js": "^7.0.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.0"
+  },
+  "dependencies": {
+    "flowbite-react": "^0.12.17",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  }
+}

@@ -1,0 +1,356 @@
+import type { AbilityName } from '../constants/gameConstants';
+
+export interface BackgroundDefinition {
+  id: string;
+  name: string;
+  skills: string[];
+  toolProficiency: string;
+  distinctiveFeatures: [string, string];
+}
+
+export interface SubcultureDefinition {
+  id: string;
+  name: string;
+  abilityBonuses: Partial<Record<AbilityName, number>>;
+  traits: string[];
+}
+
+export interface CultureDefinition {
+  id: string;
+  name: string;
+  namePt: string;
+  abilityBonuses: Partial<Record<AbilityName, number>>;
+  speed: number;
+  size: 'Pequeno' | 'Médio';
+  languages: string[];
+  standardOfLiving: string;
+  skillProficiencies: string[];
+  traits: string[];
+  subcultures: SubcultureDefinition[];
+  backgrounds: BackgroundDefinition[];
+  /** Patrulheiros: +1 em atributo à escolha */
+  freeAbilityBonus?: boolean;
+}
+
+export interface CallingDefinition {
+  id: string;
+  name: string;
+  namePt: string;
+  hitDie: number;
+  primaryAbilities: string;
+  savingThrows: AbilityName[];
+  armorProficiencies: string;
+  weaponProficiencies: string;
+  skillChoiceCount: number;
+  skillChoices: string[];
+  shadowPath: string;
+  shadowPathPt: string;
+  description: string;
+}
+
+/** Mapeia nomes do livro → ids internos de perícias */
+export const SKILL_NAME_TO_ID: Record<string, string> = {
+  Acrobatics: 'acrobatics',
+  'Animal Handling': 'animalHandling',
+  Athletics: 'athletics',
+  Deception: 'deception',
+  Explore: 'explore',
+  Hunting: 'hunting',
+  Insight: 'insight',
+  Intimidation: 'intimidation',
+  Investigation: 'investigation',
+  Medicine: 'medicine',
+  Nature: 'nature',
+  'Old Lore': 'oldLore',
+  Perception: 'perception',
+  Performance: 'performance',
+  Persuasion: 'persuasion',
+  Riddle: 'riddle',
+  'Sleight of Hand': 'sleightOfHand',
+  Stealth: 'stealth',
+  Travel: 'travel',
+};
+
+export const CREATION_STEPS = [
+  { id: 'culture', label: 'Cultura Heroica' },
+  { id: 'subculture', label: 'Subcultura' },
+  { id: 'background', label: 'Antecedente' },
+  { id: 'calling', label: 'Chamado' },
+  { id: 'abilities', label: 'Atributos' },
+] as const;
+
+export const HEROIC_CULTURES: CultureDefinition[] = [
+  {
+    id: 'bardings',
+    name: 'Bardings',
+    namePt: 'Bardings',
+    abilityBonuses: { strength: 1, charisma: 1 },
+    speed: 30,
+    size: 'Médio',
+    languages: ['Westron', 'Dalish'],
+    standardOfLiving: 'Próspero',
+    skillProficiencies: ['persuasion'],
+    traits: [
+      'Arqueiros de Dale — proficiência com great bow',
+      'Virtude cultural inicial (escolha uma)',
+    ],
+    subcultures: [],
+    backgrounds: [
+      { id: 'dragon-stories', name: 'Dragon Stories', skills: ['explore', 'oldLore'], toolProficiency: 'Instrumento musical', distinctiveFeatures: ['Eager', 'Proud'] },
+      { id: 'by-hammer-and-anvil', name: 'By Hammer and Anvil', skills: ['insight', 'intimidation'], toolProficiency: "Smith's tools", distinctiveFeatures: ['Proud', 'Wilful'] },
+      { id: 'healing-hands', name: 'Healing Hands', skills: ['medicine', 'travel'], toolProficiency: 'Herbalism kit ou water vehicles', distinctiveFeatures: ['Bold', 'Generous'] },
+      { id: 'gifted-senses', name: 'Gifted Senses', skills: ['investigation', 'perception'], toolProficiency: "Brewer's supplies ou cook's utensils", distinctiveFeatures: ['Generous', 'Wilful'] },
+      { id: 'patient-hunter', name: 'A Patient Hunter', skills: ['hunting', 'nature'], toolProficiency: "Leatherworker's tools ou woodcarver's tools", distinctiveFeatures: ['Bold', 'Fierce'] },
+      { id: 'wordweaver', name: 'Wordweaver', skills: ['deception', 'riddle'], toolProficiency: 'Gaming set', distinctiveFeatures: ['Eager', 'Fair-spoken'] },
+    ],
+  },
+  {
+    id: 'dwarves',
+    name: "Dwarves of Durin's Folk",
+    namePt: 'Anões do Povo de Durin',
+    abilityBonuses: { constitution: 2 },
+    speed: 25,
+    size: 'Médio',
+    languages: ['Westron', 'Khuzdul'],
+    standardOfLiving: 'Próspero',
+    skillProficiencies: [],
+    traits: [
+      'Machados dos Anões — battle axe, great axe, mattock',
+      'Resistência Anã — +1 PV/nível, carga dobrada, armadura não impõe desvantagem em fadiga',
+      'Ferramentas de artesão (joalheiro, pedreiro ou ferreiro)',
+    ],
+    subcultures: [
+      { id: 'erebor', name: 'Anão de Erebor', abilityBonuses: { charisma: 1 }, traits: ['Wrights of the Mountain', 'Dalish'] },
+      { id: 'blue-mountains', name: 'Anão das Montanhas Azuis', abilityBonuses: { intelligence: 1 }, traits: ['Songs of the Halls — Old Lore + instrumento'] },
+      { id: 'iron-hills', name: 'Anão das Colinas de Ferro', abilityBonuses: { strength: 1 }, traits: ['Shod with Iron — todas armaduras e escudos'] },
+      { id: 'wandering', name: 'Anão Errante', abilityBonuses: { wisdom: 1 }, traits: ['Wandering People — proficiência em Travel'] },
+    ],
+    backgrounds: [
+      { id: 'bitter-exile', name: 'Bitter Exile', skills: ['explore', 'oldLore'], toolProficiency: 'Instrumento musical', distinctiveFeatures: ['Fierce', 'Proud'] },
+      { id: 'eloquent-orator', name: 'Eloquent Orator', skills: ['persuasion', 'riddle'], toolProficiency: "Calligrapher's supplies", distinctiveFeatures: ['Cunning', 'Lordly'] },
+      { id: 'far-trader', name: 'Far Trader', skills: ['deception', 'travel'], toolProficiency: 'Land vehicles', distinctiveFeatures: ['Cunning', 'Proud'] },
+      { id: 'grief-azanulbizar', name: 'The Grief of Azanulbizar', skills: ['hunting', 'intimidation'], toolProficiency: "Smith's tools", distinctiveFeatures: ['Fierce', 'Stern'] },
+      { id: 'life-of-toil', name: 'A Life of Toil', skills: ['athletics', 'perception'], toolProficiency: "Mason's tools", distinctiveFeatures: ['Secretive', 'Wilful'] },
+      { id: 'penetrating-gaze', name: 'A Penetrating Gaze', skills: ['insight', 'investigation'], toolProficiency: 'Pipes', distinctiveFeatures: ['Wary', 'Wilful'] },
+    ],
+  },
+  {
+    id: 'elves-lindon',
+    name: 'Elves of Lindon',
+    namePt: 'Elfos de Lindon',
+    abilityBonuses: { wisdom: 2 },
+    speed: 30,
+    size: 'Médio',
+    languages: ['Westron', 'Sindarin'],
+    standardOfLiving: 'Frugal',
+    skillProficiencies: [],
+    traits: [
+      'Sonhos Élficos — meditação 4h em vez de sono',
+      'Elven-skill — sucessos mágicos',
+      'Imortal — imune a envelhecimento e doença',
+      'Olhos Agudos — Perception, sem desvantagem em penumbra',
+    ],
+    subcultures: [
+      {
+        id: 'lindon',
+        name: 'Elfos de Lindon',
+        abilityBonuses: { dexterity: 1, intelligence: 1 },
+        traits: ['Elven-lore (Medicine, Nature ou Old Lore)', 'Shipwrights and Singers (carpenter, water vehicles ou instrumento)'],
+      },
+    ],
+    backgrounds: [
+      { id: 'call-of-the-sea', name: 'The Call of the Sea', skills: ['performance', 'riddle'], toolProficiency: 'Instrumento musical', distinctiveFeatures: ['Patient', 'Subtle'] },
+      { id: 'maker-of-ships', name: 'Maker of Ships', skills: ['acrobatics', 'athletics'], toolProficiency: "Carpenter's tools", distinctiveFeatures: ['Eager', 'Lordly'] },
+      { id: 'merchant-family', name: 'A Merchant Family', skills: ['persuasion', 'travel'], toolProficiency: 'Water vehicles', distinctiveFeatures: ['Fair-spoken', 'Lordly'] },
+      { id: 'sky-watcher', name: 'Sky-Watcher', skills: ['explore', 'nature'], toolProficiency: "Navigator's tools", distinctiveFeatures: ['Patient', 'Wary'] },
+      { id: 'tower-guard', name: 'Tower Guard', skills: ['investigation', 'stealth'], toolProficiency: "Cartographer's tools", distinctiveFeatures: ['Subtle', 'Wary'] },
+      { id: 'visitor-mountains', name: 'Visitor to the Mountains', skills: ['insight', 'oldLore'], toolProficiency: "Jeweller's tools ou smith's tools", distinctiveFeatures: ['Fair-spoken', 'Inquisitive'] },
+    ],
+  },
+  {
+    id: 'hobbits',
+    name: 'Hobbits of the Shire',
+    namePt: 'Hobbits do Condado',
+    abilityBonuses: { dexterity: 2 },
+    speed: 25,
+    size: 'Pequeno',
+    languages: ['Westron'],
+    standardOfLiving: 'Comum',
+    skillProficiencies: ['stealth'],
+    traits: [
+      'Hobbit-sense — vantagem em saves Int/Sab/Car contra Sombra',
+      'Pipe-weed Lore — proficiência com pipes',
+      'Discreto — atravessar espaço de criaturas maiores',
+    ],
+    subcultures: [
+      { id: 'fallohide', name: 'Fallohide', abilityBonuses: { charisma: 1 }, traits: ['Language and Song — calligrapher, cartographer ou instrumento'] },
+      { id: 'harfoot', name: 'Harfoot', abilityBonuses: { wisdom: 1 }, traits: ['Skilful with Tools — herbalism, mason ou weaver'] },
+      { id: 'stoor', name: 'Stoor', abilityBonuses: { constitution: 1 }, traits: ['Riverside Dweller — carpenter, water vehicles ou woodcarver'] },
+    ],
+    backgrounds: [
+      { id: 'bucklander', name: 'Bucklander', skills: ['hunting', 'perception'], toolProficiency: "Carpenter's tools ou water vehicles", distinctiveFeatures: ['Rustic', 'Wary'] },
+      { id: 'on-patrol', name: 'On Patrol', skills: ['investigation', 'travel'], toolProficiency: "Brewer's supplies", distinctiveFeatures: ['Inquisitive', 'Wary'] },
+      { id: 'restless-farmer', name: 'Restless Farmer', skills: ['animalHandling', 'nature'], toolProficiency: "Cook's utensils ou herbalism kit", distinctiveFeatures: ['Faithful', 'Rustic'] },
+      { id: 'too-many-paths', name: 'Too Many Paths to Tread', skills: ['athletics', 'explore'], toolProficiency: "Mason's tools", distinctiveFeatures: ['Eager', 'Merry'] },
+      { id: 'tookish-blood', name: 'Tookish Blood', skills: ['deception', 'riddle'], toolProficiency: "Potter's tools", distinctiveFeatures: ['Eager', 'Honourable'] },
+      { id: 'witty-gentlehobbit', name: 'Witty Gentlehobbit', skills: ['insight', 'persuasion'], toolProficiency: 'Gaming set', distinctiveFeatures: ['Fair-spoken', 'Merry'] },
+    ],
+  },
+  {
+    id: 'men-bree',
+    name: 'Men of Bree',
+    namePt: 'Homens de Bree',
+    abilityBonuses: { wisdom: 1, charisma: 1 },
+    speed: 30,
+    size: 'Médio',
+    languages: ['Westron'],
+    standardOfLiving: 'Comum',
+    skillProficiencies: ['insight'],
+    traits: [
+      'Pipe-weed Lore — proficiência com pipes',
+      'Virtude cultural inicial (escolha uma)',
+    ],
+    subcultures: [],
+    backgrounds: [
+      { id: 'crossroads-north', name: 'Crossroads of the North', skills: ['explore', 'persuasion'], toolProficiency: "Cobbler's, leatherworker's ou weaver's tools", distinctiveFeatures: ['Faithful', 'Generous'] },
+      { id: 'forest-dweller', name: 'Forest-Dweller', skills: ['nature', 'stealth'], toolProficiency: 'Herbalism kit', distinctiveFeatures: ['Cunning', 'Rustic'] },
+      { id: 'gate-warden', name: 'Gate-Warden', skills: ['intimidation', 'perception'], toolProficiency: "Carpenter's tools ou woodcarver's tools", distinctiveFeatures: ['Inquisitive', 'Patient'] },
+      { id: 'no-longer-free', name: 'No Longer Free from Care and Fear', skills: ['deception', 'investigation'], toolProficiency: 'Gaming set ou instrumento musical', distinctiveFeatures: ['Inquisitive', 'Rustic'] },
+      { id: 'off-with-dwarves', name: 'Off with Dwarves', skills: ['animalHandling', 'travel'], toolProficiency: 'Land vehicles', distinctiveFeatures: ['Fair-spoken', 'Faithful'] },
+      { id: 'up-greenway', name: 'Up the Greenway', skills: ['oldLore', 'riddle'], toolProficiency: "Mason's, potter's ou smith's tools", distinctiveFeatures: ['Fair-spoken', 'True-hearted'] },
+    ],
+  },
+  {
+    id: 'rangers',
+    name: 'Rangers of the North',
+    namePt: 'Patrulheiros do Norte',
+    abilityBonuses: { strength: 1, constitution: 1, wisdom: 1 },
+    speed: 35,
+    size: 'Médio',
+    languages: ['Westron', 'Sindarin'],
+    standardOfLiving: 'Frugal',
+    skillProficiencies: [],
+    freeAbilityBonus: true,
+    traits: [
+      'Povo Errante — 2 perícias entre: Explore, Hunting, Old Lore, Perception, Stealth, Travel',
+    ],
+    subcultures: [],
+    backgrounds: [
+      { id: 'counsellor', name: 'Counsellor', skills: ['insight', 'riddle'], toolProficiency: 'Pipes', distinctiveFeatures: ['Secretive', 'Subtle'] },
+      { id: 'far-reaching-herald', name: 'Far-Reaching Herald', skills: ['athletics', 'travel'], toolProficiency: 'Land vehicles', distinctiveFeatures: ['Bold', 'True-hearted'] },
+      { id: 'hunter-orcs', name: 'Hunter of Orcs', skills: ['hunting', 'stealth'], toolProficiency: "Leatherworker's tools ou woodcarver's tools", distinctiveFeatures: ['Bold', 'Stern'] },
+      { id: 'keeper-lore', name: 'Keeper of Lore', skills: ['investigation', 'oldLore'], toolProficiency: "Calligrapher's supplies", distinctiveFeatures: ['Honourable', 'True-hearted'] },
+      { id: 'protector-land', name: 'Protector of the Land', skills: ['nature', 'medicine'], toolProficiency: 'Herbalism kit', distinctiveFeatures: ['Honourable', 'Subtle'] },
+      { id: 'watcher-border', name: 'Watcher on the Border', skills: ['explore', 'perception'], toolProficiency: "Cartographer's tools", distinctiveFeatures: ['Secretive', 'Stern'] },
+    ],
+  },
+];
+
+export const CALLINGS: CallingDefinition[] = [
+  {
+    id: 'captain',
+    name: 'Captain',
+    namePt: 'Capitão',
+    hitDie: 10,
+    primaryAbilities: 'Força e Carisma',
+    savingThrows: ['constitution', 'charisma'],
+    armorProficiencies: 'Todas armaduras, escudos',
+    weaponProficiencies: 'Armas simples e marciais',
+    skillChoiceCount: 2,
+    skillChoices: ['animalHandling', 'athletics', 'insight', 'intimidation', 'persuasion', 'travel'],
+    shadowPath: 'Lure of Power',
+    shadowPathPt: 'Sede de Poder',
+    description: 'Líder valente que guia outros em batalha.',
+  },
+  {
+    id: 'champion',
+    name: 'Champion',
+    namePt: 'Campeão',
+    hitDie: 10,
+    primaryAbilities: 'Força ou Destreza',
+    savingThrows: ['strength', 'constitution'],
+    armorProficiencies: 'Todas armaduras, escudos',
+    weaponProficiencies: 'Armas simples e marciais',
+    skillChoiceCount: 2,
+    skillChoices: ['acrobatics', 'athletics', 'deception', 'intimidation', 'performance', 'persuasion'],
+    shadowPath: 'Path of the Slayer',
+    shadowPathPt: 'Caminho do Matador',
+    description: 'Guerreiro feroz, mestre de armas e armaduras.',
+  },
+  {
+    id: 'messenger',
+    name: 'Messenger',
+    namePt: 'Mensageiro',
+    hitDie: 8,
+    primaryAbilities: 'Destreza e Carisma',
+    savingThrows: ['dexterity', 'charisma'],
+    armorProficiencies: 'Armadura leve',
+    weaponProficiencies: 'Armas simples, short swords, swords',
+    skillChoiceCount: 2,
+    skillChoices: ['deception', 'explore', 'insight', 'investigation', 'performance', 'persuasion', 'stealth', 'travel'],
+    shadowPath: 'Path of the Wanderer',
+    shadowPathPt: 'Caminho do Errante',
+    description: 'Viajante experiente que leva notícias a terras distantes.',
+  },
+  {
+    id: 'scholar',
+    name: 'Scholar',
+    namePt: 'Erudito',
+    hitDie: 8,
+    primaryAbilities: 'Inteligência e Sabedoria',
+    savingThrows: ['intelligence', 'wisdom'],
+    armorProficiencies: 'Armadura leve',
+    weaponProficiencies: 'Armas simples',
+    skillChoiceCount: 2,
+    skillChoices: ['investigation', 'medicine', 'nature', 'oldLore', 'perception', 'riddle'],
+    shadowPath: 'Path of the Sage',
+    shadowPathPt: 'Caminho do Sábio',
+    description: 'Mestre do conhecimento, lore antigo e artes curativas.',
+  },
+  {
+    id: 'treasure-hunter',
+    name: 'Treasure Hunter',
+    namePt: 'Caçador de Tesouros',
+    hitDie: 8,
+    primaryAbilities: 'Destreza',
+    savingThrows: ['dexterity', 'intelligence'],
+    armorProficiencies: 'Armadura leve',
+    weaponProficiencies: 'Armas simples, short swords, swords',
+    skillChoiceCount: 2,
+    skillChoices: ['acrobatics', 'athletics', 'deception', 'explore', 'investigation', 'perception', 'sleightOfHand', 'stealth'],
+    shadowPath: 'Path of the Treasure-hunter',
+    shadowPathPt: 'Caminho do Caçador de Tesouros',
+    description: 'Aventureiro astuto que busca recuperar o que foi perdido.',
+  },
+  {
+    id: 'warden',
+    name: 'Warden',
+    namePt: 'Guardião',
+    hitDie: 10,
+    primaryAbilities: 'Destreza e Sabedoria',
+    savingThrows: ['strength', 'wisdom'],
+    armorProficiencies: 'Armadura leve e média, escudos',
+    weaponProficiencies: 'Armas simples e marciais',
+    skillChoiceCount: 2,
+    skillChoices: ['animalHandling', 'athletics', 'hunting', 'insight', 'investigation', 'medicine', 'nature', 'perception', 'stealth'],
+    shadowPath: 'Path of the Warden',
+    shadowPathPt: 'Caminho do Guardião',
+    description: 'Protetor dos fracos, combina prowess marcial e conhecimento da terra.',
+  },
+];
+
+export function getCulture(id: string): CultureDefinition | undefined {
+  return HEROIC_CULTURES.find((c) => c.id === id);
+}
+
+export function getCalling(id: string): CallingDefinition | undefined {
+  return CALLINGS.find((c) => c.id === id);
+}
+
+export function getBackground(cultureId: string, backgroundId: string): BackgroundDefinition | undefined {
+  return getCulture(cultureId)?.backgrounds.find((b) => b.id === backgroundId);
+}
+
+export function getSubculture(cultureId: string, subcultureId: string): SubcultureDefinition | undefined {
+  return getCulture(cultureId)?.subcultures.find((s) => s.id === subcultureId);
+}
