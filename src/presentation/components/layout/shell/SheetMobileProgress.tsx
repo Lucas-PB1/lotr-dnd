@@ -1,4 +1,4 @@
-import { countJourneyDone, getMissingJourneyHints } from '../../../../application/sheet/getSheetJourney';
+import { getJourneyWeightedProgress, getMissingJourneyHints } from '../../../../application/sheet/getSheetJourney';
 import type { CharacterProps } from '../../../../domain/entities/Character';
 import { SHELL_UI } from '../../../../shared/constants/shellLabels';
 import type { SheetTabId } from './sheetTabTypes';
@@ -14,8 +14,7 @@ export function SheetMobileProgress({ character, activeTab, onTabChange }: Sheet
     return null;
   }
 
-  const { done, total } = countJourneyDone(character);
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const { done, total, percent } = getJourneyWeightedProgress(character);
   const missing = getMissingJourneyHints(character);
   const onSheet = activeTab === 'summary';
 
@@ -24,7 +23,7 @@ export function SheetMobileProgress({ character, activeTab, onTabChange }: Sheet
       <div className="st-mobile-progress__row">
         <div className="st-mobile-progress__meta">
           <span className="st-mobile-progress__count">
-            {done}/{total} passos
+            {percent}% · {SHELL_UI.journeySteps(done, total)}
           </span>
           {missing.length > 0 ? (
             <ul className="st-mobile-progress__missing">
@@ -49,11 +48,11 @@ export function SheetMobileProgress({ character, activeTab, onTabChange }: Sheet
       <div
         className="st-mobile-progress__track"
         role="progressbar"
-        aria-valuenow={done}
+        aria-valuenow={percent}
         aria-valuemin={0}
-        aria-valuemax={total}
+        aria-valuemax={100}
       >
-        <div className="st-mobile-progress__fill" style={{ width: `${pct}%` }} />
+        <div className="st-mobile-progress__fill" style={{ width: `${percent}%` }} />
       </div>
     </div>
   );

@@ -18,6 +18,8 @@ export const SHELL_UI = {
   modeBuilding: 'Montagem',
   modePlay: 'Em jogo',
   journeyLabel: 'Passos da ficha',
+  journeySteps: (done: number, total: number) =>
+    done === 1 ? `1/${total} passo` : `${done}/${total} passos`,
   goToSheet: 'Ir para a ficha',
   openSheet: 'Abrir ficha do herói',
   sheetReady: 'Ficha pronta para a mesa',

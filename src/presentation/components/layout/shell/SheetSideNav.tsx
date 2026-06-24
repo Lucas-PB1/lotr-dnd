@@ -1,4 +1,4 @@
-import { countJourneyDone } from '../../../../application/sheet/getSheetJourney';
+import { getJourneyWeightedProgress } from '../../../../application/sheet/getSheetJourney';
 import type { CharacterProps } from '../../../../domain/entities/Character';
 import { SHEET_TABS } from '../../../../shared/constants/appLabels';
 import { SHELL_UI } from '../../../../shared/constants/shellLabels';
@@ -25,7 +25,7 @@ function initials(name: string): string {
 export function SheetSideNav({ character, activeTab, onTabChange, badges }: SheetSideNavProps) {
   const displayName = character.name.trim() || 'Herói sem nome';
   const subtitle = [character.culture, character.callingAndLevel].filter(Boolean).join(' · ') || 'Aventureiro';
-  const { done, total } = countJourneyDone(character);
+  const { done, total, percent } = getJourneyWeightedProgress(character);
   const onSheetTab = activeTab === 'summary';
 
   return (
@@ -71,7 +71,7 @@ export function SheetSideNav({ character, activeTab, onTabChange, badges }: Shee
           <>
             <p className="st-sidenav__progress">{SHELL_UI.finishHint}</p>
             <p className="st-sidenav__progress-count" aria-live="polite">
-              {done}/{total} passos
+              {percent}% · {SHELL_UI.journeySteps(done, total)}
             </p>
             {!onSheetTab ? (
               <button

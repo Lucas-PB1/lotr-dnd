@@ -1,4 +1,4 @@
-import { isCreationComplete } from '../creation/creationProgress';
+import { getCreationProgress, isCreationComplete } from '../creation/creationProgress';
 import type { CharacterProps } from '../../domain/entities/Character';
 import type { SheetTabId } from '../../presentation/components/layout/shell/sheetTabTypes';
 import { JOURNEY_STEP_LABELS } from '../../shared/constants/shellLabels';
@@ -79,6 +79,36 @@ export function getSheetJourney(character: CharacterProps, activeTab: SheetTabId
 export function countJourneyDone(character: CharacterProps): { done: number; total: number } {
   const done = JOURNEY_ORDER.filter((id) => isStepComplete(id, character)).length;
   return { done, total: JOURNEY_ORDER.length };
+}
+
+function stepWeight(id: JourneyStepId, character: CharacterProps): number {
+  if (isStepComplete(id, character)) return 1;
+
+  switch (id) {
+    case 'creation': {
+      const progress = getCreationProgress(character.creationChoices);
+      return progress.total > 0 ? progress.done / progress.total : 0;
+    }
+    case 'story':
+      return storySectionsFilled(character) / 3;
+    default:
+      return 0;
+  }
+}
+
+/** Progresso da jornada com crédito parcial (ex.: criação a 57%). */
+export function getJourneyWeightedProgress(character: CharacterProps): {
+  done: number;
+  total: number;
+  percent: number;
+} {
+  const { done, total } = countJourneyDone(character);
+  const sum = JOURNEY_ORDER.reduce((acc, id) => acc + stepWeight(id, character), 0);
+  return {
+    done,
+    total,
+    percent: total > 0 ? Math.round((sum / total) * 100) : 0,
+  };
 }
 
 export interface JourneyMissingHint {

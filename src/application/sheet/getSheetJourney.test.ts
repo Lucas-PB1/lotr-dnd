@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createEmptyCharacterProps } from '../../domain/entities/Character';
-import { countJourneyDone, getMissingJourneyHints } from './getSheetJourney';
+import { countJourneyDone, getJourneyWeightedProgress, getMissingJourneyHints } from './getSheetJourney';
+import { getCreationProgress } from '../creation/creationProgress';
 
 describe('getSheetJourney', () => {
   it('lista passos pendentes com mensagens', () => {
@@ -16,5 +17,20 @@ describe('getSheetJourney', () => {
     const { done, total } = countJourneyDone(character);
     expect(total).toBe(5);
     expect(done).toBeGreaterThanOrEqual(1);
+  });
+
+  it('pondera criação parcial na jornada', () => {
+    const character = createEmptyCharacterProps('test');
+    character.creationChoices = {
+      ...character.creationChoices,
+      cultureId: 'hobbits',
+      backgroundId: 'hobbits/gardener',
+      callingId: 'scholar',
+    };
+    const creation = getCreationProgress(character.creationChoices);
+    const { percent, done } = getJourneyWeightedProgress(character);
+    expect(done).toBe(0);
+    expect(percent).toBeGreaterThan(0);
+    expect(percent).toBeLessThan(Math.round((creation.done / creation.total) * 100));
   });
 });

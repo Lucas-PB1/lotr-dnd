@@ -74,3 +74,17 @@ export function assignmentToAbilities(
 export function isAssignmentComplete(assigned: Record<AbilityName, number | null>): boolean {
   return ABILITY_NAMES.every((name) => assigned[name] != null);
 }
+
+/** Opções do select — o pool já contém só valores não atribuídos (suporta duplicatas nas rolagens). */
+export function abilityAssignmentOptions(
+  ability: AbilityName,
+  assigned: Record<AbilityName, number | null>,
+  pool: number[],
+): number[] {
+  const current = assigned[ability];
+  const fromPool = [...new Set(pool)].sort((a, b) => b - a);
+  if (current != null && !fromPool.includes(current)) {
+    return [current, ...fromPool].sort((a, b) => b - a);
+  }
+  return fromPool;
+}

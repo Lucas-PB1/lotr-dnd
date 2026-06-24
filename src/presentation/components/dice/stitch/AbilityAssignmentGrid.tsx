@@ -6,6 +6,7 @@ import {
 } from '../../../../shared/constants/gameConstants';
 import {
   abilityModifier,
+  abilityAssignmentOptions,
   formatModifier,
 } from '../../../../domain/services/AbilityScoreGenerationService';
 import { ABILITY_ROLL_UI } from '../../../../shared/constants/abilityRollLabels';
@@ -17,20 +18,6 @@ type AbilityAssignmentGridProps = {
 };
 
 export function AbilityAssignmentGrid({ assigned, pool, onAssign }: AbilityAssignmentGridProps) {
-  const optionsFor = (ability: AbilityName): number[] => {
-    const current = assigned[ability];
-    const others = new Set(
-      ABILITY_NAMES.filter((name) => name !== ability && assigned[name] != null).map(
-        (name) => assigned[name]!,
-      ),
-    );
-    const available = pool.filter((v) => !others.has(v));
-    if (current != null && !available.includes(current)) {
-      return [current, ...available];
-    }
-    return available;
-  };
-
   return (
     <>
       <div className="st-dice-pool">
@@ -49,7 +36,7 @@ export function AbilityAssignmentGrid({ assigned, pool, onAssign }: AbilityAssig
       <div className="st-dice-grid">
         {ABILITY_NAMES.map((ability) => {
           const score = assigned[ability];
-          const options = optionsFor(ability);
+          const options = abilityAssignmentOptions(ability, assigned, pool);
           return (
             <div
               key={ability}
