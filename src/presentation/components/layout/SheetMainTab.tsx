@@ -1,7 +1,7 @@
 import {
   AbilitiesAndSavesPanel,
-  HeaderSection,
 } from '../sections/HeaderAndAbilities';
+import { IdentitySection } from '../sections/IdentitySection';
 import { SkillsSection } from '../sections/SkillsSection';
 import { CombatVitalityPanel } from '../sections/CombatSection';
 import { EquipmentSection } from '../sections/DetailsSection';
@@ -12,14 +12,9 @@ import { SheetPanel } from './SheetPanel';
 export function SheetMainTab() {
   return (
     <div className="sheet-page-1">
-      <Section
-        title="Identidade"
-        description={SECTION_DESCRIPTIONS.identity}
-        icon="⚔"
-        className="sheet-page-1__identity"
-      >
-        <HeaderSection />
-      </Section>
+      <div className="sheet-page-1__identity">
+        <IdentitySection />
+      </div>
 
       <div className="sheet-main-grid">
         <SheetPanel

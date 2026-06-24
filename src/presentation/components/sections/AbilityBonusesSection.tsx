@@ -1,127 +1,74 @@
-import { Badge, Button, TextInput } from 'flowbite-react';
-import {
-  ABILITY_LABELS,
-  ABILITY_NAMES,
-  type AbilityName,
-} from '../../../shared/constants/gameConstants';
-import {
-  BONUS_SOURCE_PRESETS,
-  createEmptyBonusSource,
-  type AbilityBonusSource,
-} from '../../../domain/services/AbilityBonusService';
+import { useState } from 'react';
+import { Badge, Button } from 'flowbite-react';
+import { ABILITY_LABELS, ABILITY_NAMES } from '../../../shared/constants/gameConstants';
+import { AbilityBonusService } from '../../../domain/services/AbilityBonusService';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
+import { AbilityBonusesModal } from './AbilityBonusesModal';
 
-function BonusSourceRow({ source }: { source: AbilityBonusSource }) {
-  const { character, updateCharacter } = useCharacterSheet();
-
-  const updateSource = (partial: Partial<AbilityBonusSource>) => {
-    const abilityBonusSources = character.abilityBonusSources.map((s) =>
-      s.id === source.id ? { ...s, ...partial } : s,
-    );
-    updateCharacter({ abilityBonusSources });
-  };
-
-  const updateBonus = (ability: AbilityName, value: number) => {
-    const bonuses = { ...source.bonuses, [ability]: value };
-    if (value === 0) delete bonuses[ability];
-    updateSource({ bonuses });
-  };
-
-  const remove = () => {
-    updateCharacter({
-      abilityBonusSources: character.abilityBonusSources.filter((s) => s.id !== source.id),
-    });
-  };
-
-  return (
-    <div className="bonus-source-row">
-      <div className="bonus-source-row__header">
-        <TextInput
-          sizing="sm"
-          color="gray"
-          value={source.label}
-          placeholder="Origem"
-          onChange={(e) => updateSource({ label: e.target.value })}
-          className="bonus-source-row__label field__input"
-        />
-        <Button size="xs" color="light" onClick={remove}>
-          ×
-        </Button>
-      </div>
-      <div className="bonus-source-row__grid">
-        {ABILITY_NAMES.map((ability) => (
-          <label key={ability} className="bonus-source-row__cell">
-            <span className="bonus-source-row__ability">{ABILITY_LABELS[ability].slice(0, 3)}</span>
-            <TextInput
-              type="number"
-              sizing="sm"
-              color="gray"
-              min={-5}
-              max={5}
-              value={source.bonuses[ability] ?? 0}
-              onChange={(e) => updateBonus(ability, Number(e.target.value) || 0)}
-              className="field__input field__input--number"
-            />
-          </label>
-        ))}
-      </div>
-    </div>
-  );
+function formatSourceBonuses(bonuses: Partial<Record<string, number>>): string {
+  const parts = ABILITY_NAMES.filter((a) => (bonuses[a] ?? 0) !== 0).map((a) => {
+    const v = bonuses[a] ?? 0;
+    return `${ABILITY_LABELS[a].slice(0, 3)} ${v > 0 ? '+' : ''}${v}`;
+  });
+  return parts.length > 0 ? parts.join(', ') : 'sem bônus';
 }
 
 export function AbilityBonusesSection() {
-  const { character, updateCharacter } = useCharacterSheet();
+  const { character } = useCharacterSheet();
+  const [modalOpen, setModalOpen] = useState(false);
   const sources = character.abilityBonusSources ?? [];
-
-  const addSource = (label: string) => {
-    updateCharacter({
-      abilityBonusSources: [...sources, createEmptyBonusSource(label)],
-    });
-  };
-
-  if (sources.length === 0) {
-    return (
-      <details className="abilities-accordion__item abilities-accordion__item--bonus">
-        <summary className="abilities-accordion__summary">
-          <span>Bônus de atributos</span>
-          <span className="abilities-accordion__hint">cultura, chamado…</span>
-        </summary>
-        <div className="bonus-section bonus-section--empty">
-          <p className="bonus-section__empty-text">Nenhum bônus adicionado ainda.</p>
-          <div className="bonus-section__presets">
-            {BONUS_SOURCE_PRESETS.map((preset) => (
-              <Button key={preset} size="xs" color="light" onClick={() => addSource(preset)}>
-                + {preset}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </details>
-    );
-  }
+  const totals = AbilityBonusService.getAllBonuses(sources);
+  const hasAnyBonus = ABILITY_NAMES.some((a) => totals[a] !== 0);
 
   return (
-    <details className="abilities-accordion__item abilities-accordion__item--bonus" open>
-      <summary className="abilities-accordion__summary">
-        <span>Bônus de atributos</span>
-        <Badge color="info" size="xs">
-          {sources.length}
-        </Badge>
-      </summary>
-      <div className="bonus-section">
-        <div className="bonus-section__list">
-          {sources.map((source) => (
-            <BonusSourceRow key={source.id} source={source} />
-          ))}
+    <>
+      <div className="bonus-summary">
+        <div className="bonus-summary__header">
+          <div className="bonus-summary__title-row">
+            <span className="bonus-summary__title">Bônus de atributos</span>
+            {sources.length > 0 && (
+              <Badge color="info" size="xs">
+                {sources.length}
+              </Badge>
+            )}
+          </div>
+          <Button size="xs" color="warning" onClick={() => setModalOpen(true)}>
+            {sources.length === 0 ? 'Adicionar' : 'Editar'}
+          </Button>
         </div>
-        <div className="bonus-section__presets">
-          {BONUS_SOURCE_PRESETS.map((preset) => (
-            <Button key={preset} size="xs" color="light" onClick={() => addSource(preset)}>
-              + {preset}
-            </Button>
-          ))}
-        </div>
+
+        {sources.length === 0 ? (
+          <p className="bonus-summary__empty">Cultura, chamado, virtudes e outros bônus somam aqui.</p>
+        ) : (
+          <>
+            <ul className="bonus-summary__list">
+              {sources.map((source) => (
+                <li key={source.id} className="bonus-summary__item">
+                  <span className="bonus-summary__item-label">{source.label || 'Sem nome'}</span>
+                  <span className="bonus-summary__item-bonuses">{formatSourceBonuses(source.bonuses)}</span>
+                </li>
+              ))}
+            </ul>
+
+            {hasAnyBonus && (
+              <div className="bonus-summary__totals">
+                {ABILITY_NAMES.map((ability) => {
+                  const v = totals[ability];
+                  if (v === 0) return null;
+                  return (
+                    <span key={ability} className="bonus-summary__total-chip">
+                      {ABILITY_LABELS[ability].slice(0, 3)} {v > 0 ? '+' : ''}
+                      {v}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </details>
+
+      <AbilityBonusesModal open={modalOpen} onClose={() => setModalOpen(false)} />
+    </>
   );
 }

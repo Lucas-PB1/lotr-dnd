@@ -27,12 +27,9 @@ import { AbilityScoreDisplay } from '../sections/AbilityScoreDisplay';
 import { SheetPanel } from './SheetPanel';
 
 function FinalAbilityCard({ ability }: { ability: AbilityName }) {
-  const { character } = useCharacterSheet();
-  const base = character.abilities[ability];
-
   return (
     <div className="ability-card ability-card--final" title={ABILITY_DESCRIPTIONS[ability]}>
-      <AbilityScoreDisplay ability={ability} baseScore={base} />
+      <AbilityScoreDisplay ability={ability} />
     </div>
   );
 }

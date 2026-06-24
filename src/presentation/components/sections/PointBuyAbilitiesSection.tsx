@@ -31,7 +31,7 @@ function PointBuyAbilityBlock({ ability }: { ability: AbilityName }) {
 
   return (
     <div className="ability-card ability-card--pointbuy" title={ABILITY_DESCRIPTIONS[ability]}>
-      <AbilityScoreDisplay ability={ability} baseScore={score}>
+      <AbilityScoreDisplay ability={ability}>
         <div className="ability-card__controls">
           <button
             type="button"

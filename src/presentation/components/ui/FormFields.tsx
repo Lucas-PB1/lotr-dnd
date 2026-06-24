@@ -1,5 +1,33 @@
 import { Checkbox, Label, Textarea, TextInput } from 'flowbite-react';
 
+interface ReadOnlyFieldProps {
+  label: string;
+  value: string | number;
+  description?: string;
+  className?: string;
+  hint?: string;
+}
+
+export function ReadOnlyField({
+  label,
+  value,
+  description,
+  className = '',
+  hint = 'Definido na criação',
+}: ReadOnlyFieldProps) {
+  const display = value === '' || value === null || value === undefined ? '—' : String(value);
+  return (
+    <div className={`field field--readonly ${className}`} title={description}>
+      <Label className="field__label">{label}</Label>
+      {description && <span className="field__desc">{description}</span>}
+      <div className="field__readonly">
+        <span className="field__readonly-value">{display}</span>
+        <span className="field__readonly-badge">{hint}</span>
+      </div>
+    </div>
+  );
+}
+
 interface TextFieldProps {
   label: string;
   value: string;
