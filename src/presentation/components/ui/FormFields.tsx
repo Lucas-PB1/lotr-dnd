@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Checkbox,
-  Label,
-  Textarea,
-  TextInput,
-} from 'flowbite-react';
+import { Checkbox, Label, Textarea, TextInput } from 'flowbite-react';
 
 interface TextFieldProps {
   label: string;
@@ -14,21 +6,30 @@ interface TextFieldProps {
   onChange: (value: string) => void;
   className?: string;
   placeholder?: string;
+  description?: string;
+  compact?: boolean;
 }
 
-export function TextField({ label, value, onChange, className = '', placeholder }: TextFieldProps) {
+export function TextField({
+  label,
+  value,
+  onChange,
+  className = '',
+  placeholder,
+  description,
+  compact = false,
+}: TextFieldProps) {
   return (
-    <div className={className}>
-      <Label className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-900/70">
-        {label}
-      </Label>
+    <div className={`field ${compact ? 'field--compact' : ''} ${className}`} title={compact ? description : undefined}>
+      <Label className="field__label">{label}</Label>
+      {!compact && description && <span className="field__desc">{description}</span>}
       <TextInput
         sizing="sm"
         color="gray"
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="bg-white/60"
+        className="field__input"
       />
     </div>
   );
@@ -41,6 +42,8 @@ interface NumberFieldProps {
   min?: number;
   max?: number;
   className?: string;
+  description?: string;
+  compact?: boolean;
 }
 
 export function NumberField({
@@ -50,12 +53,13 @@ export function NumberField({
   min,
   max,
   className = '',
+  description,
+  compact = false,
 }: NumberFieldProps) {
   return (
-    <div className={className}>
-      <Label className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-900/70">
-        {label}
-      </Label>
+    <div className={`field ${compact ? 'field--compact' : ''} ${className}`} title={compact ? description : undefined}>
+      <Label className="field__label">{label}</Label>
+      {!compact && description && <span className="field__desc">{description}</span>}
       <TextInput
         type="number"
         sizing="sm"
@@ -64,7 +68,7 @@ export function NumberField({
         min={min}
         max={max}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
-        className="bg-white/60 text-center"
+        className="field__input field__input--number"
       />
     </div>
   );
@@ -76,21 +80,31 @@ interface TextAreaProps {
   onChange: (value: string) => void;
   rows?: number;
   className?: string;
+  description?: string;
+  hint?: string;
 }
 
-export function TextArea({ label, value, onChange, rows = 4, className = '' }: TextAreaProps) {
+export function TextArea({
+  label,
+  value,
+  onChange,
+  rows = 4,
+  className = '',
+  description,
+  hint,
+}: TextAreaProps) {
   return (
-    <div className={className}>
-      <Label className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-900/70">
-        {label}
-      </Label>
+    <div className={`field field--textarea ${className}`}>
+      {label && <Label className="field__label">{label}</Label>}
+      {description && <span className="field__desc">{description}</span>}
       <Textarea
         rows={rows}
         color="gray"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="bg-white/60"
+        className="field__input field__input--textarea"
       />
+      {hint && <span className="field__hint">{hint}</span>}
     </div>
   );
 }
@@ -99,17 +113,18 @@ interface CheckboxFieldProps {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  description?: string;
+  compact?: boolean;
 }
 
-export function CheckboxField({ label, checked, onChange }: CheckboxFieldProps) {
+export function CheckboxField({ label, checked, onChange, description, compact = false }: CheckboxFieldProps) {
   return (
-    <div className="flex items-center gap-2">
-      <Checkbox
-        color="warning"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-      <Label className="text-sm text-amber-950">{label}</Label>
+    <div className={`checkbox-field ${compact ? 'checkbox-field--compact' : ''}`} title={compact ? description : undefined}>
+      <Checkbox color="warning" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <div className="checkbox-field__text">
+        <Label className="checkbox-field__label">{label}</Label>
+        {!compact && description && <span className="field__desc">{description}</span>}
+      </div>
     </div>
   );
 }
@@ -118,14 +133,30 @@ interface StatBoxProps {
   label: string;
   value: string | number;
   sublabel?: string;
+  description?: string;
   onChange?: (value: number) => void;
   editable?: boolean;
+  accent?: 'gold' | 'emerald' | 'slate';
+  compact?: boolean;
 }
 
-export function StatBox({ label, value, sublabel, onChange, editable }: StatBoxProps) {
+export function StatBox({
+  label,
+  value,
+  sublabel,
+  description,
+  onChange,
+  editable,
+  accent = 'gold',
+  compact = false,
+}: StatBoxProps) {
   return (
-    <Card className="min-w-20 border-amber-300/60 bg-white/40 p-2 shadow-none">
-      <p className="text-center text-[0.6rem] font-bold uppercase text-amber-900/70">{label}</p>
+    <div
+      className={`stat-box stat-box--${accent} ${compact ? 'stat-box--compact' : ''}`}
+      title={compact ? description : description}
+    >
+      <span className="stat-box__label">{label}</span>
+      {!compact && description && <span className="stat-box__desc">{description}</span>}
       {editable && onChange ? (
         <TextInput
           type="number"
@@ -133,31 +164,37 @@ export function StatBox({ label, value, sublabel, onChange, editable }: StatBoxP
           color="gray"
           value={value}
           onChange={(e) => onChange(Number(e.target.value) || 0)}
-          className="mt-1 bg-white/80 text-center font-bold"
+          className="stat-box__input field__input"
         />
       ) : (
-        <p className="text-center text-lg font-bold text-amber-950">{value}</p>
+        <span className="stat-box__value">{value}</span>
       )}
-      {sublabel && <p className="text-center text-xs text-amber-900/60">{sublabel}</p>}
-    </Card>
+      {sublabel && <span className="stat-box__sub">{sublabel}</span>}
+    </div>
   );
 }
 
 interface SectionProps {
   title: string;
+  description?: string;
   children: React.ReactNode;
   className?: string;
+  icon?: string;
 }
 
-export function Section({ title, children, className = '' }: SectionProps) {
+export function Section({ title, description, children, className = '', icon }: SectionProps) {
   return (
-    <section className={`mb-5 ${className}`}>
-      <h2 className="mb-3 border-b border-amber-400/50 pb-1 font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-amber-800">
-        {title}
-      </h2>
-      {children}
+    <section className={`sheet-section ${className}`}>
+      <header className="sheet-section__header">
+        {icon && <span className="sheet-section__icon" aria-hidden>{icon}</span>}
+        <div>
+          <h2 className="sheet-section__title">{title}</h2>
+          {description && <p className="sheet-section__desc">{description}</p>}
+        </div>
+      </header>
+      <div className="sheet-section__body">{children}</div>
     </section>
   );
 }
 
-export { Badge, Button, Card };
+export { Badge, Button, Card } from 'flowbite-react';

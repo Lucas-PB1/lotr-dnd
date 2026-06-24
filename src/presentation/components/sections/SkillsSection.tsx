@@ -1,5 +1,6 @@
 import { Checkbox, Label } from 'flowbite-react';
-import { LOTR_SKILLS } from '../../../shared/constants/gameConstants';
+import { ABILITY_LABELS, LOTR_SKILLS } from '../../../shared/constants/gameConstants';
+import { FIELD_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
 import { Character } from '../../../domain/entities/Character';
 import { CharacterCalculator } from '../../../domain/services/CharacterCalculator';
 import { useCharacterSheet } from '../../context/CharacterSheetContext';
@@ -11,9 +12,13 @@ function SkillRow({ skillId }: { skillId: string }) {
   const domainCharacter = new Character(character);
   const skillMod = CharacterCalculator.skillModifier(domainCharacter, skillId);
   const state = character.skills[skillId];
+  const isActive = state.proficient || state.expertise;
 
   return (
-    <div className="skill-row flex items-center gap-2 py-0.5">
+    <div
+      className={`skill-row ${isActive ? 'skill-row--active' : ''}`}
+      title={`Atributo: ${ABILITY_LABELS[skillDef.ability]}`}
+    >
       <Checkbox
         color="warning"
         checked={state.proficient}
@@ -40,12 +45,10 @@ function SkillRow({ skillId }: { skillId: string }) {
           })
         }
       />
-      <span className="min-w-8 text-center text-sm font-semibold text-amber-800">
-        {skillMod.formattedModifier()}
-      </span>
-      <Label className="flex-1 text-sm text-amber-950">
-        {skillDef.name}{' '}
-        <span className="text-xs text-amber-900/60">({skillDef.ability.slice(0, 3)})</span>
+      <span className="skill-row__mod">{skillMod.formattedModifier()}</span>
+      <Label className="skill-row__name">
+        {skillDef.name}
+        <span className="skill-row__ability">{ABILITY_LABELS[skillDef.ability].slice(0, 3)}</span>
       </Label>
     </div>
   );
@@ -59,8 +62,12 @@ export function SkillsSection() {
   return (
     <div className="skills-panel">
       <div className="skills-legend">
-        <span><Checkbox readOnly color="warning" className="pointer-events-none" /> Prof.</span>
-        <span><Checkbox readOnly color="info" className="pointer-events-none" /> Perícia</span>
+        <span>
+          <Checkbox readOnly color="warning" className="pointer-events-none" /> Prof.
+        </span>
+        <span>
+          <Checkbox readOnly color="info" className="pointer-events-none" /> Perícia
+        </span>
       </div>
       <div className="skills-list">
         {LOTR_SKILLS.map((skill) => (
@@ -68,11 +75,19 @@ export function SkillsSection() {
         ))}
       </div>
       <div className="passive-wisdom">
-        <StatBox label="Sabedoria Passiva (Percepção)" value={passiveWisdom} />
+        <StatBox
+          label="Sab. Passiva"
+          value={passiveWisdom}
+          description={FIELD_DESCRIPTIONS.passiveWisdom}
+          accent="slate"
+          compact
+        />
         <NumberField
-          label="Override manual"
+          label="Override"
           value={character.passiveWisdom ?? passiveWisdom}
           onChange={(passiveWisdom) => updateCharacter({ passiveWisdom })}
+          description="Substitui o valor calculado."
+          compact
         />
       </div>
     </div>

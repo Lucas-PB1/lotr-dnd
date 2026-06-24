@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, TextInput } from 'flowbite-react';
+import { TextInput } from 'flowbite-react';
 import type { AttackProps } from '../../../../domain/value-objects/CharacterValues';
 import { useCharacterSheet } from '../../../context/CharacterSheetContext';
 
@@ -15,63 +15,63 @@ export function AttacksSection() {
   return (
     <div className="attacks-panel">
       <h3 className="subsection-title">Ataques</h3>
-      <div className="overflow-x-auto">
-        <Table hoverable className="text-sm">
-          <TableHead>
-            <TableRow>
-              <TableHeadCell>Arma</TableHeadCell>
-              <TableHeadCell>Bônus Atq.</TableHeadCell>
-              <TableHeadCell>Dano</TableHeadCell>
-              <TableHeadCell>Alcance</TableHeadCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      <div className="attacks-table-wrap">
+        <table className="attacks-table">
+          <thead>
+            <tr>
+              <th>Arma</th>
+              <th>Bônus Atq.</th>
+              <th>Dano</th>
+              <th>Alcance</th>
+            </tr>
+          </thead>
+          <tbody>
             {character.attacks.map((attack, index) => (
-              <TableRow key={index}>
-                <TableCell>
+              <tr key={index}>
+                <td>
                   <TextInput
                     sizing="sm"
                     color="gray"
                     value={attack.weapon}
                     placeholder="Arma"
                     onChange={(e) => updateAttack(index, { weapon: e.target.value })}
-                    className="bg-white/60"
+                    className="field__input"
                   />
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   <TextInput
                     sizing="sm"
                     color="gray"
                     value={attack.atkBonus}
                     placeholder="+0"
                     onChange={(e) => updateAttack(index, { atkBonus: e.target.value })}
-                    className="bg-white/60"
+                    className="field__input field__input--number"
                   />
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   <TextInput
                     sizing="sm"
                     color="gray"
                     value={attack.damage}
                     placeholder="1d8"
                     onChange={(e) => updateAttack(index, { damage: e.target.value })}
-                    className="bg-white/60"
+                    className="field__input"
                   />
-                </TableCell>
-                <TableCell>
+                </td>
+                <td>
                   <TextInput
                     sizing="sm"
                     color="gray"
                     value={attack.range}
-                    placeholder="1,5m"
+                    placeholder="1,5 m"
                     onChange={(e) => updateAttack(index, { range: e.target.value })}
-                    className="bg-white/60"
+                    className="field__input"
                   />
-                </TableCell>
-              </TableRow>
+                </td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
+          </tbody>
+        </table>
       </div>
     </div>
   );

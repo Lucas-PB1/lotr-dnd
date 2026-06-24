@@ -1,4 +1,4 @@
-import { Badge, Button, Label, TextInput } from 'flowbite-react';
+import { Badge, Button, TextInput } from 'flowbite-react';
 import {
   ABILITY_LABELS,
   ABILITY_NAMES,
@@ -40,12 +40,12 @@ function BonusSourceRow({ source }: { source: AbilityBonusSource }) {
           sizing="sm"
           color="gray"
           value={source.label}
-          placeholder="Origem do bônus"
+          placeholder="Origem"
           onChange={(e) => updateSource({ label: e.target.value })}
-          className="bonus-source-row__label bg-white/60"
+          className="bonus-source-row__label field__input"
         />
         <Button size="xs" color="light" onClick={remove}>
-          Remover
+          ×
         </Button>
       </div>
       <div className="bonus-source-row__grid">
@@ -60,7 +60,7 @@ function BonusSourceRow({ source }: { source: AbilityBonusSource }) {
               max={5}
               value={source.bonuses[ability] ?? 0}
               onChange={(e) => updateBonus(ability, Number(e.target.value) || 0)}
-              className="bg-white/60 text-center"
+              className="field__input field__input--number"
             />
           </label>
         ))}
@@ -81,14 +81,40 @@ export function AbilityBonusesSection() {
 
   if (sources.length === 0) {
     return (
-      <div className="bonus-section bonus-section--empty">
-        <Label className="text-xs font-semibold uppercase text-amber-900/70">
-          Bônus (cultura, chamado, etc.)
-        </Label>
-        <p className="mt-1 text-xs text-amber-900/60">
-          Adicione bônus de atributos da sua cultura, chamado ou traços.
-        </p>
-        <div className="mt-2 flex flex-wrap gap-1">
+      <details className="abilities-accordion__item abilities-accordion__item--bonus">
+        <summary className="abilities-accordion__summary">
+          <span>Bônus de atributos</span>
+          <span className="abilities-accordion__hint">cultura, chamado…</span>
+        </summary>
+        <div className="bonus-section bonus-section--empty">
+          <p className="bonus-section__empty-text">Nenhum bônus adicionado ainda.</p>
+          <div className="bonus-section__presets">
+            {BONUS_SOURCE_PRESETS.map((preset) => (
+              <Button key={preset} size="xs" color="light" onClick={() => addSource(preset)}>
+                + {preset}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </details>
+    );
+  }
+
+  return (
+    <details className="abilities-accordion__item abilities-accordion__item--bonus" open>
+      <summary className="abilities-accordion__summary">
+        <span>Bônus de atributos</span>
+        <Badge color="info" size="xs">
+          {sources.length}
+        </Badge>
+      </summary>
+      <div className="bonus-section">
+        <div className="bonus-section__list">
+          {sources.map((source) => (
+            <BonusSourceRow key={source.id} source={source} />
+          ))}
+        </div>
+        <div className="bonus-section__presets">
           {BONUS_SOURCE_PRESETS.map((preset) => (
             <Button key={preset} size="xs" color="light" onClick={() => addSource(preset)}>
               + {preset}
@@ -96,33 +122,6 @@ export function AbilityBonusesSection() {
           ))}
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className="bonus-section">
-      <div className="bonus-section__header">
-        <Label className="text-xs font-semibold uppercase text-amber-900/70">
-          Bônus de Atributos
-        </Label>
-        <Badge color="info" size="xs">
-          {sources.length} origem{sources.length !== 1 ? 'ns' : ''}
-        </Badge>
-      </div>
-
-      <div className="bonus-section__list">
-        {sources.map((source) => (
-          <BonusSourceRow key={source.id} source={source} />
-        ))}
-      </div>
-
-      <div className="mt-2 flex flex-wrap gap-1">
-        {BONUS_SOURCE_PRESETS.map((preset) => (
-          <Button key={preset} size="xs" color="light" onClick={() => addSource(preset)}>
-            + {preset}
-          </Button>
-        ))}
-      </div>
-    </div>
+    </details>
   );
 }

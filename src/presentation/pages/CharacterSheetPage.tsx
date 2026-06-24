@@ -4,6 +4,7 @@ import { getCreationProgress } from '../../application/creation/creationProgress
 import { migrateCreationChoices } from '../../shared/data/rewardSlotUtils';
 import { CharacterCreationSection } from '../components/sections/CharacterCreationSection';
 import { ResetCharacterModal } from '../components/layout/ResetCharacterModal';
+import { SheetFinalTab } from '../components/layout/SheetFinalTab';
 import { SheetMainTab } from '../components/layout/SheetMainTab';
 import { SheetPageHeader } from '../components/layout/SheetPageHeader';
 import { SheetStoryTab } from '../components/layout/SheetStoryTab';
@@ -59,6 +60,10 @@ export function CharacterSheetPage() {
 
           <TabItem title="Ficha — Página 1">
             <SheetMainTab />
+          </TabItem>
+
+          <TabItem title="Ficha Final">
+            <SheetFinalTab />
           </TabItem>
 
           <TabItem

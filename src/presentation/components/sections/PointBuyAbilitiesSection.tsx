@@ -1,8 +1,9 @@
-import { Button, Label } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import {
   ABILITY_NAMES,
   type AbilityName,
 } from '../../../shared/constants/gameConstants';
+import { ABILITY_DESCRIPTIONS } from '../../../shared/constants/sheetFieldDescriptions';
 import { PointBuyService } from '../../../domain/services/PointBuyService';
 import {
   POINT_BUY_COSTS,
@@ -29,17 +30,31 @@ function PointBuyAbilityBlock({ ability }: { ability: AbilityName }) {
   };
 
   return (
-    <AbilityScoreDisplay ability={ability} baseScore={score}>
-      <div className="ability-card__controls">
-        <Button size="xs" color="light" disabled={!canDecrease} onClick={() => adjust(-1)}>
-          −
-        </Button>
-        <Button size="xs" color="light" disabled={!canIncrease} onClick={() => adjust(1)}>
-          +
-        </Button>
-      </div>
-      <span className="ability-card__cost">{cost} pt{cost !== 1 ? 's' : ''}</span>
-    </AbilityScoreDisplay>
+    <div className="ability-card ability-card--pointbuy" title={ABILITY_DESCRIPTIONS[ability]}>
+      <AbilityScoreDisplay ability={ability} baseScore={score}>
+        <div className="ability-card__controls">
+          <button
+            type="button"
+            className="ability-step"
+            disabled={!canDecrease}
+            onClick={() => adjust(-1)}
+            aria-label={`Diminuir ${ability}`}
+          >
+            −
+          </button>
+          <button
+            type="button"
+            className="ability-step"
+            disabled={!canIncrease}
+            onClick={() => adjust(1)}
+            aria-label={`Aumentar ${ability}`}
+          >
+            +
+          </button>
+        </div>
+      </AbilityScoreDisplay>
+      <span className="ability-card__cost">{cost} pt</span>
+    </div>
   );
 }
 
@@ -49,40 +64,37 @@ export function PointBuyAbilitiesSection() {
   const remaining = PointBuyService.getRemainingPoints(character.abilities);
 
   return (
-    <div className="space-y-3">
+    <div className="point-buy-block">
       <div className="point-buy-bar">
-        <div>
-          <p className="text-sm font-semibold text-amber-950">Compra de Pontos</p>
-          <p className="text-xs text-amber-900/70">
-            {POINT_BUY_MIN_SCORE}–{POINT_BUY_MAX_SCORE} · {POINT_BUY_TOTAL} pts · bônus aplicados depois
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <span className={`point-buy-pill ${remaining === 0 ? 'point-buy-pill--ok' : ''}`}>
-            Restantes: {remaining}
-          </span>
-          <span className="point-buy-pill">Gastos: {spent}</span>
-          <Button
-            size="xs"
-            color="light"
-            onClick={() => updateCharacter({ abilities: PointBuyService.createDefaultAbilities() })}
-          >
-            Resetar
-          </Button>
-        </div>
+        <span className={`point-buy-pill ${remaining === 0 ? 'point-buy-pill--ok' : ''}`}>
+          {remaining} restantes
+        </span>
+        <span className="point-buy-pill">{spent} gastos</span>
+        <span className="point-buy-pill point-buy-pill--muted">
+          {POINT_BUY_MIN_SCORE}–{POINT_BUY_MAX_SCORE} · {POINT_BUY_TOTAL} pts
+        </span>
+        <Button
+          size="xs"
+          color="light"
+          onClick={() => updateCharacter({ abilities: PointBuyService.createDefaultAbilities() })}
+        >
+          Resetar
+        </Button>
       </div>
 
-      <div className="abilities-grid abilities-grid--compact">
+      <div className="abilities-grid abilities-grid--triple">
         {ABILITY_NAMES.map((ability) => (
           <PointBuyAbilityBlock key={ability} ability={ability} />
         ))}
       </div>
 
-      <details className="text-xs text-amber-900/80">
-        <summary className="cursor-pointer font-semibold">Tabela de custos</summary>
-        <div className="mt-1 grid grid-cols-4 gap-1">
+      <details className="point-buy-costs">
+        <summary>Tabela de custos</summary>
+        <div className="point-buy-costs__grid">
           {Object.entries(POINT_BUY_COSTS).map(([s, c]) => (
-            <span key={s}>{s}: {c}pt</span>
+            <span key={s}>
+              {s}: {c}pt
+            </span>
           ))}
         </div>
       </details>
@@ -107,14 +119,22 @@ export function AbilityScoreModeToggle() {
 
   return (
     <div className="mode-toggle">
-      <Label className="text-xs font-semibold uppercase text-amber-900/70">Base:</Label>
+      <span className="mode-toggle__label">Atributos base</span>
       <div className="mode-toggle__buttons">
-        <Button size="xs" color={!isPointBuy ? 'warning' : 'light'} onClick={() => setMode(false)}>
+        <button
+          type="button"
+          className={`mode-toggle__btn ${!isPointBuy ? 'mode-toggle__btn--active' : ''}`}
+          onClick={() => setMode(false)}
+        >
           Manual
-        </Button>
-        <Button size="xs" color={isPointBuy ? 'warning' : 'light'} onClick={() => setMode(true)}>
-          Compra de Pontos
-        </Button>
+        </button>
+        <button
+          type="button"
+          className={`mode-toggle__btn ${isPointBuy ? 'mode-toggle__btn--active' : ''}`}
+          onClick={() => setMode(true)}
+        >
+          Pontos
+        </button>
       </div>
     </div>
   );
