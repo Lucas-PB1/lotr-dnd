@@ -1,7 +1,18 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { PDFParse } from 'pdf-parse';
 
-const buf = fs.readFileSync('d:/Projetos/senhor dos aneis/Lord Of The Rings Roleplay.pdf');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PDF_PATH = path.join(__dirname, '../Lord Of The Rings Roleplay.pdf');
+
+if (!fs.existsSync(PDF_PATH)) {
+  console.error('PDF não encontrado:', PDF_PATH);
+  console.error('Coloque o arquivo do livro na raiz do projeto (uso local, não versionado).');
+  process.exit(1);
+}
+
+const buf = fs.readFileSync(PDF_PATH);
 const parser = new PDFParse({ data: buf });
 const result = await parser.getText();
 const text = result.text;
@@ -28,25 +39,12 @@ const keywords = [
 const out = [];
 for (const k of keywords) {
   let idx = 0;
-  let count = 0;
-  while (count < 2) {
-    const i = text.indexOf(k, idx);
-    if (i < 0) break;
-    out.push(`\n========== ${k} (#${count + 1}) ==========\n`);
-    out.push(text.slice(Math.max(0, i - 100), i + 3000));
-    idx = i + k.length;
-    count++;
+  while ((idx = text.indexOf(k, idx)) !== -1) {
+    out.push({ keyword: k, index: idx, context: text.slice(idx, idx + 120) });
+    idx += k.length;
   }
 }
 
-out.push(`\n\nTOTAL CHARS: ${text.length}, PAGES: ${result.pages?.length ?? '?'}`);
-
-// Also dump table of contents area
-const tocIdx = text.indexOf('Contents');
-if (tocIdx >= 0) {
-  out.push('\n========== CONTENTS ==========\n');
-  out.push(text.slice(tocIdx, tocIdx + 4000));
-}
-
-fs.writeFileSync('scripts/pdf-extract.txt', out.join('\n'), 'utf8');
-console.log('Written scripts/pdf-extract.txt, chars:', text.length);
+const outPath = path.join(__dirname, 'pdf-extract.txt');
+fs.writeFileSync(outPath, JSON.stringify(out, null, 2), 'utf8');
+console.log(`Encontradas ${out.length} ocorrências → ${outPath}`);
